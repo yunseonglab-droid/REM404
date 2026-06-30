@@ -19,34 +19,34 @@
     }
 
     #ui {
-  position: fixed;
-  top: 18px;
-  left: 16px;
-  right: 16px;
-  z-index: 9999;
-  padding: 12px 14px;
-  border-radius: 16px;
-  color: #111;
-  background: rgba(255,255,255,0.88);
-  font-size: 14px;
-  line-height: 1.5;
-  pointer-events: none;
-  box-shadow: 0 8px 28px rgba(0,0,0,0.12);
-  backdrop-filter: blur(12px);
-  transition: opacity 0.8s ease;
-}
+      position: fixed;
+      top: 18px;
+      left: 16px;
+      right: 16px;
+      z-index: 9999;
+      padding: 12px 14px;
+      border-radius: 16px;
+      color: #111;
+      background: rgba(255,255,255,0.88);
+      font-size: 14px;
+      line-height: 1.5;
+      pointer-events: none;
+      box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+      backdrop-filter: blur(12px);
+      transition: opacity 1.2s ease;
+    }
 
-#status {
-  font-size: 14px;
-  font-weight: 850;
-  margin-bottom: 3px;
-}
+    #status {
+      font-size: 14px;
+      font-weight: 850;
+      margin-bottom: 3px;
+    }
 
-#sub {
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(17,17,17,0.68);
-}
+    #sub {
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(17,17,17,0.68);
+    }
 
     #ui.fade {
       opacity: 0;
@@ -62,7 +62,7 @@
       z-index: 9998;
       pointer-events: none;
       opacity: 0.45;
-      transition: opacity 0.8s ease;
+      transition: opacity 1.4s ease;
     }
 
     #guide.fade {
@@ -77,29 +77,10 @@
       border-style: solid;
     }
 
-    .tl {
-      top: 0;
-      left: 0;
-      border-width: 1.5px 0 0 1.5px;
-    }
-
-    .tr {
-      top: 0;
-      right: 0;
-      border-width: 1.5px 1.5px 0 0;
-    }
-
-    .bl {
-      bottom: 0;
-      left: 0;
-      border-width: 0 0 1.5px 1.5px;
-    }
-
-    .br {
-      bottom: 0;
-      right: 0;
-      border-width: 0 1.5px 1.5px 0;
-    }
+    .tl { top: 0; left: 0; border-width: 1.5px 0 0 1.5px; }
+    .tr { top: 0; right: 0; border-width: 1.5px 1.5px 0 0; }
+    .bl { bottom: 0; left: 0; border-width: 0 0 1.5px 1.5px; }
+    .br { bottom: 0; right: 0; border-width: 0 1.5px 1.5px 0; }
 
     #loadingText {
       position: fixed;
@@ -112,7 +93,7 @@
       letter-spacing: 0.04em;
       text-align: center;
       pointer-events: none;
-      transition: opacity 0.7s ease;
+      transition: opacity 0.9s ease;
     }
 
     #loadingText.hide {
@@ -190,6 +171,17 @@
       color: #ffffff;
     }
 
+    #memoryBtn.nudge {
+      animation: nudge 1.2s ease-in-out;
+    }
+
+    @keyframes nudge {
+      0% { transform: translateX(-50%) translateY(0) scale(1); }
+      35% { transform: translateX(-50%) translateY(0) scale(1.035); }
+      70% { transform: translateX(-50%) translateY(0) scale(1); }
+      100% { transform: translateX(-50%) translateY(0) scale(1); }
+    }
+
     #flash {
       position: fixed;
       inset: 0;
@@ -241,7 +233,7 @@
   </div>
 
   <div id="loadingText">
-    기억을 찾는 중
+    기억을 불러오는 중
     <div id="loadingLine"></div>
   </div>
 
@@ -289,17 +281,30 @@
     const FADE_DURATION = 6000;
     const FAIL_HINT_1 = 5000;
     const FAIL_HINT_2 = 10000;
+    const BUTTON_NUDGE_TIME = 10000;
 
     let animationFrame = null;
     let startTime = null;
     let isImageReady = false;
     let hasSaved = false;
     let foundOnce = false;
+
     let hintTimer1 = null;
     let hintTimer2 = null;
+    let nudgeTimer = null;
+    let uiFadeTimer = null;
+    let guideFadeTimer = null;
 
     function setOpacity(value) {
       overlay.setAttribute("material", "opacity", value);
+    }
+
+    function clearTimers() {
+      clearTimeout(hintTimer1);
+      clearTimeout(hintTimer2);
+      clearTimeout(nudgeTimer);
+      clearTimeout(uiFadeTimer);
+      clearTimeout(guideFadeTimer);
     }
 
     function stopFade() {
@@ -309,12 +314,27 @@
       setOpacity(0);
     }
 
+    function vibrateOnce() {
+      if (navigator.vibrate) {
+        navigator.vibrate(28);
+      }
+    }
+
     function resetMemoryButton() {
       isImageReady = false;
       hasSaved = false;
       memoryBtn.textContent = "기억 저장";
       memoryBtn.classList.remove("show");
       memoryBtn.classList.remove("saved");
+      memoryBtn.classList.remove("nudge");
+    }
+
+    function nudgeMemoryButton() {
+      if (!isImageReady || hasSaved) return;
+
+      memoryBtn.classList.remove("nudge");
+      void memoryBtn.offsetWidth;
+      memoryBtn.classList.add("nudge");
     }
 
     function showMemoryButton() {
@@ -324,11 +344,14 @@
       memoryBtn.classList.remove("saved");
       memoryBtn.classList.add("show");
       subEl.textContent = "복원된 기억을 보존할 수 있습니다.";
+
+      nudgeTimer = setTimeout(() => {
+        nudgeMemoryButton();
+      }, BUTTON_NUDGE_TIME);
     }
 
     function startFailHints() {
-      clearTimeout(hintTimer1);
-      clearTimeout(hintTimer2);
+      clearTimers();
 
       hintTimer1 = setTimeout(() => {
         if (!foundOnce) {
@@ -348,6 +371,16 @@
     function stopFailHints() {
       clearTimeout(hintTimer1);
       clearTimeout(hintTimer2);
+    }
+
+    function fadeInstructionLater() {
+      uiFadeTimer = setTimeout(() => {
+        uiEl.classList.add("fade");
+      }, 5000);
+
+      guideFadeTimer = setTimeout(() => {
+        guideEl.classList.add("fade");
+      }, 7500);
     }
 
     function startFade() {
@@ -385,7 +418,7 @@
     function downloadMemoryImage() {
       const link = document.createElement("a");
       link.href = "./assets/ai.jpg";
-      link.download = "REM404_recovered_memory.jpg";
+      link.download = "REM404_preserved_memory.jpg";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -393,13 +426,6 @@
 
     function hideIntroUI() {
       loadingText.classList.add("hide");
-      guideEl.classList.add("fade");
-    }
-
-    function fadeInstructionLater() {
-      setTimeout(() => {
-        uiEl.classList.add("fade");
-      }, 3500);
     }
 
     window.addEventListener("load", () => {
@@ -410,19 +436,25 @@
     target.addEventListener("targetFound", () => {
       foundOnce = true;
       stopFailHints();
+      clearTimeout(uiFadeTimer);
+      clearTimeout(guideFadeTimer);
+
       hideIntroUI();
 
       statusEl.textContent = "사진이 인식되었습니다.";
       subEl.textContent = "기억이 서서히 복원됩니다.";
+
       startFade();
       fadeInstructionLater();
     });
 
     target.addEventListener("targetLost", () => {
       foundOnce = false;
+      clearTimers();
 
       statusEl.textContent = "전시 사진을 다시 비춰주세요.";
       subEl.textContent = "거리와 빛 반사를 조정해보세요.";
+
       uiEl.classList.remove("fade");
       guideEl.classList.remove("fade");
       loadingText.classList.remove("hide");
@@ -436,6 +468,9 @@
       if (!isImageReady || hasSaved) return;
 
       hasSaved = true;
+      clearTimeout(nudgeTimer);
+
+      vibrateOnce();
       cameraFlash();
 
       setTimeout(() => {
@@ -448,6 +483,7 @@
       setTimeout(() => {
         memoryBtn.classList.remove("show");
         uiEl.classList.add("fade");
+        guideEl.classList.add("fade");
       }, 2600);
     });
   </script>
