@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>Memory AR</title>
+  <title>REM404 Archive</title>
 
   <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
@@ -14,7 +14,7 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: #ffffff;
+      background: #fff;
       font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
     }
 
@@ -28,13 +28,13 @@
       border-radius: 16px;
       color: #111;
       background: rgba(255,255,255,0.88);
-      font-size: 14px;
-      line-height: 1.5;
-      pointer-events: none;
       box-shadow: 0 8px 28px rgba(0,0,0,0.12);
       backdrop-filter: blur(12px);
       transition: opacity 1.2s ease;
+      pointer-events: none;
     }
+
+    #ui.fade { opacity: 0; }
 
     #status {
       font-size: 14px;
@@ -44,11 +44,9 @@
 
     #sub {
       font-size: 13px;
-      font-weight: 500;
       color: rgba(17,17,17,0.68);
+      line-height: 1.5;
     }
-
-    #ui.fade { opacity: 0; }
 
     #guide {
       position: fixed;
@@ -164,13 +162,12 @@
       position: fixed;
       inset: 0;
       z-index: 10000;
-      background: #ffffff;
+      background: #fff;
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.15s ease;
     }
 
-    /* Archive UI */
     #archiveScreen {
       position: fixed;
       inset: 0;
@@ -269,21 +266,17 @@
       box-shadow: 0 10px 30px rgba(0,0,0,.12);
     }
 
+    #submitMemoryBtn:disabled {
+      opacity: 0.6;
+    }
+
     #submitMemoryBtn:active {
       transform: scale(.98);
     }
 
-    #archiveComplete {
-      display: none;
-    }
-
-    #archiveComplete.show {
-      display: block;
-    }
-
-    #archiveForm.hide {
-      display: none;
-    }
+    #archiveComplete { display: none; }
+    #archiveComplete.show { display: block; }
+    #archiveForm.hide { display: none; }
 
     .complete-text {
       font-size: 16px;
@@ -400,7 +393,7 @@
         <div class="archive-line"></div>
 
         <div class="count-label">현재까지</div>
-        <div class="count-number" id="memoryCount">248</div>
+        <div class="count-number" id="memoryCount">0</div>
         <div class="count-desc">개의 기억이 축적되었습니다.</div>
       </div>
     </div>
@@ -432,7 +425,9 @@
     </a-entity>
   </a-scene>
 
-  <script>
+  <script type="module">
+    import { saveMemory, getMemoryCount } from "./js/firebase.js";
+
     const statusEl = document.getElementById("status");
     const subEl = document.getElementById("sub");
     const uiEl = document.getElementById("ui");
@@ -651,6 +646,8 @@
     });
 
     target.addEventListener("targetLost", () => {
+      if (archiveScreen.classList.contains("show")) return;
+
       foundOnce = false;
       clearTimers();
 
@@ -675,39 +672,38 @@
       charCount.textContent = `${memoryInput.value.length} / 80`;
     });
 
-   submitMemoryBtn.addEventListener("click", async () => {
-  const text = memoryInput.value.trim();
+    submitMemoryBtn.addEventListener("click", async () => {
+      const text = memoryInput.value.trim();
 
-  if (!text) {
-    memoryInput.focus();
-    return;
-  }
+      if (!text) {
+        memoryInput.focus();
+        return;
+      }
 
-  submitMemoryBtn.disabled = true;
-  submitMemoryBtn.textContent = "기억을 남기는 중...";
+      submitMemoryBtn.disabled = true;
+      submitMemoryBtn.textContent = "기억을 남기는 중...";
 
-  try {
-    const beforeCount = await getMemoryCount();
+      try {
+        const beforeCount = await getMemoryCount();
 
-    await saveMemory(text);
+        await saveMemory(text);
 
-    const afterCount = await getMemoryCount();
+        const afterCount = await getMemoryCount();
 
-    archiveForm.classList.add("hide");
-    archiveComplete.classList.add("show");
+        archiveForm.classList.add("hide");
+        archiveComplete.classList.add("show");
 
-    animateCount(beforeCount, afterCount);
+        animateCount(beforeCount, afterCount);
 
-  } catch (error) {
-    console.error(error);
+      } catch (error) {
+        console.error(error);
 
-    alert("기억을 저장하지 못했습니다. 다시 시도해주세요.");
+        alert("기억을 저장하지 못했습니다. 다시 시도해주세요.");
 
-    submitMemoryBtn.disabled = false;
-    submitMemoryBtn.textContent = "기억 남기기";
-  }
-});
-<script type="module">
-  import { saveMemory, getMemoryCount } from "./js/firebase.js";
+        submitMemoryBtn.disabled = false;
+        submitMemoryBtn.textContent = "기억 남기기";
+      }
+    });
+  </script>
 </body>
 </html>
