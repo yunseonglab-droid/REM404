@@ -116,8 +116,8 @@
 
 <body>
   <div id="ui">
-    <div id="status">전시 사진을 비춰주세요.</div>
-    <div id="sub">사진이 인식되면 이미지가 서서히 나타납니다.</div>
+    <div id="status">사진을 화면 중앙에 맞춰주세요.</div>
+    <div id="sub">인식되면 기억이 서서히 복원됩니다.</div>
   </div>
 
   <button id="memoryBtn">기억 저장하기</button>
@@ -154,15 +154,20 @@
     const subEl = document.getElementById("sub");
     const target = document.getElementById("target");
     const overlay = document.getElementById("aiOverlay");
-
     const memoryBtn = document.getElementById("memoryBtn");
     const flash = document.getElementById("flash");
 
-    const FADE_DURATION = 4000;
+    const FADE_DURATION = 6000;
+    const FAIL_HINT_1 = 5000;
+    const FAIL_HINT_2 = 10000;
+
     let animationFrame = null;
     let startTime = null;
     let isImageReady = false;
     let hasSaved = false;
+    let foundOnce = false;
+    let hintTimer1 = null;
+    let hintTimer2 = null;
 
     function setOpacity(value) {
       overlay.setAttribute("material", "opacity", value);
@@ -192,6 +197,30 @@
       subEl.textContent = "기억 저장하기 버튼을 눌러 이미지를 저장할 수 있습니다.";
     }
 
+    function startFailHints() {
+      clearTimeout(hintTimer1);
+      clearTimeout(hintTimer2);
+
+      hintTimer1 = setTimeout(() => {
+        if (!foundOnce) {
+          statusEl.textContent = "사진과의 거리를 조금 조정해보세요.";
+          subEl.textContent = "화면 중앙에 사진이 크게 들어오면 인식이 쉬워집니다.";
+        }
+      }, FAIL_HINT_1);
+
+      hintTimer2 = setTimeout(() => {
+        if (!foundOnce) {
+          statusEl.textContent = "빛 반사를 피해주세요.";
+          subEl.textContent = "사진 표면이 너무 밝게 반사되면 인식이 어려울 수 있습니다.";
+        }
+      }, FAIL_HINT_2);
+    }
+
+    function stopFailHints() {
+      clearTimeout(hintTimer1);
+      clearTimeout(hintTimer2);
+    }
+
     function startFade() {
       stopFade();
       resetMemoryButton();
@@ -200,9 +229,10 @@
 
       function animate(now) {
         const progress = Math.min((now - startTime) / FADE_DURATION, 1);
-        const eased = progress < 0.5
-          ? 2 * progress * progress
-          : 1 - Math.pow(-2 * progress + 2, 2) / 2;
+
+        const eased = progress < 0.35
+          ? progress * 0.45
+          : 0.1575 + ((progress - 0.35) / 0.65) * 0.8425;
 
         setOpacity(eased);
 
@@ -226,23 +256,35 @@
     function downloadMemoryImage() {
       const link = document.createElement("a");
       link.href = "./assets/ai.jpg";
-      link.download = "memory-reconstruction.jpg";
+      link.download = "REM404_recovered_memory.jpg";
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
 
+    window.addEventListener("load", () => {
+      foundOnce = false;
+      startFailHints();
+    });
+
     target.addEventListener("targetFound", () => {
+      foundOnce = true;
+      stopFailHints();
+
       statusEl.textContent = "사진이 인식되었습니다.";
-      subEl.textContent = "이미지가 서서히 나타납니다.";
+      subEl.textContent = "기억이 서서히 복원됩니다.";
       startFade();
     });
 
     target.addEventListener("targetLost", () => {
+      foundOnce = false;
+
       statusEl.textContent = "전시 사진을 다시 비춰주세요.";
-      subEl.textContent = "인식이 끊어졌습니다.";
+      subEl.textContent = "사진과의 거리와 빛 반사를 조정해보세요.";
+
       resetMemoryButton();
       stopFade();
+      startFailHints();
     });
 
     memoryBtn.addEventListener("click", () => {
