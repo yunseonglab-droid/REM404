@@ -340,7 +340,7 @@
       height: 100vh !important;
       z-index: 1 !important;
       filter: blur(0px);
-      transition: filter 0.08s linear;
+      transition: filter 0.12s linear;
     }
 
     a-scene {
@@ -459,8 +459,12 @@
     const submitMemoryBtn = document.getElementById("submitMemoryBtn");
     const memoryCount = document.getElementById("memoryCount");
 
-    const FADE_DURATION = 3200;
+    const FAST_REVEAL_DURATION = 520;
+    const SLOW_REVEAL_DURATION = 1800;
+    const INITIAL_RENDER_OPACITY = 0.6;
+    const MID_BLUR = 4;
     const MAX_BLUR = 10;
+
     const FAIL_HINT_1 = 5000;
     const FAIL_HINT_2 = 10000;
     const BUTTON_NUDGE_TIME = 10000;
@@ -476,6 +480,10 @@
     let nudgeTimer = null;
     let uiFadeTimer = null;
     let guideFadeTimer = null;
+
+    function easeOutMemory(value) {
+      return 1 - Math.pow(1 - value, 3);
+    }
 
     function setOpacity(value) {
       overlay.setAttribute("material", "opacity", value);
@@ -569,24 +577,34 @@
       startTime = performance.now();
 
       function animate(now) {
-        const progress = Math.min((now - startTime) / FADE_DURATION, 1);
+        const elapsed = now - startTime;
+        const slowStartTime = FAST_REVEAL_DURATION;
+        const totalDuration = FAST_REVEAL_DURATION + SLOW_REVEAL_DURATION;
 
-        let eased;
+        let opacity;
+        let blurAmount;
 
-        if (progress < 0.15) {
-          eased = progress * 3.5;
+        if (elapsed <= slowStartTime) {
+          const fastProgress = Math.min(elapsed / FAST_REVEAL_DURATION, 1);
+          const easedFastProgress = easeOutMemory(fastProgress);
+
+          opacity = INITIAL_RENDER_OPACITY * easedFastProgress;
+          blurAmount = MAX_BLUR - ((MAX_BLUR - MID_BLUR) * easedFastProgress);
         } else {
-          eased = 0.52 + ((progress - 0.15) / 0.85) * 0.48;
+          const slowProgress = Math.min((elapsed - slowStartTime) / SLOW_REVEAL_DURATION, 1);
+          const easedSlowProgress = easeOutMemory(slowProgress);
+
+          opacity = INITIAL_RENDER_OPACITY + ((1 - INITIAL_RENDER_OPACITY) * easedSlowProgress);
+          blurAmount = MID_BLUR * (1 - easedSlowProgress);
         }
 
-        const blurAmount = Math.max(0, MAX_BLUR * (1 - progress));
+        setOpacity(Math.min(opacity, 1));
+        setCanvasBlur(Math.max(0, blurAmount));
 
-        setOpacity(eased);
-        setCanvasBlur(blurAmount);
-
-        if (progress < 1) {
+        if (elapsed < totalDuration) {
           animationFrame = requestAnimationFrame(animate);
         } else {
+          setOpacity(1);
           setCanvasBlur(0);
           showMemoryButton();
         }
