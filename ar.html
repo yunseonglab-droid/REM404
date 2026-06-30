@@ -48,9 +48,7 @@
       color: rgba(17,17,17,0.68);
     }
 
-    #ui.fade {
-      opacity: 0;
-    }
+    #ui.fade { opacity: 0; }
 
     #guide {
       position: fixed;
@@ -65,9 +63,7 @@
       transition: opacity 1.4s ease;
     }
 
-    #guide.fade {
-      opacity: 0;
-    }
+    #guide.fade { opacity: 0; }
 
     .corner {
       position: absolute;
@@ -96,9 +92,7 @@
       transition: opacity 0.9s ease;
     }
 
-    #loadingText.hide {
-      opacity: 0;
-    }
+    #loadingText.hide { opacity: 0; }
 
     #loadingLine {
       width: 160px;
@@ -128,32 +122,21 @@
       bottom: 34px;
       transform: translateX(-50%) translateY(28px);
       z-index: 9999;
-
       width: calc(100vw - 48px);
       max-width: 360px;
       height: 58px;
-
       border: 0;
       border-radius: 999px;
-
-      background: rgba(255,255,255,0.88);
-      color: #111111;
-
+      background: rgba(255,255,255,0.9);
+      color: #111;
       font-size: 16px;
       font-weight: 850;
       letter-spacing: -0.02em;
-
       box-shadow: 0 10px 34px rgba(0,0,0,0.26);
       backdrop-filter: blur(10px);
-
       opacity: 0;
       pointer-events: none;
-
-      transition:
-        opacity 0.45s ease,
-        transform 0.45s ease,
-        background 0.25s ease,
-        color 0.25s ease;
+      transition: opacity 0.45s ease, transform 0.45s ease;
     }
 
     #memoryBtn.show {
@@ -164,11 +147,6 @@
 
     #memoryBtn:active {
       transform: translateX(-50%) translateY(0) scale(0.97);
-    }
-
-    #memoryBtn.saved {
-      background: #111111;
-      color: #ffffff;
     }
 
     #memoryBtn.nudge {
@@ -190,6 +168,155 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.15s ease;
+    }
+
+    /* Archive UI */
+    #archiveScreen {
+      position: fixed;
+      inset: 0;
+      z-index: 20000;
+      background: #fff;
+      color: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      box-sizing: border-box;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.45s ease;
+    }
+
+    #archiveScreen.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    #archiveInner {
+      width: 100%;
+      max-width: 420px;
+      transform: translateY(12px);
+      opacity: 0;
+      transition: opacity 0.45s ease 0.18s, transform 0.45s ease 0.18s;
+    }
+
+    #archiveScreen.show #archiveInner {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .archive-label {
+      font-size: 12px;
+      letter-spacing: .16em;
+      color: #888;
+      margin-bottom: 34px;
+    }
+
+    .archive-title {
+      font-size: 30px;
+      line-height: 1.25;
+      margin: 0 0 28px;
+      font-weight: 850;
+      letter-spacing: -.05em;
+    }
+
+    .archive-question {
+      font-size: 15px;
+      line-height: 1.85;
+      color: #333;
+      margin-bottom: 26px;
+    }
+
+    #memoryInput {
+      width: 100%;
+      min-height: 118px;
+      resize: none;
+      box-sizing: border-box;
+      border: 1px solid rgba(17,17,17,0.16);
+      border-radius: 18px;
+      padding: 16px;
+      font-size: 15px;
+      line-height: 1.6;
+      font-family: inherit;
+      outline: none;
+      background: #fafafa;
+      color: #111;
+    }
+
+    #memoryInput:focus {
+      border-color: rgba(17,17,17,0.5);
+      background: #fff;
+    }
+
+    #charCount {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #888;
+      text-align: right;
+    }
+
+    #submitMemoryBtn {
+      margin-top: 24px;
+      width: 100%;
+      height: 58px;
+      border: 0;
+      border-radius: 999px;
+      background: #111;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 850;
+      font-family: inherit;
+      box-shadow: 0 10px 30px rgba(0,0,0,.12);
+    }
+
+    #submitMemoryBtn:active {
+      transform: scale(.98);
+    }
+
+    #archiveComplete {
+      display: none;
+    }
+
+    #archiveComplete.show {
+      display: block;
+    }
+
+    #archiveForm.hide {
+      display: none;
+    }
+
+    .complete-text {
+      font-size: 16px;
+      line-height: 1.9;
+      color: #222;
+      margin-bottom: 34px;
+    }
+
+    .archive-line {
+      width: 100%;
+      height: 1px;
+      background: rgba(17,17,17,0.12);
+      margin: 28px 0;
+    }
+
+    .count-label {
+      font-size: 13px;
+      color: #777;
+      line-height: 1.8;
+      margin-bottom: 8px;
+    }
+
+    .count-number {
+      font-size: 42px;
+      font-weight: 850;
+      letter-spacing: -.05em;
+      margin-bottom: 8px;
+    }
+
+    .count-desc {
+      font-size: 14px;
+      color: #555;
+      line-height: 1.7;
     }
 
     video {
@@ -239,8 +366,45 @@
     <div id="loadingLine"></div>
   </div>
 
-  <button id="memoryBtn">기억 저장</button>
+  <button id="memoryBtn">기억 남기기</button>
   <div id="flash"></div>
+
+  <div id="archiveScreen">
+    <div id="archiveInner">
+      <div class="archive-label">REM404 ARCHIVE</div>
+
+      <div id="archiveForm">
+        <h1 class="archive-title">당신의 기억</h1>
+
+        <div class="archive-question">
+          이 공간은<br>
+          당신에게<br>
+          무엇을 떠올리게 했나요?
+        </div>
+
+        <textarea id="memoryInput" maxlength="80" placeholder="80자 이내로 남겨주세요."></textarea>
+        <div id="charCount">0 / 80</div>
+
+        <button id="submitMemoryBtn">기억 남기기</button>
+      </div>
+
+      <div id="archiveComplete">
+        <h1 class="archive-title">감사합니다.</h1>
+
+        <div class="complete-text">
+          당신의 기억이<br>
+          REM404 Archive에<br>
+          추가되었습니다.
+        </div>
+
+        <div class="archive-line"></div>
+
+        <div class="count-label">현재까지</div>
+        <div class="count-number" id="memoryCount">248</div>
+        <div class="count-desc">개의 기억이 축적되었습니다.</div>
+      </div>
+    </div>
+  </div>
 
   <a-scene
     mindar-image="imageTargetSrc: ./assets/target.mind; autoStart: true; uiScanning: no; uiLoading: no; uiError: yes;"
@@ -280,6 +444,14 @@
     const memoryBtn = document.getElementById("memoryBtn");
     const flash = document.getElementById("flash");
 
+    const archiveScreen = document.getElementById("archiveScreen");
+    const archiveForm = document.getElementById("archiveForm");
+    const archiveComplete = document.getElementById("archiveComplete");
+    const memoryInput = document.getElementById("memoryInput");
+    const charCount = document.getElementById("charCount");
+    const submitMemoryBtn = document.getElementById("submitMemoryBtn");
+    const memoryCount = document.getElementById("memoryCount");
+
     const FADE_DURATION = 6000;
     const MAX_BLUR = 10;
     const FAIL_HINT_1 = 5000;
@@ -289,7 +461,7 @@
     let animationFrame = null;
     let startTime = null;
     let isImageReady = false;
-    let hasSaved = false;
+    let hasOpenedArchive = false;
     let foundOnce = false;
 
     let hintTimer1 = null;
@@ -304,9 +476,7 @@
 
     function setCanvasBlur(value) {
       const canvas = document.querySelector("canvas");
-      if (canvas) {
-        canvas.style.filter = `blur(${value}px)`;
-      }
+      if (canvas) canvas.style.filter = `blur(${value}px)`;
     }
 
     function clearTimers() {
@@ -325,24 +495,16 @@
       setCanvasBlur(0);
     }
 
-    function vibrateOnce() {
-      if (navigator.vibrate) {
-        navigator.vibrate(28);
-      }
-    }
-
     function resetMemoryButton() {
       isImageReady = false;
-      hasSaved = false;
-      memoryBtn.textContent = "기억 저장";
+      hasOpenedArchive = false;
+      memoryBtn.textContent = "기억 남기기";
       memoryBtn.classList.remove("show");
-      memoryBtn.classList.remove("saved");
       memoryBtn.classList.remove("nudge");
     }
 
     function nudgeMemoryButton() {
-      if (!isImageReady || hasSaved) return;
-
+      if (!isImageReady || hasOpenedArchive) return;
       memoryBtn.classList.remove("nudge");
       void memoryBtn.offsetWidth;
       memoryBtn.classList.add("nudge");
@@ -350,11 +512,10 @@
 
     function showMemoryButton() {
       isImageReady = true;
-      hasSaved = false;
-      memoryBtn.textContent = "기억 저장";
-      memoryBtn.classList.remove("saved");
+      hasOpenedArchive = false;
+      memoryBtn.textContent = "기억 남기기";
       memoryBtn.classList.add("show");
-      subEl.textContent = "복원된 기억을 보존할 수 있습니다.";
+      subEl.textContent = "이 공간이 떠올리게 한 기억을 남길 수 있습니다.";
 
       nudgeTimer = setTimeout(() => {
         nudgeMemoryButton();
@@ -434,17 +595,39 @@
       }, 150);
     }
 
-    function downloadMemoryImage() {
-      const link = document.createElement("a");
-      link.href = "./assets/ai.jpg";
-      link.download = "REM404_preserved_memory.jpg";
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-
     function hideIntroUI() {
       loadingText.classList.add("hide");
+    }
+
+    function openArchive() {
+      hasOpenedArchive = true;
+      clearTimeout(nudgeTimer);
+      cameraFlash();
+
+      memoryBtn.classList.remove("show");
+      uiEl.classList.add("fade");
+      guideEl.classList.add("fade");
+
+      setTimeout(() => {
+        archiveScreen.classList.add("show");
+      }, 180);
+    }
+
+    function animateCount(from, to) {
+      const duration = 850;
+      const start = performance.now();
+
+      function update(now) {
+        const progress = Math.min((now - start) / duration, 1);
+        const value = Math.round(from + (to - from) * progress);
+        memoryCount.textContent = value.toLocaleString();
+
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        }
+      }
+
+      requestAnimationFrame(update);
     }
 
     window.addEventListener("load", () => {
@@ -484,26 +667,26 @@
     });
 
     memoryBtn.addEventListener("click", () => {
-      if (!isImageReady || hasSaved) return;
+      if (!isImageReady || hasOpenedArchive) return;
+      openArchive();
+    });
 
-      hasSaved = true;
-      clearTimeout(nudgeTimer);
+    memoryInput.addEventListener("input", () => {
+      charCount.textContent = `${memoryInput.value.length} / 80`;
+    });
 
-      vibrateOnce();
-      cameraFlash();
+    submitMemoryBtn.addEventListener("click", () => {
+      const text = memoryInput.value.trim();
 
-      setTimeout(() => {
-        memoryBtn.textContent = "기억이 보존되었습니다.";
-        memoryBtn.classList.add("saved");
-        subEl.textContent = "재구성된 기억이 보존되었습니다.";
-        downloadMemoryImage();
-      }, 170);
+      if (!text) {
+        memoryInput.focus();
+        return;
+      }
 
-      setTimeout(() => {
-        memoryBtn.classList.remove("show");
-        uiEl.classList.add("fade");
-        guideEl.classList.add("fade");
-      }, 2600);
+      archiveForm.classList.add("hide");
+      archiveComplete.classList.add("show");
+
+      animateCount(248, 249);
     });
   </script>
 </body>
