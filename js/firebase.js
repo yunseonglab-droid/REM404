@@ -9,11 +9,7 @@ import {
   addDoc,
   serverTimestamp,
   getCountFromServer,
-  getDocs,
-  query,
-  where,
-  orderBy,
-  limit
+  getDocs
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -64,36 +60,9 @@ export async function getMemoryCount() {
 }
 
 export async function getRandomMemory() {
-  const seed = Math.random();
+  const snapshot = await getDocs(memoriesRef);
 
-  const forwardQuery = query(
-    memoriesRef,
-    where("random", ">=", seed),
-    orderBy("random"),
-    limit(1)
-  );
-
-  const forwardSnapshot = await getDocs(forwardQuery);
-
-  if (!forwardSnapshot.empty) {
-    return normalizeMemory(forwardSnapshot.docs[0]);
-  }
-
-  const backwardQuery = query(
-    memoriesRef,
-    where("random", "<", seed),
-    orderBy("random"),
-    limit(1)
-  );
-
-  const backwardSnapshot = await getDocs(backwardQuery);
-
-  if (!backwardSnapshot.empty) {
-    return normalizeMemory(backwardSnapshot.docs[0]);
-  }
-
-  const fallbackSnapshot = await getDocs(memoriesRef);
-  const memories = fallbackSnapshot.docs
+  const memories = snapshot.docs
     .map((docSnapshot) => normalizeMemory(docSnapshot))
     .filter(Boolean);
 
