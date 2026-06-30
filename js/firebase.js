@@ -8,7 +8,12 @@ import {
   collection,
   addDoc,
   serverTimestamp,
-  getCountFromServer
+  getCountFromServer,
+  getDocs,
+  query,
+  where,
+  orderBy,
+  limit
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -26,6 +31,15 @@ const db = getFirestore(app);
 
 const memoriesRef = collection(db, "memories");
 
+function normalizeMemory(docSnapshot) {
+  const data = docSnapshot.data();
+  const text = typeof data.memory === "string" ? data.memory.trim() : "";
+
+  if (!text) return null;
+
+  return text;
+}
+
 export async function saveMemory(memoryText) {
   const text = memoryText.trim();
 
@@ -35,6 +49,7 @@ export async function saveMemory(memoryText) {
   await addDoc(memoriesRef, {
     memory: text,
     createdAt: serverTimestamp(),
+    random: Math.random(),
     exhibition: "REM404 Archive Test",
     project: "REM404",
     archive: "REM404 Archive",
@@ -46,4 +61,45 @@ export async function saveMemory(memoryText) {
 export async function getMemoryCount() {
   const snapshot = await getCountFromServer(memoriesRef);
   return snapshot.data().count;
+}
+
+export async function getRandomMemory() {
+  const seed = Math.random();
+
+  const forwardQuery = query(
+    memoriesRef,
+    where("random", ">=", seed),
+    orderBy("random"),
+    limit(1)
+  );
+
+  const forwardSnapshot = await getDocs(forwardQuery);
+
+  if (!forwardSnapshot.empty) {
+    return normalizeMemory(forwardSnapshot.docs[0]);
+  }
+
+  const backwardQuery = query(
+    memoriesRef,
+    where("random", "<", seed),
+    orderBy("random"),
+    limit(1)
+  );
+
+  const backwardSnapshot = await getDocs(backwardQuery);
+
+  if (!backwardSnapshot.empty) {
+    return normalizeMemory(backwardSnapshot.docs[0]);
+  }
+
+  const fallbackSnapshot = await getDocs(memoriesRef);
+  const memories = fallbackSnapshot.docs
+    .map((docSnapshot) => normalizeMemory(docSnapshot))
+    .filter(Boolean);
+
+  if (memories.length === 0) return null;
+
+  const randomIndex = Math.floor(Math.random() * memories.length);
+
+  return memories[randomIndex];
 }
