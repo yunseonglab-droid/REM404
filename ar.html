@@ -459,8 +459,8 @@
     const submitMemoryBtn = document.getElementById("submitMemoryBtn");
     const memoryCount = document.getElementById("memoryCount");
 
-    const FAST_REVEAL_DURATION = 520;
-    const SLOW_REVEAL_DURATION = 1800;
+    const FAST_REVEAL_DURATION = 680;
+    const SLOW_REVEAL_DURATION = 2300;
     const INITIAL_RENDER_OPACITY = 0.6;
     const MID_BLUR = 4;
     const MAX_BLUR = 10;
@@ -639,7 +639,7 @@
     }
 
     function animateCount(from, to) {
-      const duration = 2200;
+      const duration = 1300;
       const start = performance.now();
       const countDistance = to - from;
 
