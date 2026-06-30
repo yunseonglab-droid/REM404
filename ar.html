@@ -639,16 +639,36 @@
     }
 
     function animateCount(from, to) {
-      const duration = 850;
+      const duration = 2200;
       const start = performance.now();
+      const countDistance = to - from;
+
+      memoryCount.style.willChange = "transform, opacity";
+      memoryCount.style.transformOrigin = "center";
+      memoryCount.style.transform = "scale(1)";
+      memoryCount.style.opacity = "0.92";
+
+      function easeOutCubic(value) {
+        return 1 - Math.pow(1 - value, 3);
+      }
 
       function update(now) {
         const progress = Math.min((now - start) / duration, 1);
-        const value = Math.round(from + (to - from) * progress);
+        const easedProgress = easeOutCubic(progress);
+        const value = Math.floor(from + (countDistance * easedProgress));
+        const pulse = Math.sin(progress * Math.PI) * 0.025;
+
         memoryCount.textContent = value.toLocaleString();
+        memoryCount.style.transform = `scale(${1 + pulse})`;
+        memoryCount.style.opacity = `${0.92 + (pulse * 2)}`;
 
         if (progress < 1) {
           requestAnimationFrame(update);
+        } else {
+          memoryCount.textContent = to.toLocaleString();
+          memoryCount.style.transform = "scale(1)";
+          memoryCount.style.opacity = "1";
+          memoryCount.style.willChange = "auto";
         }
       }
 
