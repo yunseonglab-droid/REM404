@@ -52,12 +52,12 @@
       position: fixed;
       left: 50%;
       top: 50%;
-      width: min(72vw, 420px);
+      width: min(76vw, 420px);
       aspect-ratio: 1.6 / 1;
       transform: translate(-50%, -50%);
       z-index: 9998;
       pointer-events: none;
-      opacity: 0.45;
+      opacity: 0.58;
       transition: opacity 1.4s ease;
     }
 
@@ -67,7 +67,7 @@
       position: absolute;
       width: 34px;
       height: 34px;
-      border-color: rgba(17,17,17,0.55);
+      border-color: rgba(17,17,17,0.68);
       border-style: solid;
     }
 
@@ -390,8 +390,8 @@
 
 <body>
   <div id="ui">
-    <div id="status">사진을 화면 중앙에 맞춰주세요.</div>
-    <div id="sub">인식되면 기억이 서서히 복원됩니다.</div>
+    <div id="status">사진 전체가 화면 안에 들어오도록 맞춰주세요.</div>
+    <div id="sub">천천히 가까이 다가가며<br>빛 반사를 피해 주세요.</div>
   </div>
 
   <div id="guide">
@@ -514,18 +514,25 @@
     const FAIL_HINT_2 = 10000;
     const BUTTON_NUDGE_TIME = 10000;
     const ARCHIVE_ENTER_DELAY = 120;
+    const RECOGNITION_STABLE_DELAY = 180;
+    const RECOGNITION_FEEDBACK_DURATION = 400;
+    const RECOGNITION_HAPTIC_DURATION = 25;
 
     let animationFrame = null;
     let startTime = null;
     let isImageReady = false;
     let hasOpenedArchive = false;
     let foundOnce = false;
+    let isTargetActive = false;
+    let hasVibratedForCurrentTarget = false;
 
     let hintTimer1 = null;
     let hintTimer2 = null;
     let nudgeTimer = null;
     let uiFadeTimer = null;
     let guideFadeTimer = null;
+    let recognitionStableTimer = null;
+    let recognitionRevealTimer = null;
 
     let firebaseApi = null;
 
@@ -545,6 +552,19 @@
       return 1 - Math.pow(1 - value, 3);
     }
 
+    function setInstruction(mainText, subHtml) {
+      statusEl.textContent = mainText;
+      subEl.innerHTML = subHtml;
+    }
+
+    function vibrateOnce() {
+      if (hasVibratedForCurrentTarget) return;
+      if (!("vibrate" in navigator)) return;
+
+      navigator.vibrate(RECOGNITION_HAPTIC_DURATION);
+      hasVibratedForCurrentTarget = true;
+    }
+
     function setOpacity(value) {
       overlay.setAttribute("material", "opacity", value);
     }
@@ -560,6 +580,8 @@
       clearTimeout(nudgeTimer);
       clearTimeout(uiFadeTimer);
       clearTimeout(guideFadeTimer);
+      clearTimeout(recognitionStableTimer);
+      clearTimeout(recognitionRevealTimer);
     }
 
     function stopFade() {
@@ -590,7 +612,10 @@
       hasOpenedArchive = false;
       memoryBtn.textContent = "기억 남기기";
       memoryBtn.classList.add("show");
-      subEl.textContent = "이 공간이 떠올리게 한 기억을 남길 수 있습니다.";
+      setInstruction(
+        "기억이 복원되었습니다.",
+        "이 공간이 떠올리게 한 기억을<br>남길 수 있습니다."
+      );
 
       nudgeTimer = setTimeout(() => {
         nudgeMemoryButton();
@@ -602,15 +627,19 @@
 
       hintTimer1 = setTimeout(() => {
         if (!foundOnce) {
-          statusEl.textContent = "사진과의 거리를 조금 조정해보세요.";
-          subEl.textContent = "화면 중앙에 사진이 크게 들어오면 인식이 쉬워집니다.";
+          setInstruction(
+            "사진과의 거리를 조금 조정해보세요.",
+            "화면 중앙에 사진 전체가 들어오면 인식이 쉬워집니다."
+          );
         }
       }, FAIL_HINT_1);
 
       hintTimer2 = setTimeout(() => {
         if (!foundOnce) {
-          statusEl.textContent = "빛 반사를 피해주세요.";
-          subEl.textContent = "사진 표면이 너무 밝게 반사되면 인식이 어려울 수 있습니다.";
+          setInstruction(
+            "빛 반사를 피해주세요.",
+            "사진 표면이 너무 밝게 반사되면 인식이 어려울 수 있습니다."
+          );
         }
       }, FAIL_HINT_2);
     }
@@ -782,28 +811,49 @@
     });
 
     target.addEventListener("targetFound", () => {
+      if (isTargetActive) return;
+
+      isTargetActive = true;
       foundOnce = true;
       stopFailHints();
       clearTimeout(uiFadeTimer);
       clearTimeout(guideFadeTimer);
+      clearTimeout(recognitionStableTimer);
+      clearTimeout(recognitionRevealTimer);
 
       hideIntroUI();
 
-      statusEl.textContent = "사진이 인식되었습니다.";
-      subEl.textContent = "기억이 서서히 복원됩니다.";
+      recognitionStableTimer = setTimeout(() => {
+        if (!isTargetActive) return;
 
-      startFade();
-      fadeInstructionLater();
+        vibrateOnce();
+
+        setInstruction(
+          "기억을 찾았습니다.",
+          "잠시 후 기억을 복원합니다."
+        );
+
+        recognitionRevealTimer = setTimeout(() => {
+          if (!isTargetActive) return;
+
+          startFade();
+          fadeInstructionLater();
+        }, RECOGNITION_FEEDBACK_DURATION);
+      }, RECOGNITION_STABLE_DELAY);
     });
 
     target.addEventListener("targetLost", () => {
       if (archiveScreen.classList.contains("show")) return;
 
+      isTargetActive = false;
       foundOnce = false;
+      hasVibratedForCurrentTarget = false;
       clearTimers();
 
-      statusEl.textContent = "전시 사진을 다시 비춰주세요.";
-      subEl.textContent = "거리와 빛 반사를 조정해보세요.";
+      setInstruction(
+        "전시 사진을 다시 비춰주세요.",
+        "사진 전체가 화면 안에 들어오도록<br>거리와 빛 반사를 조정해보세요."
+      );
 
       uiEl.classList.remove("fade");
       guideEl.classList.remove("fade");
