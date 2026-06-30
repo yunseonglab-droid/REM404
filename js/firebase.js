@@ -1,5 +1,5 @@
 // js/firebase.js
-// REM404 Archive - Firebase 연결 파일
+// REM404 Archive v0.3
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 
@@ -29,19 +29,17 @@ const memoriesRef = collection(db, "memories");
 export async function saveMemory(memoryText) {
   const text = memoryText.trim();
 
-  if (!text) {
-    throw new Error("EMPTY_MEMORY");
-  }
-
-  if (text.length > 80) {
-    throw new Error("TOO_LONG_MEMORY");
-  }
+  if (!text) throw new Error("EMPTY_MEMORY");
+  if (text.length > 80) throw new Error("TOO_LONG_MEMORY");
 
   await addDoc(memoriesRef, {
     memory: text,
     createdAt: serverTimestamp(),
-    project: "REM404 Archive",
-    version: "v0.3"
+    exhibition: "REM404 Archive Test",
+    project: "REM404",
+    archive: "REM404 Archive",
+    version: "v0.3",
+    language: "ko"
   });
 }
 
