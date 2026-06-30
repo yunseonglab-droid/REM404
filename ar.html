@@ -45,7 +45,7 @@
     #sub {
       font-size: 13px;
       color: rgba(17,17,17,0.68);
-      line-height: 1.5;
+      line-height: 1.55;
     }
 
     #guide {
@@ -57,7 +57,7 @@
       transform: translate(-50%, -50%);
       z-index: 9998;
       pointer-events: none;
-      opacity: 0.58;
+      opacity: 0.6;
       transition: opacity 1.4s ease;
     }
 
@@ -67,7 +67,7 @@
       position: absolute;
       width: 34px;
       height: 34px;
-      border-color: rgba(17,17,17,0.68);
+      border-color: rgba(17,17,17,0.7);
       border-style: solid;
     }
 
@@ -275,11 +275,13 @@
       font-weight: 850;
       font-family: inherit;
       box-shadow: 0 10px 30px rgba(0,0,0,.12);
+      transition: opacity 0.25s ease;
     }
 
     #submitMemoryBtn:disabled,
     #viewMemoryBtn:disabled {
-      opacity: 0.6;
+      opacity: 0.7;
+      pointer-events: none;
     }
 
     #submitMemoryBtn:active,
@@ -287,8 +289,14 @@
       transform: scale(.98);
     }
 
-    #archiveComplete { display: none; }
+    #archiveComplete {
+      display: none;
+      opacity: 0;
+      transition: opacity 0.32s ease;
+    }
+
     #archiveComplete.show { display: block; }
+    #archiveComplete.visible { opacity: 1; }
     #archiveForm.hide { display: none; }
 
     .complete-text {
@@ -323,6 +331,25 @@
       font-size: 14px;
       color: #555;
       line-height: 1.7;
+    }
+
+    #anonymousMemoryArea {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.32s ease;
+    }
+
+    #anonymousMemoryArea.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .view-memory-hint {
+      margin-top: 12px;
+      font-size: 12px;
+      line-height: 1.65;
+      color: rgba(17,17,17,0.7);
+      text-align: center;
     }
 
     #sharedMemory {
@@ -390,8 +417,8 @@
 
 <body>
   <div id="ui">
-    <div id="status">사진 전체가 화면 안에 들어오도록 맞춰주세요.</div>
-    <div id="sub">천천히 가까이 다가가며<br>빛 반사를 피해 주세요.</div>
+    <div id="status">사각형 안에 사진을 맞춰주세요.</div>
+    <div id="sub">사진 전체가 사각형 안에 들어오도록<br>천천히 맞춰주세요.<br><br>빛 반사를 피해주시면<br>더 빠르게 인식됩니다.</div>
   </div>
 
   <div id="guide">
@@ -436,7 +463,7 @@
         <div class="complete-text">
           당신의 기억이<br>
           REM404 Archive에<br>
-          추가되었습니다.
+          저장되었습니다.
         </div>
 
         <div class="archive-line"></div>
@@ -445,11 +472,18 @@
         <div class="count-number" id="memoryCount">0</div>
         <div class="count-desc">개의 기억이 축적되었습니다.</div>
 
-        <button id="viewMemoryBtn">다른 기억 보기</button>
+        <div id="anonymousMemoryArea">
+          <button id="viewMemoryBtn">다른 기억 보기</button>
 
-        <div id="sharedMemory">
-          <div class="shared-label">ANONYMOUS MEMORY</div>
-          <div class="shared-text" id="sharedMemoryText"></div>
+          <div class="view-memory-hint">
+            다른 사람이 남긴 기억을<br>
+            익명으로 볼 수 있습니다.
+          </div>
+
+          <div id="sharedMemory">
+            <div class="shared-label">ANONYMOUS MEMORY</div>
+            <div class="shared-text" id="sharedMemoryText"></div>
+          </div>
         </div>
       </div>
     </div>
@@ -500,6 +534,7 @@
     const charCount = document.getElementById("charCount");
     const submitMemoryBtn = document.getElementById("submitMemoryBtn");
     const memoryCount = document.getElementById("memoryCount");
+    const anonymousMemoryArea = document.getElementById("anonymousMemoryArea");
     const viewMemoryBtn = document.getElementById("viewMemoryBtn");
     const sharedMemory = document.getElementById("sharedMemory");
     const sharedMemoryText = document.getElementById("sharedMemoryText");
@@ -517,6 +552,8 @@
     const RECOGNITION_STABLE_DELAY = 180;
     const RECOGNITION_FEEDBACK_DURATION = 400;
     const RECOGNITION_HAPTIC_DURATION = 25;
+    const RECOVERY_COMPLETE_DELAY = 500;
+    const ANONYMOUS_MEMORY_DELAY = 300;
 
     let animationFrame = null;
     let startTime = null;
@@ -533,6 +570,7 @@
     let guideFadeTimer = null;
     let recognitionStableTimer = null;
     let recognitionRevealTimer = null;
+    let recoveryCompleteTimer = null;
 
     let firebaseApi = null;
 
@@ -582,6 +620,7 @@
       clearTimeout(guideFadeTimer);
       clearTimeout(recognitionStableTimer);
       clearTimeout(recognitionRevealTimer);
+      clearTimeout(recoveryCompleteTimer);
     }
 
     function stopFade() {
@@ -608,18 +647,23 @@
     }
 
     function showMemoryButton() {
-      isImageReady = true;
-      hasOpenedArchive = false;
-      memoryBtn.textContent = "기억 남기기";
-      memoryBtn.classList.add("show");
       setInstruction(
         "기억이 복원되었습니다.",
-        "이 공간이 떠올리게 한 기억을<br>남길 수 있습니다."
+        "이 공간이 떠올리게 한 기억을<br>남겨보세요."
       );
 
-      nudgeTimer = setTimeout(() => {
-        nudgeMemoryButton();
-      }, BUTTON_NUDGE_TIME);
+      recoveryCompleteTimer = setTimeout(() => {
+        if (!isTargetActive || hasOpenedArchive) return;
+
+        isImageReady = true;
+        hasOpenedArchive = false;
+        memoryBtn.textContent = "기억 남기기";
+        memoryBtn.classList.add("show");
+
+        nudgeTimer = setTimeout(() => {
+          nudgeMemoryButton();
+        }, BUTTON_NUDGE_TIME);
+      }, RECOVERY_COMPLETE_DELAY);
     }
 
     function startFailHints() {
@@ -629,7 +673,7 @@
         if (!foundOnce) {
           setInstruction(
             "사진과의 거리를 조금 조정해보세요.",
-            "화면 중앙에 사진 전체가 들어오면 인식이 쉬워집니다."
+            "사진 전체가 사각형 안에 들어오도록<br>천천히 맞춰주세요."
           );
         }
       }, FAIL_HINT_1);
@@ -638,7 +682,7 @@
         if (!foundOnce) {
           setInstruction(
             "빛 반사를 피해주세요.",
-            "사진 표면이 너무 밝게 반사되면 인식이 어려울 수 있습니다."
+            "사진 표면이 너무 밝게 반사되면<br>인식이 어려울 수 있습니다."
           );
         }
       }, FAIL_HINT_2);
@@ -727,7 +771,16 @@
       }, ARCHIVE_ENTER_DELAY);
     }
 
-    function animateCount(from, to) {
+    function showArchiveComplete() {
+      archiveForm.classList.add("hide");
+      archiveComplete.classList.add("show");
+
+      requestAnimationFrame(() => {
+        archiveComplete.classList.add("visible");
+      });
+    }
+
+    function animateCount(from, to, onComplete) {
       const duration = 1050;
       const start = performance.now();
       const countDistance = to - from;
@@ -760,6 +813,10 @@
           memoryCount.style.transform = "translateX(0) scale(1)";
           memoryCount.style.opacity = "1";
           memoryCount.style.willChange = "auto";
+
+          if (typeof onComplete === "function") {
+            onComplete();
+          }
         }
       }
 
@@ -852,7 +909,7 @@
 
       setInstruction(
         "전시 사진을 다시 비춰주세요.",
-        "사진 전체가 화면 안에 들어오도록<br>거리와 빛 반사를 조정해보세요."
+        "사진 전체가 사각형 안에 들어오도록<br>거리와 빛 반사를 조정해보세요."
       );
 
       uiEl.classList.remove("fade");
@@ -889,7 +946,7 @@
       }
 
       submitMemoryBtn.disabled = true;
-      submitMemoryBtn.textContent = "기억을 남기는 중...";
+      submitMemoryBtn.textContent = "기억을 저장하는 중...";
 
       try {
         const beforeCount = await api.getMemoryCount();
@@ -898,10 +955,13 @@
 
         const afterCount = await api.getMemoryCount();
 
-        archiveForm.classList.add("hide");
-        archiveComplete.classList.add("show");
+        showArchiveComplete();
 
-        animateCount(beforeCount, afterCount);
+        animateCount(beforeCount, afterCount, () => {
+          setTimeout(() => {
+            anonymousMemoryArea.classList.add("show");
+          }, ANONYMOUS_MEMORY_DELAY);
+        });
       } catch (error) {
         console.error(error);
 
