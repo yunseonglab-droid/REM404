@@ -20,24 +20,117 @@
 
     #ui {
       position: fixed;
-      top: 16px;
-      left: 16px;
-      right: 16px;
+      top: 24px;
+      left: 24px;
+      right: 24px;
       z-index: 9999;
-      padding: 12px 14px;
-      border-radius: 14px;
-      color: #111;
-      background: rgba(255,255,255,0.82);
-      font-size: 14px;
-      line-height: 1.45;
+      color: rgba(17,17,17,0.62);
+      font-size: 13px;
+      line-height: 1.55;
       pointer-events: none;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.08);
-      backdrop-filter: blur(10px);
+      transition: opacity 0.8s ease;
     }
 
     #status {
-      font-weight: 850;
-      margin-bottom: 4px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    #sub {
+      font-weight: 400;
+    }
+
+    #ui.fade {
+      opacity: 0;
+    }
+
+    #guide {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      width: min(72vw, 420px);
+      aspect-ratio: 1.6 / 1;
+      transform: translate(-50%, -50%);
+      z-index: 9998;
+      pointer-events: none;
+      opacity: 0.45;
+      transition: opacity 0.8s ease;
+    }
+
+    #guide.fade {
+      opacity: 0;
+    }
+
+    .corner {
+      position: absolute;
+      width: 34px;
+      height: 34px;
+      border-color: rgba(17,17,17,0.55);
+      border-style: solid;
+    }
+
+    .tl {
+      top: 0;
+      left: 0;
+      border-width: 1.5px 0 0 1.5px;
+    }
+
+    .tr {
+      top: 0;
+      right: 0;
+      border-width: 1.5px 1.5px 0 0;
+    }
+
+    .bl {
+      bottom: 0;
+      left: 0;
+      border-width: 0 0 1.5px 1.5px;
+    }
+
+    .br {
+      bottom: 0;
+      right: 0;
+      border-width: 0 1.5px 1.5px 0;
+    }
+
+    #loadingText {
+      position: fixed;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10002;
+      color: rgba(17,17,17,0.68);
+      font-size: 13px;
+      letter-spacing: 0.04em;
+      text-align: center;
+      pointer-events: none;
+      transition: opacity 0.7s ease;
+    }
+
+    #loadingText.hide {
+      opacity: 0;
+    }
+
+    #loadingLine {
+      width: 160px;
+      height: 1px;
+      margin-top: 14px;
+      background: rgba(17,17,17,0.12);
+      overflow: hidden;
+    }
+
+    #loadingLine::after {
+      content: "";
+      display: block;
+      width: 45%;
+      height: 100%;
+      background: rgba(17,17,17,0.55);
+      animation: lineMove 1.4s ease-in-out infinite;
+    }
+
+    @keyframes lineMove {
+      0% { transform: translateX(-110%); }
+      100% { transform: translateX(260%); }
     }
 
     #memoryBtn {
@@ -46,20 +139,32 @@
       bottom: 34px;
       transform: translateX(-50%) translateY(28px);
       z-index: 9999;
+
       width: calc(100vw - 48px);
       max-width: 360px;
       height: 58px;
+
       border: 0;
       border-radius: 999px;
-      background: #ffffff;
+
+      background: rgba(255,255,255,0.88);
       color: #111111;
-      font-size: 17px;
+
+      font-size: 16px;
       font-weight: 850;
       letter-spacing: -0.02em;
-      box-shadow: 0 10px 34px rgba(0,0,0,0.30);
+
+      box-shadow: 0 10px 34px rgba(0,0,0,0.26);
+      backdrop-filter: blur(10px);
+
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.45s ease, transform 0.45s ease, background 0.25s ease, color 0.25s ease;
+
+      transition:
+        opacity 0.45s ease,
+        transform 0.45s ease,
+        background 0.25s ease,
+        color 0.25s ease;
     }
 
     #memoryBtn.show {
@@ -120,11 +225,23 @@
     <div id="sub">인식되면 기억이 서서히 복원됩니다.</div>
   </div>
 
-  <button id="memoryBtn">기억 저장하기</button>
+  <div id="guide">
+    <div class="corner tl"></div>
+    <div class="corner tr"></div>
+    <div class="corner bl"></div>
+    <div class="corner br"></div>
+  </div>
+
+  <div id="loadingText">
+    기억을 찾는 중
+    <div id="loadingLine"></div>
+  </div>
+
+  <button id="memoryBtn">기억 저장</button>
   <div id="flash"></div>
 
   <a-scene
-    mindar-image="imageTargetSrc: ./assets/target.mind; autoStart: true; uiScanning: yes; uiLoading: yes; uiError: yes;"
+    mindar-image="imageTargetSrc: ./assets/target.mind; autoStart: true; uiScanning: no; uiLoading: no; uiError: yes;"
     embedded
     color-space="sRGB"
     renderer="colorManagement: true; physicallyCorrectLights: true; alpha: true; antialias: true"
@@ -152,6 +269,10 @@
   <script>
     const statusEl = document.getElementById("status");
     const subEl = document.getElementById("sub");
+    const uiEl = document.getElementById("ui");
+    const guideEl = document.getElementById("guide");
+    const loadingText = document.getElementById("loadingText");
+
     const target = document.getElementById("target");
     const overlay = document.getElementById("aiOverlay");
     const memoryBtn = document.getElementById("memoryBtn");
@@ -183,7 +304,7 @@
     function resetMemoryButton() {
       isImageReady = false;
       hasSaved = false;
-      memoryBtn.textContent = "기억 저장하기";
+      memoryBtn.textContent = "기억 저장";
       memoryBtn.classList.remove("show");
       memoryBtn.classList.remove("saved");
     }
@@ -191,10 +312,10 @@
     function showMemoryButton() {
       isImageReady = true;
       hasSaved = false;
-      memoryBtn.textContent = "기억 저장하기";
+      memoryBtn.textContent = "기억 저장";
       memoryBtn.classList.remove("saved");
       memoryBtn.classList.add("show");
-      subEl.textContent = "기억 저장하기 버튼을 눌러 이미지를 저장할 수 있습니다.";
+      subEl.textContent = "복원된 기억을 보존할 수 있습니다.";
     }
 
     function startFailHints() {
@@ -262,6 +383,17 @@
       document.body.removeChild(link);
     }
 
+    function hideIntroUI() {
+      loadingText.classList.add("hide");
+      guideEl.classList.add("fade");
+    }
+
+    function fadeInstructionLater() {
+      setTimeout(() => {
+        uiEl.classList.add("fade");
+      }, 3500);
+    }
+
     window.addEventListener("load", () => {
       foundOnce = false;
       startFailHints();
@@ -270,17 +402,22 @@
     target.addEventListener("targetFound", () => {
       foundOnce = true;
       stopFailHints();
+      hideIntroUI();
 
       statusEl.textContent = "사진이 인식되었습니다.";
       subEl.textContent = "기억이 서서히 복원됩니다.";
       startFade();
+      fadeInstructionLater();
     });
 
     target.addEventListener("targetLost", () => {
       foundOnce = false;
 
       statusEl.textContent = "전시 사진을 다시 비춰주세요.";
-      subEl.textContent = "사진과의 거리와 빛 반사를 조정해보세요.";
+      subEl.textContent = "거리와 빛 반사를 조정해보세요.";
+      uiEl.classList.remove("fade");
+      guideEl.classList.remove("fade");
+      loadingText.classList.remove("hide");
 
       resetMemoryButton();
       stopFade();
@@ -294,14 +431,15 @@
       cameraFlash();
 
       setTimeout(() => {
-        memoryBtn.textContent = "기억이 저장되었습니다.";
+        memoryBtn.textContent = "기억이 보존되었습니다.";
         memoryBtn.classList.add("saved");
-        subEl.textContent = "재구성된 이미지가 저장되었습니다.";
+        subEl.textContent = "재구성된 기억이 보존되었습니다.";
         downloadMemoryImage();
       }, 170);
 
       setTimeout(() => {
         memoryBtn.classList.remove("show");
+        uiEl.classList.add("fade");
       }, 2600);
     });
   </script>
