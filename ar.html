@@ -209,6 +209,8 @@
       width: 100vw !important;
       height: 100vh !important;
       z-index: 1 !important;
+      filter: blur(0px);
+      transition: filter 0.08s linear;
     }
 
     a-scene {
@@ -279,6 +281,7 @@
     const flash = document.getElementById("flash");
 
     const FADE_DURATION = 6000;
+    const MAX_BLUR = 10;
     const FAIL_HINT_1 = 5000;
     const FAIL_HINT_2 = 10000;
     const BUTTON_NUDGE_TIME = 10000;
@@ -299,6 +302,13 @@
       overlay.setAttribute("material", "opacity", value);
     }
 
+    function setCanvasBlur(value) {
+      const canvas = document.querySelector("canvas");
+      if (canvas) {
+        canvas.style.filter = `blur(${value}px)`;
+      }
+    }
+
     function clearTimers() {
       clearTimeout(hintTimer1);
       clearTimeout(hintTimer2);
@@ -312,6 +322,7 @@
       animationFrame = null;
       startTime = null;
       setOpacity(0);
+      setCanvasBlur(0);
     }
 
     function vibrateOnce() {
@@ -392,15 +403,23 @@
       function animate(now) {
         const progress = Math.min((now - startTime) / FADE_DURATION, 1);
 
-        const eased = progress < 0.35
-          ? progress * 0.45
-          : 0.1575 + ((progress - 0.35) / 0.65) * 0.8425;
+        let eased;
+
+        if (progress < 0.2) {
+          eased = progress * 1.5;
+        } else {
+          eased = 0.30 + ((progress - 0.2) / 0.8) * 0.70;
+        }
+
+        const blurAmount = Math.max(0, MAX_BLUR * (1 - progress));
 
         setOpacity(eased);
+        setCanvasBlur(blurAmount);
 
         if (progress < 1) {
           animationFrame = requestAnimationFrame(animate);
         } else {
+          setCanvasBlur(0);
           showMemoryButton();
         }
       }
