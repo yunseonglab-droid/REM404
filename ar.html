@@ -483,8 +483,6 @@
   </a-scene>
 
   <script type="module">
-    import { saveMemory, getMemoryCount, getRandomMemory } from "./js/firebase.js";
-
     const statusEl = document.getElementById("status");
     const subEl = document.getElementById("sub");
     const uiEl = document.getElementById("ui");
@@ -528,6 +526,20 @@
     let nudgeTimer = null;
     let uiFadeTimer = null;
     let guideFadeTimer = null;
+
+    let firebaseApi = null;
+
+    async function loadFirebaseApi() {
+      if (firebaseApi) return firebaseApi;
+
+      try {
+        firebaseApi = await import("./js/firebase.js");
+        return firebaseApi;
+      } catch (error) {
+        console.error("Firebase module load failed:", error);
+        return null;
+      }
+    }
 
     function easeOutMemory(value) {
       return 1 - Math.pow(1 - value, 3);
@@ -728,11 +740,22 @@
     async function showRandomMemory() {
       viewMemoryBtn.disabled = true;
       viewMemoryBtn.textContent = "기억을 불러오는 중...";
-
       sharedMemory.classList.remove("show");
 
+      const api = await loadFirebaseApi();
+
+      if (!api || !api.getRandomMemory) {
+        setTimeout(() => {
+          sharedMemoryText.textContent = "기억을 불러오지 못했습니다.";
+          sharedMemory.classList.add("show");
+          viewMemoryBtn.textContent = "다른 기억 보기";
+          viewMemoryBtn.disabled = false;
+        }, 300);
+        return;
+      }
+
       try {
-        const randomMemory = await getRandomMemory();
+        const randomMemory = await api.getRandomMemory();
 
         setTimeout(() => {
           sharedMemoryText.textContent = randomMemory || "아직 남겨진 기억이 없습니다.";
@@ -755,6 +778,7 @@
     window.addEventListener("load", () => {
       foundOnce = false;
       startFailHints();
+      loadFirebaseApi();
     });
 
     target.addEventListener("targetFound", () => {
@@ -807,21 +831,27 @@
         return;
       }
 
+      const api = await loadFirebaseApi();
+
+      if (!api || !api.saveMemory || !api.getMemoryCount) {
+        alert("기억 저장 기능을 불러오지 못했습니다. 다시 시도해주세요.");
+        return;
+      }
+
       submitMemoryBtn.disabled = true;
       submitMemoryBtn.textContent = "기억을 남기는 중...";
 
       try {
-        const beforeCount = await getMemoryCount();
+        const beforeCount = await api.getMemoryCount();
 
-        await saveMemory(text);
+        await api.saveMemory(text);
 
-        const afterCount = await getMemoryCount();
+        const afterCount = await api.getMemoryCount();
 
         archiveForm.classList.add("hide");
         archiveComplete.classList.add("show");
 
         animateCount(beforeCount, afterCount);
-
       } catch (error) {
         console.error(error);
 
