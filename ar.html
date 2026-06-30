@@ -675,19 +675,39 @@
       charCount.textContent = `${memoryInput.value.length} / 80`;
     });
 
-    submitMemoryBtn.addEventListener("click", () => {
-      const text = memoryInput.value.trim();
+   submitMemoryBtn.addEventListener("click", async () => {
+  const text = memoryInput.value.trim();
 
-      if (!text) {
-        memoryInput.focus();
-        return;
-      }
+  if (!text) {
+    memoryInput.focus();
+    return;
+  }
 
-      archiveForm.classList.add("hide");
-      archiveComplete.classList.add("show");
+  submitMemoryBtn.disabled = true;
+  submitMemoryBtn.textContent = "기억을 남기는 중...";
 
-      animateCount(248, 249);
-    });
-  </script>
+  try {
+    const beforeCount = await getMemoryCount();
+
+    await saveMemory(text);
+
+    const afterCount = await getMemoryCount();
+
+    archiveForm.classList.add("hide");
+    archiveComplete.classList.add("show");
+
+    animateCount(beforeCount, afterCount);
+
+  } catch (error) {
+    console.error(error);
+
+    alert("기억을 저장하지 못했습니다. 다시 시도해주세요.");
+
+    submitMemoryBtn.disabled = false;
+    submitMemoryBtn.textContent = "기억 남기기";
+  }
+});
+<script type="module">
+  import { saveMemory, getMemoryCount } from "./js/firebase.js";
 </body>
 </html>
