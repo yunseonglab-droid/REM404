@@ -1,104 +1,207 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>남겨진 사람들의 기억과 흔적</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
-  <style>
-    html, body {
-      margin: 0;
-      width: 100%;
-      height: 100%;
-      background: #ffffff;
-      color: #111111;
-      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans KR", sans-serif;
-    }
+<title>남겨진 사람들의 기억과 흔적</title>
 
-    body {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 28px;
-      box-sizing: border-box;
-    }
+<style>
 
-    main {
-      width: 100%;
-      max-width: 420px;
-    }
+html,body{
+margin:0;
+width:100%;
+height:100%;
+background:#fff;
+color:#111;
+font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;
+}
 
-    .label {
-      font-size: 12px;
-      letter-spacing: 0.12em;
-      color: #888;
-      margin-bottom: 34px;
-      text-align: left;
-    }
+body{
+display:flex;
+align-items:center;
+justify-content:center;
+padding:28px;
+box-sizing:border-box;
+}
 
-    h1 {
-      font-size: 32px;
-      line-height: 1.25;
-      margin: 0 0 30px;
-      font-weight: 850;
-      letter-spacing: -0.05em;
-      text-align: left;
-    }
+main{
+width:100%;
+max-width:420px;
+}
 
-    .text {
-      font-size: 15px;
-      line-height: 1.85;
-      color: #333;
-      margin-bottom: 34px;
-      text-align: left;
-    }
+.label{
+font-size:12px;
+letter-spacing:.12em;
+color:#888;
+margin-bottom:34px;
+}
 
-    .notice {
-      font-size: 13px;
-      line-height: 1.7;
-      color: #777;
-      margin-bottom: 34px;
-      text-align: left;
-    }
+h1{
+font-size:32px;
+line-height:1.25;
+margin:0 0 30px;
+font-weight:850;
+letter-spacing:-.05em;
+}
 
-    a {
-      display: block;
-      text-align: center;
-      padding: 16px 20px;
-      border-radius: 999px;
-      background: #111;
-      color: #fff;
-      text-decoration: none;
-      font-size: 16px;
-      font-weight: 850;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.12);
-    }
+.text{
+font-size:15px;
+line-height:1.85;
+color:#333;
+margin-bottom:34px;
+}
 
-    a:active {
-      transform: scale(0.98);
-    }
-  </style>
+.notice{
+font-size:13px;
+line-height:1.7;
+color:#777;
+margin-bottom:34px;
+}
+
+#startBtn{
+
+display:block;
+text-align:center;
+padding:16px 20px;
+border-radius:999px;
+background:#111;
+color:#fff;
+text-decoration:none;
+font-size:16px;
+font-weight:850;
+
+box-shadow:0 10px 30px rgba(0,0,0,.12);
+
+transition:.2s;
+
+}
+
+#startBtn:active{
+
+transform:scale(.98);
+
+}
+
+/* ---------- Transition ---------- */
+
+#transition{
+
+position:fixed;
+inset:0;
+
+background:#fff;
+
+display:flex;
+align-items:center;
+justify-content:center;
+
+opacity:0;
+
+pointer-events:none;
+
+transition:opacity .45s ease;
+
+z-index:99999;
+
+}
+
+#transition.show{
+
+opacity:1;
+
+}
+
+#transitionText{
+
+font-size:14px;
+color:#666;
+letter-spacing:.05em;
+
+opacity:0;
+
+transition:opacity .25s ease .12s;
+
+}
+
+#transition.show #transitionText{
+
+opacity:1;
+
+}
+
+</style>
+
 </head>
 
 <body>
-  <main>
-    <div class="label">REM404 v0.2</div>
 
-    <h1>남겨진 사람들의<br>기억과 흔적</h1>
+<main>
 
-    <div class="text">
-      이곳에 남겨진 것은<br>
-      건물이 아니라 기억입니다.<br><br>
-      카메라를 통해 전시 사진을 비추면,<br>
-      다른 이미지가 서서히 나타납니다.
-    </div>
+<div class="label">
+REM404 v0.2
+</div>
 
-    <div class="notice">
-      이 경험은 스마트폰 카메라를 사용합니다.<br>
-      별도의 앱 설치는 필요하지 않습니다.
-    </div>
+<h1>
 
-    <a href="./ar.html">기억 복원하기</a>
-  </main>
+남겨진 사람들의<br>
+기억과 흔적
+
+</h1>
+
+<div class="text">
+
+이곳에 남겨진 것은<br>
+건물이 아니라 기억입니다.<br><br>
+
+카메라를 통해 전시 사진을 비추면,<br>
+다른 이미지가 서서히 나타납니다.
+
+</div>
+
+<div class="notice">
+
+이 경험은 스마트폰 카메라를 사용합니다.<br>
+별도의 앱 설치는 필요하지 않습니다.
+
+</div>
+
+<a href="./ar.html" id="startBtn">
+기억 복원하기
+</a>
+
+</main>
+
+<div id="transition">
+
+<div id="transitionText">
+
+기억을 복원하는 중...
+
+</div>
+
+</div>
+
+<script>
+
+const startBtn=document.getElementById("startBtn");
+const transition=document.getElementById("transition");
+
+startBtn.addEventListener("click",(e)=>{
+
+e.preventDefault();
+
+transition.classList.add("show");
+
+setTimeout(()=>{
+
+window.location.href="./ar.html";
+
+},450);
+
+});
+
+</script>
+
 </body>
 </html>
