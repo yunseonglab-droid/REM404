@@ -192,15 +192,25 @@
     #archiveInner {
       width: 100%;
       max-width: 420px;
-      transform: translateY(12px);
-      opacity: 0;
-      transition: opacity 0.45s ease 0.18s, transform 0.45s ease 0.18s;
     }
 
-    #archiveScreen.show #archiveInner {
+    .archive-animate {
+      opacity: 0;
+      transform: translateY(10px);
+      transition:
+        opacity 0.45s ease,
+        transform 0.45s cubic-bezier(.22,1,.36,1);
+    }
+
+    #archiveScreen.show .archive-animate {
       opacity: 1;
       transform: translateY(0);
     }
+
+    #archiveScreen.show .delay-1 { transition-delay: 0.16s; }
+    #archiveScreen.show .delay-2 { transition-delay: 0.32s; }
+    #archiveScreen.show .delay-3 { transition-delay: 0.48s; }
+    #archiveScreen.show .delay-4 { transition-delay: 0.64s; }
 
     .archive-label {
       font-size: 12px;
@@ -364,21 +374,23 @@
 
   <div id="archiveScreen">
     <div id="archiveInner">
-      <div class="archive-label">REM404 ARCHIVE</div>
+      <div class="archive-label archive-animate delay-1">REM404 ARCHIVE</div>
 
       <div id="archiveForm">
-        <h1 class="archive-title">당신의 기억</h1>
+        <h1 class="archive-title archive-animate delay-2">당신의 기억</h1>
 
-        <div class="archive-question">
+        <div class="archive-question archive-animate delay-3">
           이 공간은<br>
           당신에게<br>
           무엇을 떠올리게 했나요?
         </div>
 
-        <textarea id="memoryInput" maxlength="80" placeholder="80자 이내로 남겨주세요."></textarea>
-        <div id="charCount">0 / 80</div>
+        <div class="archive-animate delay-4">
+          <textarea id="memoryInput" maxlength="80" placeholder="80자 이내로 남겨주세요."></textarea>
+          <div id="charCount">0 / 80</div>
 
-        <button id="submitMemoryBtn">기억 남기기</button>
+          <button id="submitMemoryBtn">기억 남기기</button>
+        </div>
       </div>
 
       <div id="archiveComplete">
