@@ -1,3 +1,4 @@
+<!-- ar.html -->
 <!doctype html>
 <html lang="ko">
 <head>
@@ -262,7 +263,8 @@
       text-align: right;
     }
 
-    #submitMemoryBtn {
+    #submitMemoryBtn,
+    #viewMemoryBtn {
       margin-top: 24px;
       width: 100%;
       height: 58px;
@@ -276,11 +278,13 @@
       box-shadow: 0 10px 30px rgba(0,0,0,.12);
     }
 
-    #submitMemoryBtn:disabled {
+    #submitMemoryBtn:disabled,
+    #viewMemoryBtn:disabled {
       opacity: 0.6;
     }
 
-    #submitMemoryBtn:active {
+    #submitMemoryBtn:active,
+    #viewMemoryBtn:active {
       transform: scale(.98);
     }
 
@@ -320,6 +324,40 @@
       font-size: 14px;
       color: #555;
       line-height: 1.7;
+    }
+
+    #sharedMemory {
+      margin-top: 28px;
+      opacity: 0;
+      transform: translateY(8px);
+      transition:
+        opacity 0.55s cubic-bezier(.22,1,.36,1),
+        transform 0.55s cubic-bezier(.22,1,.36,1);
+    }
+
+    #sharedMemory.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .shared-label {
+      font-size: 12px;
+      letter-spacing: .12em;
+      color: #888;
+      margin-bottom: 12px;
+    }
+
+    .shared-text {
+      min-height: 72px;
+      padding: 16px;
+      border: 1px solid rgba(17,17,17,0.15);
+      border-radius: 18px;
+      background: #fafafa;
+      color: #222;
+      font-size: 15px;
+      line-height: 1.8;
+      box-sizing: border-box;
+      white-space: pre-wrap;
     }
 
     video {
@@ -407,6 +445,13 @@
         <div class="count-label">현재까지</div>
         <div class="count-number" id="memoryCount">0</div>
         <div class="count-desc">개의 기억이 축적되었습니다.</div>
+
+        <button id="viewMemoryBtn">다른 기억 보기</button>
+
+        <div id="sharedMemory">
+          <div class="shared-label">ANONYMOUS MEMORY</div>
+          <div class="shared-text" id="sharedMemoryText"></div>
+        </div>
       </div>
     </div>
   </div>
@@ -438,7 +483,7 @@
   </a-scene>
 
   <script type="module">
-    import { saveMemory, getMemoryCount } from "./js/firebase.js";
+    import { saveMemory, getMemoryCount, getRandomMemory } from "./js/firebase.js";
 
     const statusEl = document.getElementById("status");
     const subEl = document.getElementById("sub");
@@ -458,6 +503,9 @@
     const charCount = document.getElementById("charCount");
     const submitMemoryBtn = document.getElementById("submitMemoryBtn");
     const memoryCount = document.getElementById("memoryCount");
+    const viewMemoryBtn = document.getElementById("viewMemoryBtn");
+    const sharedMemory = document.getElementById("sharedMemory");
+    const sharedMemoryText = document.getElementById("sharedMemoryText");
 
     const FAST_REVEAL_DURATION = 820;
     const SLOW_REVEAL_DURATION = 2700;
@@ -677,6 +725,33 @@
       requestAnimationFrame(update);
     }
 
+    async function showRandomMemory() {
+      viewMemoryBtn.disabled = true;
+      viewMemoryBtn.textContent = "기억을 불러오는 중...";
+
+      sharedMemory.classList.remove("show");
+
+      try {
+        const randomMemory = await getRandomMemory();
+
+        setTimeout(() => {
+          sharedMemoryText.textContent = randomMemory || "아직 남겨진 기억이 없습니다.";
+          sharedMemory.classList.add("show");
+          viewMemoryBtn.textContent = "다른 기억 보기";
+          viewMemoryBtn.disabled = false;
+        }, 300);
+      } catch (error) {
+        console.error(error);
+
+        setTimeout(() => {
+          sharedMemoryText.textContent = "기억을 불러오지 못했습니다.";
+          sharedMemory.classList.add("show");
+          viewMemoryBtn.textContent = "다른 기억 보기";
+          viewMemoryBtn.disabled = false;
+        }, 300);
+      }
+    }
+
     window.addEventListener("load", () => {
       foundOnce = false;
       startFailHints();
@@ -755,6 +830,10 @@
         submitMemoryBtn.disabled = false;
         submitMemoryBtn.textContent = "기억 남기기";
       }
+    });
+
+    viewMemoryBtn.addEventListener("click", () => {
+      showRandomMemory();
     });
   </script>
 </body>
