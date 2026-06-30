@@ -459,7 +459,7 @@
     const submitMemoryBtn = document.getElementById("submitMemoryBtn");
     const memoryCount = document.getElementById("memoryCount");
 
-    const FADE_DURATION = 6000;
+    const FADE_DURATION = 3200;
     const MAX_BLUR = 10;
     const FAIL_HINT_1 = 5000;
     const FAIL_HINT_2 = 10000;
@@ -573,10 +573,10 @@
 
         let eased;
 
-        if (progress < 0.2) {
-          eased = progress * 1.5;
+        if (progress < 0.15) {
+          eased = progress * 3.5;
         } else {
-          eased = 0.30 + ((progress - 0.2) / 0.8) * 0.70;
+          eased = 0.52 + ((progress - 0.15) / 0.85) * 0.48;
         }
 
         const blurAmount = Math.max(0, MAX_BLUR * (1 - progress));
