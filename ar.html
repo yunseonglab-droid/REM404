@@ -639,13 +639,13 @@
     }
 
     function animateCount(from, to) {
-      const duration = 1300;
+      const duration = 1050;
       const start = performance.now();
       const countDistance = to - from;
 
       memoryCount.style.willChange = "transform, opacity";
       memoryCount.style.transformOrigin = "center";
-      memoryCount.style.transform = "scale(1)";
+      memoryCount.style.transform = "translateX(0) scale(1)";
       memoryCount.style.opacity = "0.92";
 
       function easeOutCubic(value) {
@@ -656,17 +656,19 @@
         const progress = Math.min((now - start) / duration, 1);
         const easedProgress = easeOutCubic(progress);
         const value = Math.floor(from + (countDistance * easedProgress));
-        const pulse = Math.sin(progress * Math.PI) * 0.025;
+
+        const pulse = Math.sin(progress * Math.PI) * 0.022;
+        const tremble = Math.sin(progress * Math.PI * 18) * 0.28 * (1 - progress);
 
         memoryCount.textContent = value.toLocaleString();
-        memoryCount.style.transform = `scale(${1 + pulse})`;
-        memoryCount.style.opacity = `${0.92 + (pulse * 2)}`;
+        memoryCount.style.transform = `translateX(${tremble}px) scale(${1 + pulse})`;
+        memoryCount.style.opacity = `${0.93 + (pulse * 2)}`;
 
         if (progress < 1) {
           requestAnimationFrame(update);
         } else {
           memoryCount.textContent = to.toLocaleString();
-          memoryCount.style.transform = "scale(1)";
+          memoryCount.style.transform = "translateX(0) scale(1)";
           memoryCount.style.opacity = "1";
           memoryCount.style.willChange = "auto";
         }
