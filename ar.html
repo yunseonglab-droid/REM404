@@ -299,29 +299,34 @@
     #archiveComplete.visible { opacity: 1; }
     #archiveForm.hide { display: none; }
 
+    #archiveComplete .archive-title {
+      margin-bottom: 20px;
+    }
+
     .complete-text {
-      font-size: 16px;
-      line-height: 1.9;
+      font-size: 15px;
+      line-height: 1.72;
       color: #222;
-      margin-bottom: 34px;
+      margin-bottom: 24px;
     }
 
     .archive-line {
       width: 100%;
       height: 1px;
       background: rgba(17,17,17,0.12);
-      margin: 28px 0;
+      margin: 20px 0 22px;
     }
 
     .count-label {
-      font-size: 13px;
-      color: #777;
-      line-height: 1.8;
-      margin-bottom: 8px;
+      font-size: 12px;
+      color: rgba(17,17,17,0.48);
+      line-height: 1.5;
+      margin-bottom: 4px;
     }
 
     .count-number {
-      font-size: 42px;
+      font-size: 48px;
+      line-height: 1.05;
       font-weight: 850;
       letter-spacing: -.05em;
       margin-bottom: 8px;
@@ -330,7 +335,7 @@
     .count-desc {
       font-size: 14px;
       color: #555;
-      line-height: 1.7;
+      line-height: 1.55;
     }
 
     #anonymousMemoryArea {
@@ -345,15 +350,15 @@
     }
 
     .view-memory-hint {
-      margin-top: 12px;
+      margin-top: 10px;
       font-size: 12px;
-      line-height: 1.65;
+      line-height: 1.6;
       color: rgba(17,17,17,0.7);
       text-align: center;
     }
 
     #sharedMemory {
-      margin-top: 28px;
+      margin-top: 24px;
       opacity: 0;
       transform: translateY(8px);
       transition:
@@ -462,15 +467,17 @@
 
         <div class="complete-text">
           당신의 기억이<br>
-          REM404 Archive에<br>
-          저장되었습니다.
+          REM404 Archive에 저장되었습니다.
         </div>
 
         <div class="archive-line"></div>
 
         <div class="count-label">현재까지</div>
         <div class="count-number" id="memoryCount">0</div>
-        <div class="count-desc">개의 기억이 축적되었습니다.</div>
+        <div class="count-desc">
+          개의 기억이<br>
+          이곳에 남아 있습니다.
+        </div>
 
         <div id="anonymousMemoryArea">
           <button id="viewMemoryBtn">다른 기억 보기</button>
