@@ -60,7 +60,6 @@ margin-bottom:34px;
 }
 
 #startBtn{
-
 display:block;
 text-align:center;
 padding:16px 20px;
@@ -70,68 +69,65 @@ color:#fff;
 text-decoration:none;
 font-size:16px;
 font-weight:850;
-
 box-shadow:0 10px 30px rgba(0,0,0,.12);
-
 transition:.2s;
-
 }
 
 #startBtn:active{
-
 transform:scale(.98);
-
 }
 
 /* ---------- Transition ---------- */
 
 #transition{
-
 position:fixed;
 inset:0;
-
 background:#fff;
-
 display:flex;
 align-items:center;
 justify-content:center;
-
 opacity:0;
-
 pointer-events:none;
-
-transition:opacity .45s ease;
-
+transition:opacity .9s ease;
 z-index:99999;
-
 }
 
 #transition.show{
-
 opacity:1;
-
 }
 
 #transitionText{
-
-font-size:14px;
-color:#666;
-letter-spacing:.05em;
-
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
 opacity:0;
-
-transition:opacity .25s ease .12s;
-
+transform:translateY(-6px);
+transition:
+  opacity .35s ease .2s,
+  transform .35s ease .2s;
 }
 
 #transition.show #transitionText{
-
 opacity:1;
+transform:translateY(0);
+}
 
+#transitionText .title{
+font-size:12px;
+letter-spacing:.18em;
+color:#8a8a8a;
+margin-bottom:14px;
+}
+
+#transitionText .subtitle{
+font-size:18px;
+font-weight:700;
+letter-spacing:-.03em;
+color:#222;
 }
 
 </style>
-
 </head>
 
 <body>
@@ -143,27 +139,21 @@ REM404 v0.2
 </div>
 
 <h1>
-
 남겨진 사람들의<br>
 기억과 흔적
-
 </h1>
 
 <div class="text">
-
 이곳에 남겨진 것은<br>
 건물이 아니라 기억입니다.<br><br>
 
 카메라를 통해 전시 사진을 비추면,<br>
 다른 이미지가 서서히 나타납니다.
-
 </div>
 
 <div class="notice">
-
 이 경험은 스마트폰 카메라를 사용합니다.<br>
 별도의 앱 설치는 필요하지 않습니다.
-
 </div>
 
 <a href="./ar.html" id="startBtn">
@@ -173,13 +163,10 @@ REM404 v0.2
 </main>
 
 <div id="transition">
-
-<div id="transitionText">
-
-기억을 복원하는 중...
-
-</div>
-
+  <div id="transitionText">
+    <div class="title">REM404 v0.2</div>
+    <div class="subtitle">기억에 접근하는 중...</div>
+  </div>
 </div>
 
 <script>
@@ -188,17 +175,13 @@ const startBtn=document.getElementById("startBtn");
 const transition=document.getElementById("transition");
 
 startBtn.addEventListener("click",(e)=>{
+  e.preventDefault();
 
-e.preventDefault();
+  transition.classList.add("show");
 
-transition.classList.add("show");
-
-setTimeout(()=>{
-
-window.location.href="./ar.html";
-
-},450);
-
+  setTimeout(()=>{
+    window.location.href="./ar.html";
+  },900);
 });
 
 </script>
