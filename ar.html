@@ -19,26 +19,34 @@
     }
 
     #ui {
-      position: fixed;
-      top: 24px;
-      left: 24px;
-      right: 24px;
-      z-index: 9999;
-      color: rgba(17,17,17,0.62);
-      font-size: 13px;
-      line-height: 1.55;
-      pointer-events: none;
-      transition: opacity 0.8s ease;
-    }
+  position: fixed;
+  top: 18px;
+  left: 16px;
+  right: 16px;
+  z-index: 9999;
+  padding: 12px 14px;
+  border-radius: 16px;
+  color: #111;
+  background: rgba(255,255,255,0.88);
+  font-size: 14px;
+  line-height: 1.5;
+  pointer-events: none;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+  backdrop-filter: blur(12px);
+  transition: opacity 0.8s ease;
+}
 
-    #status {
-      font-weight: 700;
-      margin-bottom: 2px;
-    }
+#status {
+  font-size: 14px;
+  font-weight: 850;
+  margin-bottom: 3px;
+}
 
-    #sub {
-      font-weight: 400;
-    }
+#sub {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(17,17,17,0.68);
+}
 
     #ui.fade {
       opacity: 0;
