@@ -224,6 +224,11 @@ html, body {
 #archiveInner {
   width: 100%;
   max-width: 420px;
+  transition: transform 0.32s ease;
+}
+
+#archiveInner.complete-mode {
+  transform: translateY(36px);
 }
 
 .archive-animate {
@@ -348,7 +353,6 @@ html, body {
 #archiveComplete {
   display: none;
   opacity: 0;
-  transform: translateY(40px);
   transition: opacity 0.32s ease;
 }
 
