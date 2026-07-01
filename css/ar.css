@@ -226,6 +226,10 @@ html, body {
   max-width: 420px;
 }
 
+.archive-state {
+  width: 100%;
+}
+
 .archive-animate {
   opacity: 0;
   transform: translateY(10px);
@@ -275,12 +279,15 @@ html, body {
   letter-spacing: -.05em;
 }
 
-.archive-question,
-.complete-text {
+.archive-description {
   font-size: 15px;
   line-height: 1.85;
   color: #333;
   margin-bottom: 26px;
+}
+
+.archive-action {
+  width: 100%;
 }
 
 #memoryInput {
@@ -348,7 +355,6 @@ html, body {
 #archiveComplete {
   display: none;
   opacity: 0;
-  margin-top: 0;
   transition: opacity 0.32s ease;
 }
 
@@ -362,13 +368,6 @@ html, body {
 
 #archiveForm.hide {
   display: none;
-}
-
-.archive-line {
-  width: 100%;
-  height: 1px;
-  background: rgba(17,17,17,0.12);
-  margin: 28px 0;
 }
 
 .count-label {
@@ -389,6 +388,7 @@ html, body {
   font-size: 14px;
   color: #555;
   line-height: 1.7;
+  margin-bottom: 0;
 }
 
 #anonymousMemoryArea {
