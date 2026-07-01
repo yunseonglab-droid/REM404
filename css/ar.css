@@ -348,6 +348,7 @@ html, body {
 #archiveComplete {
   display: none;
   opacity: 0;
+  transform: translateY(40px);
   transition: opacity 0.32s ease;
 }
 
