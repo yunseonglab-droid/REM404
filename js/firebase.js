@@ -1,5 +1,5 @@
 // js/firebase.js
-// REM404 Archive v0.4
+// REM404 Archive v0.3.8
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 
@@ -49,7 +49,7 @@ export async function saveMemory(memoryText) {
     exhibition: "REM404 Archive Test",
     project: "REM404",
     archive: "REM404 Archive",
-    version: "v0.4",
+    version: "v0.3.8",
     language: "ko"
   });
 }
