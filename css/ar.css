@@ -228,6 +228,10 @@ html, body {
 
 .archive-state {
   width: 100%;
+  min-height: 560px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
 }
 
 .archive-animate {
@@ -274,7 +278,7 @@ html, body {
 .archive-title {
   font-size: 30px;
   line-height: 1.25;
-  margin: 0 0 28px;
+  margin: 0 0 34px;
   font-weight: 850;
   letter-spacing: -.05em;
 }
@@ -318,6 +322,13 @@ html, body {
   text-align: right;
 }
 
+.complete-summary {
+  min-height: 118px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 #submitMemoryBtn,
 #viewMemoryBtn {
   width: 100%;
@@ -359,7 +370,7 @@ html, body {
 }
 
 #archiveComplete.show {
-  display: block;
+  display: flex;
 }
 
 #archiveComplete.visible {
