@@ -125,15 +125,31 @@ function setCanvasBlur(value) {
   if (canvas) canvas.style.filter = `blur(${value}px)`;
 }
 
-function clearTimers() {
+function clearHintTimers() {
   clearTimeout(hintTimer1);
   clearTimeout(hintTimer2);
-  clearTimeout(nudgeTimer);
-  clearTimeout(uiFadeTimer);
-  clearTimeout(guideFadeTimer);
+}
+
+function clearRecognitionTimers() {
   clearTimeout(recognitionStableTimer);
   clearTimeout(recognitionRevealTimer);
+}
+
+function clearUiTimers() {
+  clearTimeout(uiFadeTimer);
+  clearTimeout(guideFadeTimer);
+}
+
+function clearMemoryFlowTimers() {
+  clearTimeout(nudgeTimer);
   clearTimeout(recoveryCompleteTimer);
+}
+
+function clearAllTimers() {
+  clearHintTimers();
+  clearRecognitionTimers();
+  clearUiTimers();
+  clearMemoryFlowTimers();
 }
 
 function stopFade() {
@@ -180,7 +196,7 @@ function showMemoryButton() {
 }
 
 function startFailHints() {
-  clearTimers();
+  clearHintTimers();
 
   hintTimer1 = setTimeout(() => {
     if (!foundOnce) {
@@ -202,8 +218,7 @@ function startFailHints() {
 }
 
 function stopFailHints() {
-  clearTimeout(hintTimer1);
-  clearTimeout(hintTimer2);
+  clearHintTimers();
 }
 
 function fadeInstructionLater() {
@@ -268,11 +283,10 @@ function handleTargetFound() {
 
   isTargetActive = true;
   foundOnce = true;
+
   stopFailHints();
-  clearTimeout(uiFadeTimer);
-  clearTimeout(guideFadeTimer);
-  clearTimeout(recognitionStableTimer);
-  clearTimeout(recognitionRevealTimer);
+  clearRecognitionTimers();
+  clearUiTimers();
 
   hideIntroUI();
 
@@ -301,7 +315,7 @@ function handleTargetLost() {
   isTargetActive = false;
   foundOnce = false;
   haptic.reset();
-  clearTimers();
+  clearAllTimers();
 
   setInstruction(
     "전시 사진을 다시 비춰주세요.",
