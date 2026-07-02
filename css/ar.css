@@ -15,11 +15,43 @@ body {
   touch-action: manipulation;
 }
 
+/* ---------- Camera / AR Layer ---------- */
+
 a-scene {
-  position: fixed;
-  inset: 0;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
   z-index: 1;
+  background: transparent !important;
 }
+
+video {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  object-fit: cover !important;
+  z-index: 0 !important;
+  background: transparent !important;
+}
+
+canvas,
+.a-canvas {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 1 !important;
+  background: transparent !important;
+}
+
+.mindar-ui-overlay {
+  background: transparent !important;
+  pointer-events: none;
+}
+
+/* ---------- Recognition UI ---------- */
 
 #ui {
   position: fixed;
@@ -145,6 +177,8 @@ a-scene {
   }
 }
 
+/* ---------- Memory Button ---------- */
+
 #memoryBtn {
   position: fixed;
   left: 24px;
@@ -202,38 +236,46 @@ a-scene {
   background: #fff;
   opacity: 0;
   pointer-events: none;
-  z-index: 9997;
+  z-index: 9999;
   transition: opacity 0.15s ease;
 }
+
+/* ---------- Archive Screen ---------- */
 
 #archiveScreen {
   position: fixed;
   inset: 0;
-  z-index: 9998;
+  z-index: -1;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding:
-    calc(env(safe-area-inset-top) + 28px)
-    28px
-    calc(env(safe-area-inset-bottom) + 28px);
+  padding: 0 28px;
   box-sizing: border-box;
-  background: #fff;
+  background: transparent;
+  visibility: hidden;
   opacity: 0;
   pointer-events: none;
   overflow-y: auto;
-  transition: opacity 0.8s cubic-bezier(.22,1,.36,1);
+  transition:
+    opacity 0.8s cubic-bezier(.22,1,.36,1),
+    visibility 0s linear 0.8s;
 }
 
 #archiveScreen.show {
+  z-index: 9998;
+  background: #fff;
+  visibility: visible;
   opacity: 1;
   pointer-events: auto;
+  transition:
+    opacity 0.8s cubic-bezier(.22,1,.36,1),
+    visibility 0s;
 }
 
 #archiveInner {
   width: 100%;
   max-width: 420px;
-  transform: translateY(76px);
+  transform: translateY(clamp(48px, 7vh, 72px));
 }
 
 .archive-state {
@@ -281,7 +323,7 @@ a-scene {
   font-size: 12px;
   letter-spacing: 0.16em;
   color: #888;
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 .archive-title {
@@ -329,7 +371,7 @@ a-scene {
 }
 
 #charCount {
-  margin: 10px 0 18px;
+  margin: 12px 0 24px;
   text-align: right;
   font-size: 13px;
   color: #888;
@@ -469,26 +511,30 @@ a-scene {
 
 @media (max-height: 760px) {
   #archiveInner {
-    transform: translateY(28px);
+    transform: translateY(clamp(36px, 6vh, 56px));
   }
 
   .archive-label {
-    margin-bottom: 34px;
+    margin-bottom: 28px;
   }
 
   .archive-description,
   .archive-question {
     margin-bottom: 28px;
   }
+
+  #charCount {
+    margin: 10px 0 20px;
+  }
 }
 
 @media (max-height: 680px) {
   #archiveInner {
-    transform: translateY(12px);
+    transform: translateY(clamp(20px, 4vh, 36px));
   }
 
   .archive-label {
-    margin-bottom: 28px;
+    margin-bottom: 24px;
   }
 
   .archive-title {
@@ -502,6 +548,10 @@ a-scene {
 
   #memoryInput {
     height: 132px;
+  }
+
+  #charCount {
+    margin: 8px 0 18px;
   }
 
   .complete-summary {
