@@ -469,7 +469,7 @@ a-scene {
 
 @media (max-height: 760px) {
   #archiveInner {
-    transform: translateY(56px);
+    transform: translateY(28px);
   }
 
   .archive-label {
@@ -484,7 +484,7 @@ a-scene {
 
 @media (max-height: 680px) {
   #archiveInner {
-    transform: translateY(32px);
+    transform: translateY(12px);
   }
 
   .archive-label {
