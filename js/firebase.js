@@ -1,5 +1,5 @@
 // js/firebase.js
-// REM404 Archive v0.3.8
+// REM404 Archive v0.4.1
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 
