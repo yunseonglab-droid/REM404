@@ -331,15 +331,6 @@ function handleTargetLost() {
   startFailHints();
 }
 
-  uiEl.classList.remove("fade");
-  guideEl.classList.remove("fade");
-  loadingText.classList.remove("hide");
-
-  resetMemoryButton();
-  stopFade();
-  startFailHints();
-}
-
 window.addEventListener("load", () => {
   foundOnce = false;
 
