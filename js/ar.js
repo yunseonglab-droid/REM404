@@ -6,6 +6,7 @@ import { createHapticController } from "./haptic.js";
 const statusEl = document.getElementById("status");
 const subEl = document.getElementById("sub");
 const uiEl = document.getElementById("ui");
+const reflectionCard = document.getElementById("reflectionCard");
 const guideEl = document.getElementById("guide");
 const loadingText = document.getElementById("loadingText");
 
@@ -32,8 +33,8 @@ const INITIAL_RENDER_OPACITY = 0.4;
 const MID_BLUR = 5;
 const MAX_BLUR = 10;
 
-const FAIL_HINT_1 = 5000;
-const FAIL_HINT_2 = 10000;
+const GUIDE_SWAP_DELAY = 3000;
+const REFLECTION_HINT_DELAY = 9000;
 const BUTTON_NUDGE_TIME = 10000;
 const ARCHIVE_ENTER_DELAY = 120;
 const RECOGNITION_STABLE_DELAY = 180;
@@ -42,6 +43,9 @@ const RECOGNITION_HAPTIC_DURATION = 25;
 const RECOVERY_COMPLETE_DELAY = 500;
 const ANONYMOUS_MEMORY_DELAY = 300;
 
+const INITIAL_STATUS_TEXT = "사진을 사각형 안에<br>맞춰주세요.";
+const INITIAL_SUB_TEXT = "사진 전체가 사각형 안에<br>들어오도록 맞춰주세요.";
+
 let animationFrame = null;
 let startTime = null;
 let isImageReady = false;
@@ -49,8 +53,8 @@ let hasOpenedArchive = false;
 let foundOnce = false;
 let isTargetActive = false;
 
-let hintTimer1 = null;
-let hintTimer2 = null;
+let guideSwapTimer = null;
+let reflectionHintTimer = null;
 let nudgeTimer = null;
 let uiFadeTimer = null;
 let guideFadeTimer = null;
@@ -112,8 +116,52 @@ function easeOutMemory(value) {
 }
 
 function setInstruction(mainText, subHtml) {
-  statusEl.textContent = mainText;
+  statusEl.innerHTML = mainText;
   subEl.innerHTML = subHtml;
+}
+
+function resetRecognitionText() {
+  statusEl.innerHTML = INITIAL_STATUS_TEXT;
+  subEl.innerHTML = INITIAL_SUB_TEXT;
+}
+
+function showInitialRecognitionUI() {
+  resetRecognitionText();
+
+  uiEl.classList.remove("fade");
+  statusEl.classList.remove("is-hidden");
+  subEl.classList.remove("is-visible");
+
+  hideReflectionCard();
+  hideLoadingText();
+}
+
+function showSecondaryGuide() {
+  if (isTargetActive || foundOnce || hasOpenedArchive) return;
+
+  statusEl.classList.add("is-hidden");
+  subEl.classList.add("is-visible");
+}
+
+function showReflectionCard() {
+  if (isTargetActive || foundOnce || hasOpenedArchive || isImageReady) return;
+  if (!reflectionCard) return;
+
+  reflectionCard.classList.add("is-visible");
+}
+
+function hideReflectionCard() {
+  if (!reflectionCard) return;
+
+  reflectionCard.classList.remove("is-visible");
+}
+
+function showLoadingText() {
+  loadingText.classList.remove("hide");
+}
+
+function hideLoadingText() {
+  loadingText.classList.add("hide");
 }
 
 function setOpacity(value) {
@@ -126,8 +174,8 @@ function setCanvasBlur(value) {
 }
 
 function clearHintTimers() {
-  clearTimeout(hintTimer1);
-  clearTimeout(hintTimer2);
+  clearTimeout(guideSwapTimer);
+  clearTimeout(reflectionHintTimer);
 }
 
 function clearRecognitionTimers() {
@@ -176,13 +224,13 @@ function nudgeMemoryButton() {
 }
 
 function showMemoryButton() {
-  setInstruction(
-    "기억이 복원되었습니다.",
-    "이 공간이 떠올리게 한 기억을<br>남겨보세요."
-  );
+  hideReflectionCard();
+  hideLoadingText();
 
   recoveryCompleteTimer = setTimeout(() => {
     if (!isTargetActive || hasOpenedArchive) return;
+
+    hideReflectionCard();
 
     isImageReady = true;
     hasOpenedArchive = false;
@@ -198,23 +246,13 @@ function showMemoryButton() {
 function startFailHints() {
   clearHintTimers();
 
-  hintTimer1 = setTimeout(() => {
-    if (!foundOnce) {
-      setInstruction(
-        "사진과의 거리를 조금 조정해보세요.",
-        "사진 전체가 사각형 안에 들어오도록<br>천천히 맞춰주세요."
-      );
-    }
-  }, FAIL_HINT_1);
+  guideSwapTimer = setTimeout(() => {
+    showSecondaryGuide();
+  }, GUIDE_SWAP_DELAY);
 
-  hintTimer2 = setTimeout(() => {
-    if (!foundOnce) {
-      setInstruction(
-        "빛 반사를 피해주세요.",
-        "사진 표면이 너무 밝게 반사되면<br>인식이 어려울 수 있습니다."
-      );
-    }
-  }, FAIL_HINT_2);
+  reflectionHintTimer = setTimeout(() => {
+    showReflectionCard();
+  }, REFLECTION_HINT_DELAY);
 }
 
 function stopFailHints() {
@@ -274,10 +312,6 @@ function startFade() {
   animationFrame = requestAnimationFrame(animate);
 }
 
-function hideIntroUI() {
-  loadingText.classList.add("hide");
-}
-
 function handleTargetFound() {
   if (isTargetActive) return;
 
@@ -288,17 +322,18 @@ function handleTargetFound() {
   clearRecognitionTimers();
   clearUiTimers();
 
-  hideIntroUI();
+  resetRecognitionText();
+  statusEl.classList.remove("is-hidden");
+  subEl.classList.remove("is-visible");
+  hideReflectionCard();
+
+  uiEl.classList.add("fade");
+  showLoadingText();
 
   recognitionStableTimer = setTimeout(() => {
     if (!isTargetActive) return;
 
     haptic.vibrateOnce();
-
-    setInstruction(
-      "기억을 찾았습니다.",
-      "잠시 후 기억을 복원합니다."
-    );
 
     recognitionRevealTimer = setTimeout(() => {
       if (!isTargetActive) return;
@@ -317,14 +352,9 @@ function handleTargetLost() {
   haptic.reset();
   clearAllTimers();
 
-  setInstruction(
-    "전시 사진을 다시 비춰주세요.",
-    "사진 전체가 사각형 안에 들어오도록<br>거리와 빛 반사를 조정해보세요."
-  );
+  showInitialRecognitionUI();
 
-  uiEl.classList.remove("fade");
   guideEl.classList.remove("fade");
-  loadingText.classList.remove("hide");
 
   resetMemoryButton();
   stopFade();
@@ -333,6 +363,7 @@ function handleTargetLost() {
 
 window.addEventListener("load", () => {
   foundOnce = false;
+  showInitialRecognitionUI();
   startFailHints();
   loadFirebaseApi();
 });
@@ -347,6 +378,10 @@ target.addEventListener("targetLost", () => {
 
 memoryBtn.addEventListener("click", () => {
   if (!isImageReady || hasOpenedArchive) return;
+
+  hideReflectionCard();
+  uiEl.classList.add("fade");
+
   archive.openArchive();
 });
 
