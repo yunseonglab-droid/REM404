@@ -312,11 +312,6 @@ function handleTargetFound() {
 function handleTargetLost() {
   if (archive.isArchiveOpen()) return;
 
-  // AI 복원이 완료된 이후에는 사진에서 벗어나도 유지
-  if (isImageReady || hasOpenedArchive) {
-    return;
-  }
-
   isTargetActive = false;
   foundOnce = false;
   haptic.reset();
