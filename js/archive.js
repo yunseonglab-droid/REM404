@@ -16,7 +16,9 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
     anonymousMemoryArea,
     viewMemoryBtn,
     sharedMemory,
-    sharedMemoryText
+    sharedMemoryText,
+    memoryViewer = document.getElementById("memoryViewer"),
+    nextRandomMemory = document.getElementById("nextRandomMemory")
   } = elements;
 
   const {
@@ -54,6 +56,21 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
     requestAnimationFrame(() => {
       archiveComplete.classList.add("visible");
     });
+  }
+
+  function showMemoryViewer() {
+    if (!memoryViewer) return;
+
+    archiveComplete.classList.remove("visible");
+
+    setTimeout(() => {
+      archiveComplete.classList.remove("show");
+      memoryViewer.classList.add("show");
+
+      requestAnimationFrame(() => {
+        memoryViewer.classList.add("visible");
+      });
+    }, 320);
   }
 
   function animateCount(from, to, onComplete) {
@@ -100,19 +117,40 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
     requestAnimationFrame(update);
   }
 
-  async function showRandomMemory() {
-    viewMemoryBtn.disabled = true;
-    viewMemoryBtn.textContent = "기억을 불러오는 중...";
-    sharedMemory.classList.remove("show");
+  async function showRandomMemory(triggerButton = viewMemoryBtn) {
+    const shouldOpenViewer = triggerButton === viewMemoryBtn;
+
+    if (triggerButton) {
+      triggerButton.disabled = true;
+      triggerButton.textContent = "기억을 불러오는 중...";
+    }
+
+    if (sharedMemory) {
+      sharedMemory.classList.remove("show");
+    }
 
     const api = await loadFirebaseApi();
 
     if (!api || !api.getRandomMemory) {
       setTimeout(() => {
-        sharedMemoryText.textContent = "기억을 불러오지 못했습니다.";
-        sharedMemory.classList.add("show");
-        viewMemoryBtn.textContent = "다른 기억 보기";
-        viewMemoryBtn.disabled = false;
+        if (sharedMemoryText) {
+          sharedMemoryText.textContent = "기억을 불러오지 못했습니다.";
+        }
+
+        if (shouldOpenViewer) {
+          showMemoryViewer();
+        }
+
+        if (sharedMemory) {
+          sharedMemory.classList.add("show");
+        }
+
+        if (triggerButton) {
+          triggerButton.textContent = triggerButton === nextRandomMemory
+            ? "새로운 기억 만나기"
+            : "다른 기억 보기";
+          triggerButton.disabled = false;
+        }
       }, 300);
       return;
     }
@@ -121,19 +159,47 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
       const randomMemory = await api.getRandomMemory();
 
       setTimeout(() => {
-        sharedMemoryText.textContent = randomMemory || "아직 남겨진 기억이 없습니다.";
-        sharedMemory.classList.add("show");
-        viewMemoryBtn.textContent = "다른 기억 보기";
-        viewMemoryBtn.disabled = false;
+        if (sharedMemoryText) {
+          sharedMemoryText.textContent = randomMemory || "아직 공유된 기억이 없습니다.";
+        }
+
+        if (shouldOpenViewer) {
+          showMemoryViewer();
+        }
+
+        if (sharedMemory) {
+          sharedMemory.classList.add("show");
+        }
+
+        if (triggerButton) {
+          triggerButton.textContent = triggerButton === nextRandomMemory
+            ? "새로운 기억 만나기"
+            : "다른 기억 보기";
+          triggerButton.disabled = false;
+        }
       }, 300);
     } catch (error) {
       console.error(error);
 
       setTimeout(() => {
-        sharedMemoryText.textContent = "기억을 불러오지 못했습니다.";
-        sharedMemory.classList.add("show");
-        viewMemoryBtn.textContent = "다른 기억 보기";
-        viewMemoryBtn.disabled = false;
+        if (sharedMemoryText) {
+          sharedMemoryText.textContent = "기억을 불러오지 못했습니다.";
+        }
+
+        if (shouldOpenViewer) {
+          showMemoryViewer();
+        }
+
+        if (sharedMemory) {
+          sharedMemory.classList.add("show");
+        }
+
+        if (triggerButton) {
+          triggerButton.textContent = triggerButton === nextRandomMemory
+            ? "새로운 기억 만나기"
+            : "다른 기억 보기";
+          triggerButton.disabled = false;
+        }
       }, 300);
     }
   }
@@ -188,8 +254,14 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
     });
 
     viewMemoryBtn.addEventListener("click", () => {
-      showRandomMemory();
+      showRandomMemory(viewMemoryBtn);
     });
+
+    if (nextRandomMemory) {
+      nextRandomMemory.addEventListener("click", () => {
+        showRandomMemory(nextRandomMemory);
+      });
+    }
   }
 
   function isArchiveOpen() {
