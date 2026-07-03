@@ -336,7 +336,7 @@ window.addEventListener("load", () => {
 
   setInstruction(
     "사진을 사각형 안에 맞춰주세요.",
-    "사진 전체가 사각형 안에<br>맞춰주세요."
+    "사진 전체가 사각형 안에<br>들어오도록 맞춰주세요."
   );
 
   startFailHints();
