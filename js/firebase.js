@@ -27,6 +27,8 @@ const db = getFirestore(app);
 
 const memoriesRef = collection(db, "memories");
 
+let memoryCache = null;
+
 function normalizeMemory(docSnapshot) {
   const data = docSnapshot.data();
   const text = typeof data.memory === "string" ? data.memory.trim() : "";
@@ -52,6 +54,8 @@ export async function saveMemory(memoryText) {
     version: "v0.3.8",
     language: "ko"
   });
+  
+  memoryCache = null;
 }
 
 export async function getMemoryCount() {
@@ -60,15 +64,17 @@ export async function getMemoryCount() {
 }
 
 export async function getRandomMemory() {
-  const snapshot = await getDocs(memoriesRef);
+  if (!memoryCache) {
+    const snapshot = await getDocs(memoriesRef);
 
-  const memories = snapshot.docs
-    .map((docSnapshot) => normalizeMemory(docSnapshot))
-    .filter(Boolean);
+    memoryCache = snapshot.docs
+      .map((docSnapshot) => normalizeMemory(docSnapshot))
+      .filter(Boolean);
+  }
 
-  if (memories.length === 0) return null;
+  if (memoryCache.length === 0) return null;
 
-  const randomIndex = Math.floor(Math.random() * memories.length);
+  const randomIndex = Math.floor(Math.random() * memoryCache.length);
 
-  return memories[randomIndex];
+  return memoryCache[randomIndex];
 }
