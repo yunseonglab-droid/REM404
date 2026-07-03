@@ -14,9 +14,16 @@
 
 <body>
   <div id="ui">
-  <div id="status">사진을 사각형 안에 맞춰주세요.</div>
-  <div id="sub">사진 전체가 사각형 안에 <br>들어오도록 맞춰주세요.</div>
-</div>
+    <div class="white-card recognition-card">
+      <div id="status">사진을 사각형 안에<br>맞춰주세요.</div>
+      <div id="sub">사진 전체가 사각형 안에<br>들어오도록 맞춰주세요.</div>
+    </div>
+  </div>
+
+  <div id="reflectionCard" class="white-card reflection-card">
+    빛 반사를 피해<br>
+    다시 맞춰주세요.
+  </div>
 
   <div id="guide">
     <div class="corner tl"></div>
@@ -35,18 +42,17 @@
 
   <div id="archiveScreen">
     <div id="archiveInner">
-      <div id="archiveForm">
+      <div id="archiveForm" class="archive-state">
         <div class="archive-label archive-animate delay-1">REM404 ARCHIVE</div>
 
         <h1 class="archive-title archive-animate delay-2">당신의 기억</h1>
 
-        <div class="archive-question archive-animate delay-3">
-          이 공간은<br>
-          당신에게<br>
+        <div class="archive-description archive-animate delay-3">
+          이 공간은 당신에게<br>
           무엇을 떠올리게 했나요?
         </div>
 
-        <div class="archive-animate delay-4">
+        <div class="archive-action archive-animate delay-4">
           <textarea id="memoryInput" maxlength="80" placeholder="80자 이내로 남겨주세요."></textarea>
           <div id="charCount">0 / 80</div>
 
@@ -54,40 +60,53 @@
         </div>
       </div>
 
-      <div id="archiveComplete">
+      <div id="archiveComplete" class="archive-state">
         <div class="archive-label archive-animate delay-1">REM404 ARCHIVE</div>
 
         <h1 class="archive-title archive-animate delay-2">감사합니다.</h1>
 
-        <div class="complete-text archive-animate delay-3">
+        <div class="archive-description archive-animate delay-3">
           당신의 기억이<br>
           REM404 Archive에 저장되었습니다.
         </div>
 
-        <div class="archive-animate delay-4">
-          <div class="archive-line"></div>
-
-          <div class="count-label">현재까지</div>
-          <div class="count-number" id="memoryCount">0</div>
-          <div class="count-desc">
-            개의 기억이<br>
-            이곳에 남아 있습니다.
+        <div class="archive-action archive-animate delay-4">
+          <div class="complete-summary">
+            <div class="count-label">현재까지</div>
+            <div class="count-number" id="memoryCount">0</div>
+            <div class="count-desc">
+              개의 기억이<br>
+              이곳에 남아 있습니다.
+            </div>
           </div>
 
           <div id="anonymousMemoryArea">
             <button id="viewMemoryBtn">다른 기억 보기</button>
 
             <div class="view-memory-hint">
-              다른 사람이 남긴 기억을<br>
+              무작위로 선택된 기억을<br>
               익명으로 볼 수 있습니다.
-            </div>
-
-            <div id="sharedMemory">
-              <div class="shared-label">ANONYMOUS MEMORY</div>
-              <div class="shared-text" id="sharedMemoryText"></div>
             </div>
           </div>
         </div>
+      </div>
+
+      <div id="memoryViewer">
+        <div class="archive-label archive-animate delay-1">REM404 ARCHIVE</div>
+
+        <div class="viewer-label archive-animate delay-2">ANONYMOUS MEMORY</div>
+
+        <div class="viewer-memory archive-animate delay-3">
+          <div id="sharedMemoryText"></div>
+        </div>
+
+        <div class="viewer-hint archive-animate delay-4">
+          누군가가 이 공간에 남긴 기억입니다.
+        </div>
+
+        <button id="nextRandomMemory" class="archive-animate delay-4">
+          새로운 기억 만나기
+        </button>
       </div>
     </div>
   </div>
