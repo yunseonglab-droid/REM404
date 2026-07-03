@@ -32,8 +32,8 @@ const INITIAL_RENDER_OPACITY = 0.4;
 const MID_BLUR = 5;
 const MAX_BLUR = 10;
 
-const FAIL_HINT_1 = 5000;
-const FAIL_HINT_2 = 10000;
+const FAIL_HINT_1 = 3000;
+const FAIL_HINT_2 = 6000;
 const BUTTON_NUDGE_TIME = 10000;
 const ARCHIVE_ENTER_DELAY = 120;
 const RECOGNITION_STABLE_DELAY = 180;
@@ -201,8 +201,8 @@ function startFailHints() {
   hintTimer1 = setTimeout(() => {
     if (!foundOnce) {
       setInstruction(
-        "사진과의 거리를 조금 조정해보세요.",
-        "사진 전체가 사각형 안에 들어오도록<br>천천히 맞춰주세요."
+        "사진을 사각형 안에 맞춰주세요.",
+        "사진 전체가 사각형 안에<br>들어오도록 맞춰주세요."
       );
     }
   }, FAIL_HINT_1);
@@ -210,8 +210,8 @@ function startFailHints() {
   hintTimer2 = setTimeout(() => {
     if (!foundOnce) {
       setInstruction(
-        "빛 반사를 피해주세요.",
-        "사진 표면이 너무 밝게 반사되면<br>인식이 어려울 수 있습니다."
+        "사진을 사각형 안에 맞춰주세요.",
+        "빛 반사를 피해<br>다시 맞춰주세요."
       );
     }
   }, FAIL_HINT_2);
