@@ -470,3 +470,76 @@ a-scene {
   inset: 0 !important;
   z-index: 1 !important;
 }
+
+/* ---------- Anonymous Memory Viewer ---------- */
+
+#memoryViewer {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.32s ease;
+}
+
+#memoryViewer.show {
+  display: block;
+}
+
+#memoryViewer.visible {
+  opacity: 1;
+}
+
+.viewer-label {
+  font-size: 12px;
+  letter-spacing: .16em;
+  color: #888;
+  margin-bottom: 34px;
+}
+
+.viewer-memory {
+  min-height: 220px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  margin: 32px 0;
+}
+
+#memoryViewer #sharedMemoryText {
+  font-size: 28px;
+  line-height: 1.7;
+  font-weight: 750;
+  letter-spacing: -0.04em;
+  color: #111;
+  word-break: keep-all;
+  white-space: pre-wrap;
+}
+
+.viewer-hint {
+  font-size: 13px;
+  line-height: 1.7;
+  color: #888;
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+#nextRandomMemory {
+  width: 100%;
+  height: 58px;
+  border: 0;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-size: 16px;
+  font-family: inherit;
+  font-weight: 850;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+#nextRandomMemory:disabled {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+#nextRandomMemory:active {
+  transform: scale(.98);
+}
