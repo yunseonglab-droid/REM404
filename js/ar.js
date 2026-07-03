@@ -48,6 +48,7 @@ let isImageReady = false;
 let hasOpenedArchive = false;
 let foundOnce = false;
 let isTargetActive = false;
+let isExperienceLocked = false;
 
 let hintTimer1 = null;
 let hintTimer2 = null;
@@ -163,6 +164,8 @@ function stopFade() {
 function resetMemoryButton() {
   isImageReady = false;
   hasOpenedArchive = false;
+  isExperienceLocked = false;
+
   memoryBtn.textContent = "기억 남기기";
   memoryBtn.classList.remove("show");
   memoryBtn.classList.remove("nudge");
@@ -184,11 +187,12 @@ function showMemoryButton() {
   recoveryCompleteTimer = setTimeout(() => {
     if (!isTargetActive || hasOpenedArchive) return;
 
-    isImageReady = true;
+        isImageReady = true;
     hasOpenedArchive = false;
+    isExperienceLocked = true;
+
     memoryBtn.textContent = "기억 남기기";
     memoryBtn.classList.add("show");
-
     nudgeTimer = setTimeout(() => {
       nudgeMemoryButton();
     }, BUTTON_NUDGE_TIME);
@@ -311,6 +315,10 @@ function handleTargetFound() {
 
 function handleTargetLost() {
   if (archive.isArchiveOpen()) return;
+
+  if (isExperienceLocked) {
+    return;
+  }
 
   isTargetActive = false;
   foundOnce = false;
