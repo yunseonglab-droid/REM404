@@ -312,6 +312,11 @@ function handleTargetFound() {
 function handleTargetLost() {
   if (archive.isArchiveOpen()) return;
 
+  // AI 복원이 완료된 이후에는 사진에서 벗어나도 유지
+  if (isImageReady || hasOpenedArchive) {
+    return;
+  }
+
   isTargetActive = false;
   foundOnce = false;
   haptic.reset();
@@ -321,6 +326,15 @@ function handleTargetLost() {
     "전시 사진을 다시 비춰주세요.",
     "사진 전체가 사각형 안에 들어오도록<br>거리와 빛 반사를 조정해보세요."
   );
+
+  uiEl.classList.remove("fade");
+  guideEl.classList.remove("fade");
+  loadingText.classList.remove("hide");
+
+  resetMemoryButton();
+  stopFade();
+  startFailHints();
+}
 
   uiEl.classList.remove("fade");
   guideEl.classList.remove("fade");
