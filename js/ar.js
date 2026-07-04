@@ -87,13 +87,16 @@ const archive = createArchiveController({
     ANONYMOUS_MEMORY_DELAY
   },
   callbacks: {
-    setHasOpenedArchive(value) {
-      hasOpenedArchive = value;
-    },
-    clearNudgeTimer() {
-      clearTimeout(nudgeTimer);
-    }
+  setHasOpenedArchive(value) {
+    hasOpenedArchive = value;
+  },
+  clearNudgeTimer() {
+    clearTimeout(nudgeTimer);
+  },
+  triggerSuccessHaptic() {
+    haptic.success();
   }
+}
 });
 
 async function loadFirebaseApi() {
@@ -187,7 +190,7 @@ function showMemoryButton() {
   recoveryCompleteTimer = setTimeout(() => {
     if (!isTargetActive || hasOpenedArchive) return;
 
-        isImageReady = true;
+    isImageReady = true;
     hasOpenedArchive = false;
     isExperienceLocked = true;
 
