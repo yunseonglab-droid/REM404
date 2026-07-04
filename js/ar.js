@@ -207,11 +207,6 @@ function showMemoryButton() {
     "이 공간이 떠올리게 한 기억을<br>남겨보세요."
   );
   
-setTimeout(() => {
-  restoreSound.currentTime = 0;
-  restoreSound.play().catch(() => {});
-}, 150);
-  
   recoveryCompleteTimer = setTimeout(() => {
     if (!isTargetActive || hasOpenedArchive) return;
 
@@ -268,7 +263,9 @@ function startFade() {
   resetMemoryButton();
 
   startTime = performance.now();
-
+    restoreSound.currentTime = 0;
+  restoreSound.play().catch(() => {});
+  
   function animate(now) {
     const elapsed = now - startTime;
     const slowStartTime = FAST_REVEAL_DURATION;
