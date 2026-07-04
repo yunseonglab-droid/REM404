@@ -42,7 +42,7 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
     callbacks.clearNudgeTimer();
 
     cameraFlash();
-
+    callbacks.playRestoreSound();
     memoryBtn.classList.remove("show");
     uiEl.classList.add("fade");
     guideEl.classList.add("fade");
