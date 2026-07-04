@@ -25,7 +25,10 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
     ARCHIVE_ENTER_DELAY,
     ANONYMOUS_MEMORY_DELAY
   } = constants;
-
+  
+  const viewedMemoryIds = new Set();
+  let savedMemoryId = null;
+  
   function cameraFlash() {
     flash.style.opacity = "1";
 
@@ -156,11 +159,23 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
     }
 
     try {
-      const randomMemory = await api.getRandomMemory();
+      const excludedIds = [...viewedMemoryIds];
+
+      if (savedMemoryId) {
+        excludedIds.push(savedMemoryId);
+      }
+
+      const randomMemory = await api.getRandomMemory(excludedIds);
 
       setTimeout(() => {
         if (sharedMemoryText) {
-          sharedMemoryText.textContent = randomMemory || "아직 공유된 기억이 없습니다.";
+          if (randomMemory) {
+            sharedMemoryText.textContent = randomMemory.text;
+            viewedMemoryIds.add(randomMemory.id);
+          } else {
+            sharedMemoryText.textContent = "아직 새로운 기억이 없습니다.";
+            viewedMemoryIds.clear();
+          }
         }
 
         if (shouldOpenViewer) {
@@ -231,8 +246,9 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
 
       try {
         const beforeCount = await api.getMemoryCount();
-
-        await api.saveMemory(text);
+        const savedMemory = await api.saveMemory(text);
+        savedMemoryId = savedMemory.id;
+        viewedMemoryIds.add(savedMemory.id);
 
         const afterCount = await api.getMemoryCount();
 
