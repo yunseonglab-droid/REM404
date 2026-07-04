@@ -505,13 +505,23 @@ a-scene {
 }
 
 #memoryViewer #sharedMemoryText {
-  font-size: 22px;
-  line-height: 1.65;
+  width: 100%;
+  max-width: 330px;
+  margin: 0 auto;
+  font-size: clamp(18px, 5.2vw, 22px);
+  line-height: 1.75;
   font-weight: 700;
   color: #111;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.04em;
   word-break: keep-all;
-  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  white-space: pre-line;
+  text-align: center;
+  text-wrap: balance;
+}
+
+#memoryViewer #sharedMemoryText strong {
+  font-weight: 850;
 }
 
 .viewer-hint {
