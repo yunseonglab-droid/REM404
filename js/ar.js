@@ -204,7 +204,7 @@ function nudgeMemoryButton() {
 function showMemoryButton() {
   setInstruction(
     "기억이 복원되었습니다.",
-    "이 공간이 떠올리게 한 기억을<br>남겨보세요."
+    "이 공간이 떠올리게 한 기억을 남겨보세요."
   );
   
   recoveryCompleteTimer = setTimeout(() => {
@@ -238,7 +238,7 @@ function startFailHints() {
     if (!foundOnce) {
       setInstruction(
         "사진을 사각형 안에 맞춰주세요.",
-        "빛 반사를 피해<br>다시 맞춰주세요."
+        "빛 반사를 피해 다시 맞춰주세요."
       );
     }
   }, FAIL_HINT_2);
