@@ -78,7 +78,7 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
 
   function animateCount(from, to, onComplete) {
     const displayTo = to > from ? to : from + 1;
-    const duration = 1050;
+    const duration = 1500;
     const start = performance.now();
     const countDistance = displayTo - from;
 
