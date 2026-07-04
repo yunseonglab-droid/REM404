@@ -232,15 +232,19 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
         return;
       }
 
-      try {
-        const beforeCount = await api.getMemoryCount();
-        const savedMemory = await api.saveMemory(text);
-        savedMemoryId = savedMemory.id;
-        viewedMemoryIds.add(savedMemory.id);
+     try {
+  const beforeCount = await api.getMemoryCount();
+  const savedMemory = await api.saveMemory(text);
+  savedMemoryId = savedMemory.id;
+  viewedMemoryIds.add(savedMemory.id);
 
-        const afterCount = await api.getMemoryCount();
+  if (callbacks.triggerSuccessHaptic) {
+    callbacks.triggerSuccessHaptic();
+  }
 
-        showArchiveComplete();
+  const afterCount = await api.getMemoryCount();
+
+  showArchiveComplete();
 
         animateCount(beforeCount, afterCount, () => {
           setTimeout(() => {
