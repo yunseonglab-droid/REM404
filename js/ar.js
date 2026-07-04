@@ -62,6 +62,10 @@ let recoveryCompleteTimer = null;
 let firebaseApi = null;
 
 const haptic = createHapticController(RECOGNITION_HAPTIC_DURATION);
+const restoreSound = new Audio("./audio/restore.mp3");
+
+restoreSound.preload = "auto";
+restoreSound.volume = 0.75;
 
 const archive = createArchiveController({
   elements: {
@@ -186,7 +190,12 @@ function showMemoryButton() {
     "기억이 복원되었습니다.",
     "이 공간이 떠올리게 한 기억을<br>남겨보세요."
   );
-
+  
+setTimeout(() => {
+  restoreSound.currentTime = 0;
+  restoreSound.play().catch(() => {});
+}, 150);
+  
   recoveryCompleteTimer = setTimeout(() => {
     if (!isTargetActive || hasOpenedArchive) return;
 
