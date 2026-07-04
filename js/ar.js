@@ -107,16 +107,20 @@ const archive = createArchiveController({
     ANONYMOUS_MEMORY_DELAY
   },
   callbacks: {
-  setHasOpenedArchive(value) {
-    hasOpenedArchive = value;
-  },
-  clearNudgeTimer() {
-    clearTimeout(nudgeTimer);
-  },
-  triggerSuccessHaptic() {
-    haptic.success();
+    setHasOpenedArchive(value) {
+      hasOpenedArchive = value;
+    },
+    clearNudgeTimer() {
+      clearTimeout(nudgeTimer);
+    },
+    triggerSuccessHaptic() {
+      haptic.success();
+    },
+    playRestoreSound() {
+      restoreSound.currentTime = 0;
+      restoreSound.play().catch(() => {});
+    }
   }
-}
 });
 
 async function loadFirebaseApi() {
@@ -263,8 +267,6 @@ function startFade() {
   resetMemoryButton();
 
   startTime = performance.now();
-    restoreSound.currentTime = 0;
-  restoreSound.play().catch(() => {});
   
   function animate(now) {
     const elapsed = now - startTime;
