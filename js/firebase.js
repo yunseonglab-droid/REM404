@@ -35,7 +35,10 @@ function normalizeMemory(docSnapshot) {
 
   if (!text) return null;
 
-  return text;
+  return {
+    id: docSnapshot.id,
+    text
+  };
 }
 
 export async function saveMemory(memoryText) {
