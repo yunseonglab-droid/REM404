@@ -123,101 +123,89 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
   async function showRandomMemory(triggerButton = viewMemoryBtn) {
     const shouldOpenViewer = triggerButton === viewMemoryBtn;
 
-    if (triggerButton) {
-      triggerButton.disabled = true;
-      triggerButton.textContent = "기억을 불러오는 중...";
-    }
+  if (triggerButton) {
+    triggerButton.disabled = true;
+    triggerButton.textContent = "기억을 불러오는 중...";
+  }
 
-    if (sharedMemory) {
-      sharedMemory.classList.remove("show");
-    }
+  if (sharedMemory) {
+    sharedMemory.classList.remove("show");
+  }
 
-    const api = await loadFirebaseApi();
+  const api = await loadFirebaseApi();
 
-    if (!api || !api.getRandomMemory) {
-      setTimeout(() => {
-        if (sharedMemoryText) {
-          sharedMemoryText.textContent = "기억을 불러오지 못했습니다.";
-        }
-
-        if (shouldOpenViewer) {
-          showMemoryViewer();
-        }
-
-        if (sharedMemory) {
-          sharedMemory.classList.add("show");
-        }
-
-        if (triggerButton) {
-          triggerButton.textContent = triggerButton === nextRandomMemory
-            ? "새로운 기억 만나기"
-            : "다른 기억 보기";
-          triggerButton.disabled = false;
-        }
-      }, 300);
-      return;
-    }
-
-    try {
-      const excludedIds = [...viewedMemoryIds];
-
-      if (savedMemoryId) {
-        excludedIds.push(savedMemoryId);
+  if (!api || !api.getRandomMemory) {
+    setTimeout(() => {
+      if (sharedMemoryText) {
+        sharedMemoryText.textContent = "기억을 불러오지 못했습니다.";
       }
 
-      const randomMemory = await api.getRandomMemory(excludedIds);
+      if (shouldOpenViewer) showMemoryViewer();
+      if (sharedMemory) sharedMemory.classList.add("show");
 
-      setTimeout(() => {
-        if (sharedMemoryText) {
-          if (randomMemory) {
-            sharedMemoryText.textContent = randomMemory.text;
-            viewedMemoryIds.add(randomMemory.id);
-          } else {
-            sharedMemoryText.textContent = "아직 새로운 기억이 없습니다.";
-            viewedMemoryIds.clear();
-          }
-        }
-
-        if (shouldOpenViewer) {
-          showMemoryViewer();
-        }
-
-        if (sharedMemory) {
-          sharedMemory.classList.add("show");
-        }
-
-        if (triggerButton) {
-          triggerButton.textContent = triggerButton === nextRandomMemory
-            ? "새로운 기억 만나기"
-            : "다른 기억 보기";
-          triggerButton.disabled = false;
-        }
-      }, 300);
-    } catch (error) {
-      console.error(error);
-
-      setTimeout(() => {
-        if (sharedMemoryText) {
-          sharedMemoryText.textContent = "기억을 불러오지 못했습니다.";
-        }
-
-        if (shouldOpenViewer) {
-          showMemoryViewer();
-        }
-
-        if (sharedMemory) {
-          sharedMemory.classList.add("show");
-        }
-
-        if (triggerButton) {
-          triggerButton.textContent = triggerButton === nextRandomMemory
-            ? "새로운 기억 만나기"
-            : "다른 기억 보기";
-          triggerButton.disabled = false;
-        }
-      }, 300);
-    }
+      if (triggerButton) {
+        triggerButton.textContent = triggerButton === nextRandomMemory
+          ? "새로운 기억 만나기"
+          : "다른 기억 보기";
+        triggerButton.disabled = false;
+      }
+    }, 300);
+    return;
   }
+
+  try {
+    const excludedIds = [...viewedMemoryIds];
+
+    if (savedMemoryId) {
+      excludedIds.push(savedMemoryId);
+    }
+
+    const randomMemory = await api.getRandomMemory(excludedIds);
+
+    setTimeout(() => {
+      if (sharedMemoryText) {
+        if (randomMemory) {
+          sharedMemoryText.textContent = randomMemory.text;
+          viewedMemoryIds.add(randomMemory.id);
+        } else {
+          sharedMemoryText.innerHTML = `
+            <strong>모든 기억을 읽었습니다.</strong><br>
+            새로운 기억이 추가되면 다시 찾아와 주세요.
+          `;
+          viewedMemoryIds.clear();
+        }
+      }
+
+      if (shouldOpenViewer) showMemoryViewer();
+      if (sharedMemory) sharedMemory.classList.add("show");
+
+      if (triggerButton) {
+        triggerButton.textContent = triggerButton === nextRandomMemory
+          ? "새로운 기억 만나기"
+          : "다른 기억 보기";
+        triggerButton.disabled = false;
+      }
+    }, 300);
+  } catch (error) {
+    console.error(error);
+
+    setTimeout(() => {
+      if (sharedMemoryText) {
+        sharedMemoryText.textContent = "기억을 불러오지 못했습니다.";
+      }
+
+      if (shouldOpenViewer) showMemoryViewer();
+      if (sharedMemory) sharedMemory.classList.add("show");
+
+      if (triggerButton) {
+        triggerButton.textContent = triggerButton === nextRandomMemory
+          ? "새로운 기억 만나기"
+          : "다른 기억 보기";
+        triggerButton.disabled = false;
+      }
+    }, 300);
+  }
+}
 
   function bindArchiveEvents() {
     memoryInput.addEventListener("input", () => {
