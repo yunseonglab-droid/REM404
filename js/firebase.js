@@ -47,18 +47,23 @@ export async function saveMemory(memoryText) {
   if (!text) throw new Error("EMPTY_MEMORY");
   if (text.length > 80) throw new Error("TOO_LONG_MEMORY");
 
-  await addDoc(memoriesRef, {
+  const docRef = await addDoc(memoriesRef, {
     memory: text,
     createdAt: serverTimestamp(),
     random: Math.random(),
     exhibition: "REM404 Archive Test",
     project: "REM404",
     archive: "REM404 Archive",
-    version: "v0.3.8",
+    version: "v0.4.3-beta",
     language: "ko"
   });
-  
+
   memoryCache = null;
+
+  return {
+    id: docRef.id,
+    text
+  };
 }
 
 export async function getMemoryCount() {
@@ -66,7 +71,7 @@ export async function getMemoryCount() {
   return snapshot.data().count;
 }
 
-export async function getRandomMemory() {
+export async function getRandomMemory(excludedIds = []) {
   if (!memoryCache) {
     const snapshot = await getDocs(memoriesRef);
 
@@ -75,9 +80,15 @@ export async function getRandomMemory() {
       .filter(Boolean);
   }
 
-  if (memoryCache.length === 0) return null;
+  const excludedIdSet = new Set(excludedIds);
 
-  const randomIndex = Math.floor(Math.random() * memoryCache.length);
+  const availableMemories = memoryCache.filter((memory) => {
+    return !excludedIdSet.has(memory.id);
+  });
 
-  return memoryCache[randomIndex];
+  if (availableMemories.length === 0) return null;
+
+  const randomIndex = Math.floor(Math.random() * availableMemories.length);
+
+  return availableMemories[randomIndex];
 }
