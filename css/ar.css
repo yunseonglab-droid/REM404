@@ -520,6 +520,11 @@ a-scene {
   text-wrap: balance;
 }
 
+#memoryViewer #sharedMemoryText.long-memory {
+  font-size: 18px;
+  line-height: 1.9;
+}
+
 #memoryViewer #sharedMemoryText strong {
   font-weight: 850;
 }
