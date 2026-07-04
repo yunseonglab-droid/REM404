@@ -119,7 +119,22 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
 
     requestAnimationFrame(update);
   }
+  function formatMemoryText(text) {
+    const length = text.length;
 
+    const formattedText = text
+      .replace(/,\s*/g, ",\n")
+      .replace(/\.\s*/g, ".\n\n");
+
+    if (length > 55) {
+      sharedMemoryText.classList.add("long-memory");
+    } else {
+      sharedMemoryText.classList.remove("long-memory");
+    }
+
+    return formattedText.trim();
+  }
+  
   async function showRandomMemory(triggerButton = viewMemoryBtn) {
     const shouldOpenViewer = triggerButton === viewMemoryBtn;
 
@@ -165,7 +180,7 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
     setTimeout(() => {
       if (sharedMemoryText) {
         if (randomMemory) {
-          sharedMemoryText.textContent = randomMemory.text;
+          sharedMemoryText.textContent = formatMemoryText(randomMemory.text);
           viewedMemoryIds.add(randomMemory.id);
         } else {
           sharedMemoryText.innerHTML = `
