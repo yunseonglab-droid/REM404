@@ -403,7 +403,7 @@ html, body {
 }
 
 .view-memory-hint {
-  margin-top: 8px;
+  margin-top: 16px;
   font-size: 12px;
   line-height: 1.55;
   color: rgba(17,17,17,0.56);
