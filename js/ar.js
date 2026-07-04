@@ -66,7 +66,23 @@ const restoreSound = new Audio("./audio/restore.mp3");
 
 restoreSound.preload = "auto";
 restoreSound.volume = 0.75;
+let isSoundUnlocked = false;
 
+function unlockRestoreSound() {
+  if (isSoundUnlocked) return;
+
+  restoreSound.volume = 0;
+  restoreSound.play()
+    .then(() => {
+      restoreSound.pause();
+      restoreSound.currentTime = 0;
+      restoreSound.volume = 0.75;
+      isSoundUnlocked = true;
+    })
+    .catch(() => {
+      restoreSound.volume = 0.75;
+    });
+}
 const archive = createArchiveController({
   elements: {
     uiEl,
@@ -351,9 +367,13 @@ function handleTargetLost() {
   startFailHints();
 }
 
+window.addEventListener("pointerdown", () => {
+  unlockRestoreSound();
+}, { once: true });
+
 window.addEventListener("load", () => {
   foundOnce = false;
-
+  
   setInstruction(
     "사진을 사각형 안에 맞춰주세요.",
     "사진 전체가 사각형 안에<br>들어오도록 맞춰주세요."
