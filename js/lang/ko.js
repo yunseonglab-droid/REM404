@@ -39,6 +39,33 @@ export default {
   text: "이곳에 남겨진 것은<br>건물이 아니라 기억입니다.<br><br>카메라를 통해 전시 사진을 비추면,<br>다른 이미지가 서서히 나타납니다.",
   notice: "이 경험은 스마트폰 카메라를 사용합니다.<br>별도의 앱 설치는 필요하지 않습니다.",
   startButton: "기억 복원하기",
-  loading: "기억에 접근하는 중..."
+  loading: "기억에 접근하는 중...",
+  archiveScreen: {
+
+  loadingText: "기억을 불러오는 중",
+
+  archiveLabel: "REM404 ARCHIVE",
+
+  formTitle: "당신의 기억",
+
+  formQuestion: "이 공간은 당신에게 무엇을 떠올리게 했나요?",
+
+  inputPlaceholder: "80자 이내로 남겨주세요.",
+
+  completeTitle: "감사합니다.",
+
+  completeText: "당신의 기억이<br>REM404 Archive에 저장되었습니다.",
+
+  countLabel: "현재까지",
+
+  countDesc: "개의 기억이<br>이곳에 남아 있습니다.",
+
+  viewMemoryHint: "다른 사람이 남긴 익명의 기억을 읽어보세요.",
+
+  viewerLabel: "ANONYMOUS MEMORY",
+
+  viewerHint: "누군가가 이 공간에 남긴 기억입니다."
+
+}
   }
 };
