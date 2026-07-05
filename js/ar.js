@@ -1,4 +1,4 @@
-// js/ar.js
+ㅍ// js/ar.js
 import { createArchiveController } from "./archive.js";
 import { createHapticController } from "./haptic.js";
 import { getText } from "./lang/language.js";
@@ -324,22 +324,23 @@ function handleTargetFound() {
   hideIntroUI();
 
   recognitionStableTimer = setTimeout(() => {
-  if (!isTargetActive) return;
-
-  haptic.vibrateOnce();
-
-  setInstruction(
-    t.status.memoryFound,
-    t.status.memoryFoundSub
-  );
-
-  recognitionRevealTimer = setTimeout(() => {
     if (!isTargetActive) return;
 
-    startFade();
-    fadeInstructionLater();
-  }, RECOGNITION_FEEDBACK_DURATION);
-}, RECOGNITION_STABLE_DELAY);
+    haptic.vibrateOnce();
+
+    setInstruction(
+      t.status.memoryFound,
+      t.status.memoryFoundSub
+    );
+
+    recognitionRevealTimer = setTimeout(() => {
+      if (!isTargetActive) return;
+
+      startFade();
+      fadeInstructionLater();
+    }, RECOGNITION_FEEDBACK_DURATION);
+  }, RECOGNITION_STABLE_DELAY);
+}
   
 function handleTargetLost() {
   if (archive.isArchiveOpen()) return;
