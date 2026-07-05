@@ -1,4 +1,4 @@
-ㅍ// js/ar.js
+// js/ar.js
 import { createArchiveController } from "./archive.js";
 import { createHapticController } from "./haptic.js";
 import { getText } from "./lang/language.js";
