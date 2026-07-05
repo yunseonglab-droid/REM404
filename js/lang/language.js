@@ -11,10 +11,25 @@ const translations = {
 const DEFAULT_LANGUAGE = "ko";
 const STORAGE_KEY = "rem404Language";
 
-let currentLanguage = DEFAULT_LANGUAGE;
+let currentLanguage = detectLanguage();
 
 function isValidLanguage(language) {
   return Boolean(language && translations[language]);
+}
+
+function getUrlLanguage() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const urlLanguage = params.get("lang");
+
+    if (isValidLanguage(urlLanguage)) {
+      return urlLanguage;
+    }
+
+    return null;
+  } catch (error) {
+    return null;
+  }
 }
 
 function getSavedLanguage() {
@@ -44,6 +59,12 @@ function getBrowserLanguage() {
 }
 
 function detectLanguage() {
+  const urlLanguage = getUrlLanguage();
+
+  if (urlLanguage) {
+    return urlLanguage;
+  }
+
   const savedLanguage = getSavedLanguage();
 
   if (savedLanguage) {
@@ -52,8 +73,6 @@ function detectLanguage() {
 
   return getBrowserLanguage();
 }
-
-currentLanguage = detectLanguage();
 
 export function getLanguage() {
   return currentLanguage;
@@ -70,7 +89,5 @@ export function setLanguage(language) {
 
   try {
     localStorage.setItem(STORAGE_KEY, language);
-  } catch (error) {
-    // iOS Safari 등에서 localStorage가 막혀도 사이트는 계속 동작해야 함
-  }
+  } catch (error) {}
 }
