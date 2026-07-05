@@ -185,6 +185,10 @@ function applyArchiveScreenText() {
   if (memoryViewerArchiveLabel) memoryViewerArchiveLabel.textContent = t.archiveScreen.archiveLabel;
   if (memoryViewerLabel) memoryViewerLabel.textContent = t.archiveScreen.viewerLabel;
   if (memoryViewerHint) memoryViewerHint.textContent = t.archiveScreen.viewerHint;
+  if (memoryBtn) memoryBtn.textContent = t.buttons.leaveMemory;
+  if (submitMemoryBtn) submitMemoryBtn.textContent = t.buttons.submitMemory;
+  if (viewMemoryBtn) viewMemoryBtn.textContent = t.buttons.viewMemory;
+  if (nextRandomMemory) nextRandomMemory.textContent = t.buttons.nextMemory;
 }
 
 function setOpacity(value) {
