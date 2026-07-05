@@ -1450,15 +1450,96 @@ v0.4.8은 새로운 기능보다
 
 REM404 Archive를 실제 전시 환경에 더욱 적합한 형태로 발전시켰다.
 
-# Future Roadmap
+# REM404 v0.5 Beta
 
-## v0.5
+## 🌐 Major Update
 
-- 관리자 기능
-- 코드 리팩토링
-- 전시 최적화
+This release introduces the first multilingual system for REM404, allowing both Korean and English users to experience the project without changing the core interaction.
+
+This update also includes a large internal refactor to prepare the project for future expansion.
 
 ---
+
+## ✨ Added
+
+- Korean / English language support
+- Language selector on Landing Page
+- Multilingual Landing Page
+- Multilingual AR interface
+- Multilingual Archive interface
+- Multilingual Anonymous Memory Viewer
+- Localized buttons and system messages
+- "Searching Memory" status
+- Dynamic language switching
+
+---
+
+## 🔧 Improved
+
+- Refactored language system
+- Improved UI text management
+- Cleaner HTML structure
+- Better maintainability
+- Better localization workflow
+
+---
+
+## 🐛 Fixed
+
+- Fixed untranslated interface elements
+- Fixed language switching issues
+- Fixed Archive UI localization
+- Fixed Anonymous Memory Viewer layout
+- Fixed memory submission issues
+- Fixed HTML layout structure
+- Various UI bugs
+
+---
+
+## 📁 Internal
+
+- Refactored `index.html`
+- Refactored `ar.html`
+- Refactored `ar.js`
+- Expanded `ko.js`
+- Expanded `en.js`
+- Improved `language.js`
+- Improved localization architecture
+
+---
+
+## 📱 Current Features
+
+- Image Recognition
+- AI Memory Restoration
+- Firebase Memory Archive
+- Anonymous Memory Viewer
+- Korean / English Support
+- Mobile Web Experience
+
+---
+
+## Known Issues
+
+- iOS Safari does not support Web Vibration API.
+- Multi Image Target support is not yet available.
+
+---
+
+## Next Release
+
+### v0.5.1 Beta
+
+- Multi Image Target Support
+- Archive Protection System
+- UX Improvements
+- Performance Optimization
+
+---
+
+**Version:** `REM404 v0.5 Beta`
+
+# Future Roadmap
 
 ## v0.6
 
