@@ -130,36 +130,51 @@ h1{
 
 <body>
 <main>
-  <div class="label">REM404 v0.4.8 </div>
+<div class="label" id="versionLabel">REM404 v0.4.8</div>
 
-  <h1>
-   남겨진 사람들의<br>
-   기억과 흔적
-  </h1>
+<h1 id="landingTitle">
+  남겨진 사람들의<br>
+  기억과 흔적
+</h1>
 
-  <div class="text">
-    이곳에 남겨진 것은<br>
-    건물이 아니라 기억입니다.<br><br>
-    카메라를 통해 전시 사진을 비추면,<br>
-    다른 이미지가 서서히 나타납니다.
-  </div>
+<div class="text" id="landingText">
+  이곳에 남겨진 것은<br>
+  건물이 아니라 기억입니다.<br><br>
+  카메라를 통해 전시 사진을 비추면,<br>
+  다른 이미지가 서서히 나타납니다.
+</div>
 
-  <div class="notice">
-    이 경험은 스마트폰 카메라를 사용합니다.<br>
-    별도의 앱 설치는 필요하지 않습니다.
-  </div>
+<div class="notice" id="landingNotice">
+  이 경험은 스마트폰 카메라를 사용합니다.<br>
+  별도의 앱 설치는 필요하지 않습니다.
+</div>
 
-  <a href="./ar.html" id="startBtn">기억 복원하기</a>
+<a href="./ar.html" id="startBtn">기억 복원하기</a>
 </main>
 
 <div id="transition">
   <div id="transitionText">
-    <div class="title">REM404 v0.4.8 </div>
-    <div class="subtitle">기억에 접근하는 중...</div>
+   <div class="title" id="transitionVersion">REM404 v0.4.8</div>
+    <div class="subtitle" id="transitionSubtitle">기억에 접근하는 중...</div>
   </div>
 </div>
 
-<script>
+<script type="module">
+import { getText, getLanguage } from "./js/lang/language.js";
+
+const t = getText();
+
+document.title = t.landing.pageTitle;
+document.documentElement.lang = getLanguage();
+
+document.getElementById("versionLabel").textContent = t.landing.version;
+document.getElementById("landingTitle").innerHTML = t.landing.title;
+document.getElementById("landingText").innerHTML = t.landing.text;
+document.getElementById("landingNotice").innerHTML = t.landing.notice;
+document.getElementById("startBtn").textContent = t.landing.startButton;
+document.getElementById("transitionVersion").textContent = t.landing.version;
+document.getElementById("transitionSubtitle").textContent = t.landing.loading;
+
 const startBtn = document.getElementById("startBtn");
 const transition = document.getElementById("transition");
 
@@ -173,5 +188,3 @@ startBtn.addEventListener("click", (e) => {
   }, 900);
 });
 </script>
-</body>
-</html>
