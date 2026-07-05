@@ -39,6 +39,20 @@ export default {
   text: "What remains here is not a building,<br>but memory.<br><br>Point your camera at the exhibition photo,<br>and another image will slowly appear.",
   notice: "This experience uses your smartphone camera.<br>No app installation is required.",
   startButton: "Restore Memory",
-  loading: "Accessing memory..."
+  loading: "Accessing memory...",
+  archiveScreen: {
+  loadingText: "Loading memory",
+  archiveLabel: "REM404 ARCHIVE",
+  formTitle: "Your Memory",
+  formQuestion: "What did this place bring to mind?",
+  inputPlaceholder: "Leave your memory in 80 characters.",
+  completeTitle: "Thank you.",
+  completeText: "Your memory has been saved<br>to the REM404 Archive.",
+  countLabel: "So far",
+  countDesc: "memories remain<br>in this place.",
+  viewMemoryHint: "Read anonymous memories left by others.",
+  viewerLabel: "ANONYMOUS MEMORY",
+  viewerHint: "This is a memory someone left in this place."
+}
   }
 };
