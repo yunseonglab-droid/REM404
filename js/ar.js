@@ -18,7 +18,7 @@ const flash = document.getElementById("flash");
 
 const archiveScreen = document.getElementById("archiveScreen");
 const archiveForm = document.getElementById("archiveForm");
-const archiveComplete = document.getElementById(archiveComplete);
+const archiveComplete = document.getElementById("archiveComplete");
 const memoryInput = document.getElementById("memoryInput");
 const charCount = document.getElementById("charCount");
 const submitMemoryBtn = document.getElementById("submitMemoryBtn");
@@ -324,24 +324,23 @@ function handleTargetFound() {
   hideIntroUI();
 
   recognitionStableTimer = setTimeout(() => {
+  if (!isTargetActive) return;
+
+  haptic.vibrateOnce();
+
+  setInstruction(
+    t.status.memoryFound,
+    t.status.memoryFoundSub
+  );
+
+  recognitionRevealTimer = setTimeout(() => {
     if (!isTargetActive) return;
 
-    haptic.vibrateOnce();
-
-    setInstruction(
-    t.status.memoryRestored,
-    t.status.memoryRestoredSub
-);
-
-    recognitionRevealTimer = setTimeout(() => {
-      if (!isTargetActive) return;
-
-      startFade();
-      fadeInstructionLater();
-    }, RECOGNITION_FEEDBACK_DURATION);
-  }, RECOGNITION_STABLE_DELAY);
-}
-
+    startFade();
+    fadeInstructionLater();
+  }, RECOGNITION_FEEDBACK_DURATION);
+}, RECOGNITION_STABLE_DELAY);
+  
 function handleTargetLost() {
   if (archive.isArchiveOpen()) return;
 
@@ -374,12 +373,11 @@ window.addEventListener("pointerdown", () => {
 
 window.addEventListener("load", () => {
   foundOnce = false;
-  
+
   setInstruction(
-    setInstruction(
-      t.status.alignPhoto,
-      t.status.alignPhotoSub
-    );
+    t.status.alignPhoto,
+    t.status.alignPhotoSub
+  );
 
   startFailHints();
   loadFirebaseApi();
