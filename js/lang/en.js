@@ -39,7 +39,9 @@ export default {
   text: "What remains here is not a building,<br>but memory.<br><br>Point your camera at the exhibition photo,<br>and another image will slowly appear.",
   notice: "This experience uses your smartphone camera.<br>No app installation is required.",
   startButton: "Restore Memory",
-  loading: "Accessing memory...",
+  loading: "Accessing memory..."
+  },
+  
   archiveScreen: {
   loadingText: "Loading memory",
   archiveLabel: "REM404 ARCHIVE",
@@ -54,5 +56,4 @@ export default {
   viewerLabel: "ANONYMOUS MEMORY",
   viewerHint: "This is a memory someone left in this place."
 }
-  }
 };
