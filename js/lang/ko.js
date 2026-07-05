@@ -39,7 +39,9 @@ export default {
   text: "이곳에 남겨진 것은<br>건물이 아니라 기억입니다.<br><br>카메라를 통해 전시 사진을 비추면,<br>다른 이미지가 서서히 나타납니다.",
   notice: "이 경험은 스마트폰 카메라를 사용합니다.<br>별도의 앱 설치는 필요하지 않습니다.",
   startButton: "기억 복원하기",
-  loading: "기억에 접근하는 중...",
+  loading: "기억에 접근하는 중..."
+  },
+  
   archiveScreen: {
   loadingText: "기억을 불러오는 중",
   archiveLabel: "REM404 ARCHIVE",
