@@ -145,6 +145,47 @@ function setInstruction(mainText, subHtml) {
   statusEl.textContent = mainText;
   subEl.innerHTML = subHtml;
 }
+function applyArchiveScreenText() {
+  if (loadingText) {
+    const loadingTextLabel = document.getElementById("loadingTextLabel");
+    if (loadingTextLabel) {
+      loadingTextLabel.textContent = t.archiveScreen.loadingText;
+    }
+  }
+
+  const archiveFormLabel = document.getElementById("archiveFormLabel");
+  const archiveFormTitle = document.getElementById("archiveFormTitle");
+  const archiveFormQuestion = document.getElementById("archiveFormQuestion");
+
+  const archiveCompleteLabel = document.getElementById("archiveCompleteLabel");
+  const archiveCompleteTitle = document.getElementById("archiveCompleteTitle");
+  const archiveCompleteText = document.getElementById("archiveCompleteText");
+
+  const countLabel = document.getElementById("countLabel");
+  const countDesc = document.getElementById("countDesc");
+  const viewMemoryHint = document.getElementById("viewMemoryHint");
+
+  const memoryViewerArchiveLabel = document.getElementById("memoryViewerArchiveLabel");
+  const memoryViewerLabel = document.getElementById("memoryViewerLabel");
+  const memoryViewerHint = document.getElementById("memoryViewerHint");
+
+  if (archiveFormLabel) archiveFormLabel.textContent = t.archiveScreen.archiveLabel;
+  if (archiveFormTitle) archiveFormTitle.textContent = t.archiveScreen.formTitle;
+  if (archiveFormQuestion) archiveFormQuestion.textContent = t.archiveScreen.formQuestion;
+  if (memoryInput) memoryInput.placeholder = t.archiveScreen.inputPlaceholder;
+
+  if (archiveCompleteLabel) archiveCompleteLabel.textContent = t.archiveScreen.archiveLabel;
+  if (archiveCompleteTitle) archiveCompleteTitle.textContent = t.archiveScreen.completeTitle;
+  if (archiveCompleteText) archiveCompleteText.innerHTML = t.archiveScreen.completeText;
+
+  if (countLabel) countLabel.textContent = t.archiveScreen.countLabel;
+  if (countDesc) countDesc.innerHTML = t.archiveScreen.countDesc;
+  if (viewMemoryHint) viewMemoryHint.textContent = t.archiveScreen.viewMemoryHint;
+
+  if (memoryViewerArchiveLabel) memoryViewerArchiveLabel.textContent = t.archiveScreen.archiveLabel;
+  if (memoryViewerLabel) memoryViewerLabel.textContent = t.archiveScreen.viewerLabel;
+  if (memoryViewerHint) memoryViewerHint.textContent = t.archiveScreen.viewerHint;
+}
 
 function setOpacity(value) {
   overlay.setAttribute("material", "opacity", value);
@@ -375,7 +416,7 @@ window.addEventListener("pointerdown", () => {
 window.addEventListener("load", () => {
   foundOnce = false;
 
-  loadingText.textContent = t.status.searchingMemory;
+  applyArchiveScreenText();
 
   setInstruction(
     t.status.alignPhoto,
