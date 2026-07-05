@@ -11,7 +11,7 @@ const translations = {
 const STORAGE_KEY = "rem404Language";
 
 function detectLanguage() {
-  const savedLanguage = localStorage.getItem(STORAGE_KEY);
+  const savedLanguage = null;
 
   if (savedLanguage && translations[savedLanguage]) {
     return savedLanguage;
