@@ -8,35 +8,69 @@ const translations = {
   en
 };
 
+const DEFAULT_LANGUAGE = "ko";
 const STORAGE_KEY = "rem404Language";
 
-function detectLanguage() {
-  const savedLanguage = null;
+let currentLanguage = DEFAULT_LANGUAGE;
 
-  if (savedLanguage && translations[savedLanguage]) {
+function isValidLanguage(language) {
+  return Boolean(language && translations[language]);
+}
+
+function getSavedLanguage() {
+  try {
+    const savedLanguage = localStorage.getItem(STORAGE_KEY);
+
+    if (isValidLanguage(savedLanguage)) {
+      return savedLanguage;
+    }
+
+    return null;
+  } catch (error) {
+    return null;
+  }
+}
+
+function getBrowserLanguage() {
+  try {
+    if (navigator.language && navigator.language.startsWith("ko")) {
+      return "ko";
+    }
+
+    return "en";
+  } catch (error) {
+    return DEFAULT_LANGUAGE;
+  }
+}
+
+function detectLanguage() {
+  const savedLanguage = getSavedLanguage();
+
+  if (savedLanguage) {
     return savedLanguage;
   }
 
-  if (navigator.language && navigator.language.startsWith("ko")) {
-    return "ko";
-  }
-
-  return "en";
+  return getBrowserLanguage();
 }
 
-let currentLanguage = detectLanguage();
+currentLanguage = detectLanguage();
 
 export function getLanguage() {
   return currentLanguage;
 }
 
 export function getText() {
-  return translations[currentLanguage];
+  return translations[currentLanguage] || translations[DEFAULT_LANGUAGE];
 }
 
 export function setLanguage(language) {
-  if (!translations[language]) return;
+  if (!isValidLanguage(language)) return;
 
   currentLanguage = language;
-  localStorage.setItem(STORAGE_KEY, language);
+
+  try {
+    localStorage.setItem(STORAGE_KEY, language);
+  } catch (error) {
+    // iOS Safari 등에서 localStorage가 막혀도 사이트는 계속 동작해야 함
+  }
 }
