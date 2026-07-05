@@ -12,6 +12,7 @@ export default {
     memoryFoundSub: "잠시 후 기억을 복원합니다.",
     memoryRestored: "기억이 복원되었습니다.",
     memoryRestoredSub: "이 공간이 떠올리게 한 기억을 남겨보세요."
+    searchingMemory: "기억을 찾는 중..."
   },
 
   buttons: {
