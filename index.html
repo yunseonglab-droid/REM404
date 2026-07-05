@@ -28,7 +28,30 @@ main{
   width:100%;
   max-width:420px;
 }
+  
+#languageSelector{
+  display:flex;
+  justify-content:flex-end;
+  gap:12px;
+  margin-bottom:28px;
+}
 
+#languageSelector button{
+  border:none;
+  background:none;
+  padding:0;
+  color:#9a9a9a;
+  font-size:12px;
+  font-weight:700;
+  letter-spacing:.08em;
+  cursor:pointer;
+  transition:.2s;
+}
+
+#languageSelector button.active{
+  color:#111;
+}
+  
 .label{
   font-size:12px;
   letter-spacing:.12em;
@@ -130,6 +153,10 @@ h1{
 
 <body>
 <main>
+  <div id="languageSelector">
+  <button type="button" data-lang="ko">KR</button>
+  <button type="button" data-lang="en">EN</button>
+</div>
 <div class="label" id="versionLabel">REM404 v0.4.8</div>
 
 <h1 id="landingTitle">
@@ -160,20 +187,35 @@ h1{
 </div>
 
 <script type="module">
-import { getText, getLanguage } from "./js/lang/language.js";
+import { getText, getLanguage, setLanguage } from "./js/lang/language.js";
 
-const t = getText();
+function applyLandingText() {
+  const t = getText();
 
-document.title = t.landing.pageTitle;
-document.documentElement.lang = getLanguage();
+  document.title = t.landing.pageTitle;
+  document.documentElement.lang = getLanguage();
 
-document.getElementById("versionLabel").textContent = t.landing.version;
-document.getElementById("landingTitle").innerHTML = t.landing.title;
-document.getElementById("landingText").innerHTML = t.landing.text;
-document.getElementById("landingNotice").innerHTML = t.landing.notice;
-document.getElementById("startBtn").textContent = t.landing.startButton;
-document.getElementById("transitionVersion").textContent = t.landing.version;
-document.getElementById("transitionSubtitle").textContent = t.landing.loading;
+  document.getElementById("versionLabel").textContent = t.landing.version;
+  document.getElementById("landingTitle").innerHTML = t.landing.title;
+  document.getElementById("landingText").innerHTML = t.landing.text;
+  document.getElementById("landingNotice").innerHTML = t.landing.notice;
+  document.getElementById("startBtn").textContent = t.landing.startButton;
+  document.getElementById("transitionVersion").textContent = t.landing.version;
+  document.getElementById("transitionSubtitle").textContent = t.landing.loading;
+
+  document.querySelectorAll("#languageSelector button").forEach((button) => {
+    button.classList.toggle("active", button.dataset.lang === getLanguage());
+  });
+}
+
+document.querySelectorAll("#languageSelector button").forEach((button) => {
+  button.addEventListener("click", () => {
+    setLanguage(button.dataset.lang);
+    applyLandingText();
+  });
+});
+
+applyLandingText();
 
 const startBtn = document.getElementById("startBtn");
 const transition = document.getElementById("transition");
