@@ -273,7 +273,7 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
       } catch (error) {
         console.error(error);
 
-        alert(t.archive.saveFailed);
+        alert(`${t.archive.saveFailed}\n\n${error.message}`);
 
         submitMemoryBtn.disabled = false;
         submitMemoryBtn.textContent = t.buttons.submitMemory;
