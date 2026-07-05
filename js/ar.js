@@ -375,6 +375,8 @@ window.addEventListener("pointerdown", () => {
 window.addEventListener("load", () => {
   foundOnce = false;
 
+  loadingText.textContent = t.status.searchingMemory;
+
   setInstruction(
     t.status.alignPhoto,
     t.status.alignPhotoSub
