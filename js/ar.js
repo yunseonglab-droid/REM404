@@ -18,7 +18,7 @@ const flash = document.getElementById("flash");
 
 const archiveScreen = document.getElementById("archiveScreen");
 const archiveForm = document.getElementById("archiveForm");
-const archiveComplete = document.getElementById("archiveComplete");
+const archiveComplete = document.getElementById(archiveComplete);
 const memoryInput = document.getElementById("memoryInput");
 const charCount = document.getElementById("charCount");
 const submitMemoryBtn = document.getElementById("submitMemoryBtn");
@@ -234,8 +234,8 @@ function startFailHints() {
   hintTimer1 = setTimeout(() => {
     if (!foundOnce) {
       setInstruction(
-        "사진을 사각형 안에 맞춰주세요.",
-        "사진 전체가 사각형 안에<br>들어오도록 맞춰주세요."
+        t.status.alignPhoto,
+        t.status.alignPhotoSub
       );
     }
   }, FAIL_HINT_1);
@@ -243,8 +243,8 @@ function startFailHints() {
   hintTimer2 = setTimeout(() => {
     if (!foundOnce) {
       setInstruction(
-        "사진을 사각형 안에 맞춰주세요.",
-        "빛 반사를 피해 다시 맞춰주세요."
+        t.status.avoidGlare,
+        t.status.avoidGlareSub
       );
     }
   }, FAIL_HINT_2);
@@ -355,8 +355,8 @@ function handleTargetLost() {
   clearAllTimers();
 
   setInstruction(
-    "전시 사진을 다시 비춰주세요.",
-    "사진 전체가 사각형 안에 들어오도록<br>거리와 빛 반사를 조정해보세요."
+    t.status.targetLost,
+    t.status.targetLostSub
   );
 
   uiEl.classList.remove("fade");
@@ -376,9 +376,10 @@ window.addEventListener("load", () => {
   foundOnce = false;
   
   setInstruction(
-    "사진을 사각형 안에 맞춰주세요.",
-    "사진 전체가 사각형 안에<br>들어오도록 맞춰주세요."
-  );
+    setInstruction(
+      t.status.alignPhoto,
+      t.status.alignPhotoSub
+    );
 
   startFailHints();
   loadFirebaseApi();
