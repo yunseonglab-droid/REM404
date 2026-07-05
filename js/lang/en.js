@@ -12,6 +12,7 @@ export default {
     memoryFoundSub: "Restoring memory.",
     memoryRestored: "Memory restored.",
     memoryRestoredSub: "Leave a memory this place brings back."
+    searchingMemory: "Searching for memory..."
   },
 
   buttons: {
