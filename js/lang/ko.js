@@ -56,5 +56,4 @@ export default {
   viewerLabel: "ANONYMOUS MEMORY",
   viewerHint: "누군가가 이 공간에 남긴 기억입니다."
 }
-  }
 };
