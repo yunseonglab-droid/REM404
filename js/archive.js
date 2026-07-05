@@ -1,5 +1,9 @@
 // js/archive.js
 
+import { getText } from "./lang/language.js";
+
+const t = getText();
+
 export function createArchiveController({ elements, loadFirebaseApi, constants, callbacks }) {
   const {
     uiEl,
@@ -140,7 +144,7 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
 
   if (triggerButton) {
     triggerButton.disabled = true;
-    triggerButton.textContent = "기억을 불러오는 중...";
+    triggerButton.textContent = t.buttons.loadingMemory;
   }
 
   if (sharedMemory) {
@@ -150,21 +154,21 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
   const api = await loadFirebaseApi();
 
   if (!api || !api.getRandomMemory) {
-    setTimeout(() => {
-      if (sharedMemoryText) {
-        sharedMemoryText.textContent = "기억을 불러오지 못했습니다.";
-      }
+   setTimeout(() => {
+  if (sharedMemoryText) {
+    sharedMemoryText.textContent = t.archive.loadFailed;
+  }
 
-      if (shouldOpenViewer) showMemoryViewer();
-      if (sharedMemory) sharedMemory.classList.add("show");
+  if (shouldOpenViewer) showMemoryViewer();
+  if (sharedMemory) sharedMemory.classList.add("show");
 
-      if (triggerButton) {
-        triggerButton.textContent = triggerButton === nextRandomMemory
-          ? "새로운 기억 만나기"
-          : "다른 기억 보기";
-        triggerButton.disabled = false;
-      }
-    }, 300);
+  if (triggerButton) {
+    triggerButton.textContent = triggerButton === nextRandomMemory
+      ? t.buttons.nextMemory
+      : t.buttons.viewMemory;
+    triggerButton.disabled = false;
+  }
+}, 300);
     return;
   }
 
@@ -184,8 +188,8 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
           viewedMemoryIds.add(randomMemory.id);
         } else {
           sharedMemoryText.innerHTML = `
-            <strong>모든 기억을 읽었습니다.</strong><br>
-            새로운 기억이 추가되면 다시 찾아와 주세요.
+            <strong>${t.archive.allReadTitle}</strong><br>
+            ${t.archive.allReadSub}
           `;
           viewedMemoryIds.clear();
         }
@@ -196,17 +200,18 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
 
       if (triggerButton) {
         triggerButton.textContent = triggerButton === nextRandomMemory
-          ? "새로운 기억 만나기"
-          : "다른 기억 보기";
+          ? t.buttons.nextMemory
+          : t.buttons.viewMemory;
         triggerButton.disabled = false;
       }
     }, 300);
-  } catch (error) {
+    
+    } catch (error) {
     console.error(error);
 
     setTimeout(() => {
       if (sharedMemoryText) {
-        sharedMemoryText.textContent = "기억을 불러오지 못했습니다.";
+        sharedMemoryText.textContent = t.archive.loadFailed;
       }
 
       if (shouldOpenViewer) showMemoryViewer();
@@ -214,14 +219,13 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
 
       if (triggerButton) {
         triggerButton.textContent = triggerButton === nextRandomMemory
-          ? "새로운 기억 만나기"
-          : "다른 기억 보기";
+          ? t.buttons.nextMemory
+          : t.buttons.viewMemory;
         triggerButton.disabled = false;
       }
     }, 300);
   }
 }
-
   function bindArchiveEvents() {
     memoryInput.addEventListener("input", () => {
       charCount.textContent = `${memoryInput.value.length} / 80`;
@@ -236,14 +240,14 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
       }
 
       submitMemoryBtn.disabled = true;
-      submitMemoryBtn.textContent = "기억을 저장하는 중...";
+      submitMemoryBtn.textContent = t.buttons.savingMemory;
 
       const api = await loadFirebaseApi();
 
       if (!api || !api.saveMemory || !api.getMemoryCount) {
-        alert("기억 저장 기능을 불러오지 못했습니다. 다시 시도해주세요.");
+        alert(t.archive.systemLoadFailed);
         submitMemoryBtn.disabled = false;
-        submitMemoryBtn.textContent = "기억 남기기";
+        submitMemoryBtn.textContent = t.buttons.submitMemory;
         return;
       }
 
@@ -269,10 +273,10 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
       } catch (error) {
         console.error(error);
 
-        alert("기억을 저장하지 못했습니다. 다시 시도해주세요.");
+        alert(t.archive.saveFailed);
 
         submitMemoryBtn.disabled = false;
-        submitMemoryBtn.textContent = "기억 남기기";
+        submitMemoryBtn.textContent = t.buttons.submitMemory;
       }
     });
 
