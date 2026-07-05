@@ -1,7 +1,9 @@
 // js/ar.js
-
 import { createArchiveController } from "./archive.js";
 import { createHapticController } from "./haptic.js";
+import { getText } from "./lang/language.js";
+
+const t = getText();
 
 const statusEl = document.getElementById("status");
 const subEl = document.getElementById("sub");
