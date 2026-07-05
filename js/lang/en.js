@@ -11,7 +11,7 @@ export default {
     memoryFound: "Memory found.",
     memoryFoundSub: "Restoring memory.",
     memoryRestored: "Memory restored.",
-    memoryRestoredSub: "Leave a memory this place brings back."
+    memoryRestoredSub: "Leave a memory this place brings back.",
     searchingMemory: "Searching for memory..."
   },
 
