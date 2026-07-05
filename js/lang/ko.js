@@ -29,5 +29,15 @@ export default {
     systemLoadFailed: "기억 저장 기능을 불러오지 못했습니다. 다시 시도해주세요.",
     allReadTitle: "모든 기억을 읽었습니다.",
     allReadSub: "새로운 기억이 추가되면 다시 찾아와 주세요."
+  },
+  
+  landing: {
+  pageTitle: "남겨진 사람들의 기억과 흔적",
+  version: "REM404 v0.4.8",
+  title: "남겨진 사람들의<br>기억과 흔적",
+  text: "이곳에 남겨진 것은<br>건물이 아니라 기억입니다.<br><br>카메라를 통해 전시 사진을 비추면,<br>다른 이미지가 서서히 나타납니다.",
+  notice: "이 경험은 스마트폰 카메라를 사용합니다.<br>별도의 앱 설치는 필요하지 않습니다.",
+  startButton: "기억 복원하기",
+  loading: "기억에 접근하는 중..."
   }
 };
