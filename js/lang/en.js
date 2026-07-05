@@ -29,5 +29,15 @@ export default {
     systemLoadFailed: "Could not load the memory system. Please try again.",
     allReadTitle: "You have read all memories.",
     allReadSub: "Come back when new memories are added."
+  },
+  
+  landing: {
+  pageTitle: "REM404",
+  version: "REM404 v0.4.8",
+  title: "Memory and Traces<br>of Those Left Behind",
+  text: "What remains here is not a building,<br>but memory.<br><br>Point your camera at the exhibition photo,<br>and another image will slowly appear.",
+  notice: "This experience uses your smartphone camera.<br>No app installation is required.",
+  startButton: "Restore Memory",
+  loading: "Accessing memory..."
   }
 };
