@@ -12,6 +12,7 @@ const uiEl = document.getElementById("ui");
 const guideEl = document.getElementById("guide");
 const loadingText = document.getElementById("loadingText");
 
+
 const target01 = document.getElementById("target01");
 const target02 = document.getElementById("target02");
 
@@ -93,6 +94,8 @@ let firebaseApi = null;
 let recognitionWatchTimer = null;
 let hasDetectedAnyTarget = false;
 let prepareTextTimer = null;
+let sceneEl = null;
+
 if (prepareStartBtn) {
 
   prepareStartBtn.disabled = true;
@@ -219,6 +222,16 @@ function startPrepareOverlay() {
 
   }, 1200);
 
+}
+function setPrepareReady() {
+  if (!prepareStartBtn || !prepareText) return;
+
+  prepareText.textContent =
+    document.documentElement.lang === "en"
+      ? "Memory Scanner Ready."
+      : "기억 스캐너 준비 완료.";
+
+  prepareStartBtn.disabled = false;
 }
 
 function applyArchiveScreenText() {
@@ -549,9 +562,24 @@ window.addEventListener("click", unlockAudio, { once: true });
 
 window.addEventListener("load", () => {
   foundOnce = false;
+  sceneEl = document.querySelector("a-scene");
 
   applyArchiveScreenText();
   startPrepareOverlay();
+
+ if (sceneEl) {
+  if (sceneEl.hasLoaded) {
+    setTimeout(() => {
+      setPrepareReady();
+    }, 900);
+  } else {
+    sceneEl.addEventListener("loaded", () => {
+      setTimeout(() => {
+        setPrepareReady();
+      }, 900);
+    });
+  }
+}
 
   setInstruction(
     t.status.alignPhoto,
@@ -585,6 +613,45 @@ target02.addEventListener("targetFound", () => {
 target02.addEventListener("targetLost", () => {
   handleTargetLost();
 });
+
+if (prepareStartBtn) {
+  prepareStartBtn.addEventListener("click", async () => {
+    prepareStartBtn.disabled = true;
+
+    prepareText.textContent =
+      document.documentElement.lang === "en"
+        ? "Requesting camera permission..."
+        : "카메라 권한을 요청하는 중...";
+
+    try {
+      if (!sceneEl) sceneEl = document.querySelector("a-scene");
+
+      const mindarSystem = sceneEl.systems["mindar-image-system"];
+      await mindarSystem.start();
+
+      clearInterval(prepareTextTimer);
+      prepareOverlay.classList.add("hide");
+
+      setTimeout(() => {
+        prepareOverlay.style.display = "none";
+      }, 500);
+    } catch (error) {
+      console.error("MindAR start failed:", error);
+
+      logDebugError("REM404-E-MIND-START", {
+        message: "MindAR start failed",
+        error: String(error)
+      });
+
+      prepareStartBtn.disabled = false;
+
+      prepareText.textContent =
+        document.documentElement.lang === "en"
+          ? "Camera could not be opened. Please try again."
+          : "카메라를 열 수 없습니다. 다시 시도해주세요.";
+    }
+  });
+}
 
 memoryBtn.addEventListener("click", () => {
   if (!isImageReady || hasOpenedArchive) return;
