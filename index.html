@@ -217,7 +217,28 @@ document.querySelectorAll("#languageSelector button").forEach((button) => {
 });
 
 applyLandingText();
+let adminTapCount = 0;
+let adminTapTimer = null;
 
+const landingTitle = document.getElementById("landingTitle");
+
+if (landingTitle) {
+  landingTitle.addEventListener("click", () => {
+    adminTapCount += 1;
+
+    clearTimeout(adminTapTimer);
+
+    adminTapTimer = setTimeout(() => {
+      adminTapCount = 0;
+    }, 1200);
+
+    if (adminTapCount >= 3) {
+      adminTapCount = 0;
+      window.location.href = "./admin.html";
+    }
+  });
+}
+  
 const startBtn = document.getElementById("startBtn");
 const transition = document.getElementById("transition");
 
