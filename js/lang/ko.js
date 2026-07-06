@@ -21,7 +21,8 @@ export default {
     viewMemory: "다른 기억 보기",
     nextMemory: "새로운 기억 만나기",
     loadingMemory: "기억을 불러오는 중...",
-    savingMemory: "기억을 저장하는 중..."
+    savingMemory: "기억을 저장하는 중...",
+    rescanSpace: "새로운 공간 인식하기"
   },
 
   archive: {
