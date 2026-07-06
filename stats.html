@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>REM404 Archive Statistics</title>
+
+<link rel="stylesheet" href="./css/debug.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <a href="./admin.html" class="back-link">← Admin으로 돌아가기</a>
+
+  <header class="header">
+    <div class="label">REM404 ARCHIVE</div>
+
+    <h1>
+      Archive<br>
+      Statistics
+    </h1>
+
+    <div class="version">
+      Current Build
+      <strong>v0.6.0 Beta</strong>
+    </div>
+  </header>
+
+  <section class="summary">
+    <div class="card">
+      <div class="title">Total Memories</div>
+      <div class="value" id="totalMemories">0</div>
+    </div>
+
+    <div class="card">
+      <div class="title">Korean</div>
+      <div class="value" id="koCount">0</div>
+    </div>
+
+    <div class="card">
+      <div class="title">English</div>
+      <div class="value" id="enCount">0</div>
+    </div>
+  </section>
+
+  <section class="summary">
+    <div class="card">
+      <div class="title">Unknown</div>
+      <div class="value" id="unknownCount">0</div>
+    </div>
+
+    <div class="card">
+      <div class="title">Usage Logs</div>
+      <div class="value" id="usageCount">0</div>
+    </div>
+
+    <div class="card">
+      <div class="title">Status</div>
+      <div class="value" style="font-size:18px;">LIVE</div>
+    </div>
+  </section>
+
+  <section class="actions">
+    <button id="refreshStatsBtn">새로고침</button>
+  </section>
+
+  <section>
+    <h2>Recent Usage</h2>
+
+    <div id="usageList">
+      <div class="empty">
+        아직 사용 기록이 없습니다.
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<script type="module" src="./js/stats.js"></script>
+
+</body>
+</html>
