@@ -260,3 +260,27 @@ h2 {
   background: #eee;
   color: #777;
 }
+
+.memory-editor{
+  width:100%;
+  min-height:90px;
+  margin-top:14px;
+  padding:14px;
+  box-sizing:border-box;
+  resize:vertical;
+
+  border:1px solid rgba(17,17,17,.12);
+  border-radius:14px;
+
+  background:#fafafa;
+
+  font-size:15px;
+  line-height:1.7;
+  font-family:inherit;
+}
+
+.memory-editor:focus{
+  outline:none;
+  background:#fff;
+  border-color:#111;
+}
