@@ -14,9 +14,9 @@
 
 <body>
   <div id="ui">
-  <div id="status">사진을 사각형 안에 맞춰주세요.</div>
-  <div id="sub">사진 전체가 사각형 안에 <br>들어오도록 맞춰주세요.</div>
-</div>
+    <div id="status">사진을 사각형 안에 맞춰주세요.</div>
+    <div id="sub">사진 전체가 사각형 안에 <br>들어오도록 맞춰주세요.</div>
+  </div>
 
   <div id="guide">
     <div class="corner tl"></div>
@@ -25,81 +25,82 @@
     <div class="corner br"></div>
   </div>
 
- <div id="loadingText">
-  <span id="loadingTextLabel">기억을 불러오는 중</span>
-  <div id="loadingLine"></div>
-</div>
-  
+  <div id="loadingText">
+    <span id="loadingTextLabel">기억을 불러오는 중</span>
+    <div id="loadingLine"></div>
+  </div>
+
   <button id="memoryBtn">기억 남기기</button>
   <div id="flash"></div>
 
-<div id="archiveScreen">
-  <div id="archiveInner">
+  <div id="archiveScreen">
+    <div id="archiveInner">
 
-    <div id="archiveForm">
-      <div class="archive-label archive-animate delay-1" id="archiveFormLabel">REM404 ARCHIVE</div>
+      <div id="archiveForm">
+        <div class="archive-label archive-animate delay-1" id="archiveFormLabel">REM404 ARCHIVE</div>
 
-      <h1 class="archive-title archive-animate delay-2" id="archiveFormTitle">당신의 기억</h1>
+        <h1 class="archive-title archive-animate delay-2" id="archiveFormTitle">당신의 기억</h1>
 
-      <div class="archive-question archive-animate delay-3" id="archiveFormQuestion">
-        이 공간은 당신에게 무엇을 떠올리게 했나요?
-      </div>
-
-      <div class="archive-animate delay-4">
-        <textarea id="memoryInput" maxlength="80" placeholder="80자 이내로 남겨주세요."></textarea>
-        <div id="charCount">0 / 80</div>
-        <button id="submitMemoryBtn">기억 남기기</button>
-      </div>
-    </div>
-
-    <div id="archiveComplete">
-      <div class="archive-label archive-animate delay-1" id="archiveCompleteLabel">REM404 ARCHIVE</div>
-
-      <h1 class="archive-title archive-animate delay-2" id="archiveCompleteTitle">감사합니다.</h1>
-
-      <div class="complete-text archive-animate delay-3" id="archiveCompleteText">
-        당신의 기억이<br>
-        REM404 Archive에 저장되었습니다.
-      </div>
-
-      <div class="archive-animate delay-4">
-        <div class="archive-line"></div>
-
-        <div class="count-label" id="countLabel">현재까지</div>
-        <div class="count-number" id="memoryCount">0</div>
-        <div class="count-desc" id="countDesc">
-          개의 기억이<br>
-          이곳에 남아 있습니다.
+        <div class="archive-question archive-animate delay-3" id="archiveFormQuestion">
+          이 공간은 당신에게 무엇을 떠올리게 했나요?
         </div>
 
-        <div id="anonymousMemoryArea">
-          <button id="viewMemoryBtn">다른 기억 보기</button>
+        <div class="archive-animate delay-4">
+          <textarea id="memoryInput" maxlength="80" placeholder="80자 이내로 남겨주세요."></textarea>
+          <div id="charCount">0 / 80</div>
+          <button id="submitMemoryBtn">기억 남기기</button>
+        </div>
+      </div>
 
-          <div class="view-memory-hint" id="viewMemoryHint">
-            다른 사람이 남긴 익명의 기억을 읽어보세요.
+      <div id="archiveComplete">
+        <div class="archive-label archive-animate delay-1" id="archiveCompleteLabel">REM404 ARCHIVE</div>
+
+        <h1 class="archive-title archive-animate delay-2" id="archiveCompleteTitle">감사합니다.</h1>
+
+        <div class="complete-text archive-animate delay-3" id="archiveCompleteText">
+          당신의 기억이<br>
+          REM404 Archive에 저장되었습니다.
+        </div>
+
+        <div class="archive-animate delay-4">
+          <div class="archive-line"></div>
+
+          <div class="count-label" id="countLabel">현재까지</div>
+          <div class="count-number" id="memoryCount">0</div>
+
+          <div class="count-desc" id="countDesc">
+            개의 기억이<br>
+            이곳에 남아 있습니다.
+          </div>
+
+          <div id="anonymousMemoryArea">
+            <button id="viewMemoryBtn">다른 기억 보기</button>
+
+            <div class="view-memory-hint" id="viewMemoryHint">
+              다른 사람이 남긴 익명의 기억을 읽어보세요.
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div id="memoryViewer">
-      <div class="archive-label" id="memoryViewerArchiveLabel">REM404 ARCHIVE</div>
+      <div id="memoryViewer">
+        <div class="archive-label" id="memoryViewerArchiveLabel">REM404 ARCHIVE</div>
 
-      <div class="viewer-label" id="memoryViewerLabel">ANONYMOUS MEMORY</div>
+        <div class="viewer-label" id="memoryViewerLabel">ANONYMOUS MEMORY</div>
 
-      <div class="viewer-memory">
-        <div id="sharedMemoryText"></div>
+        <div class="viewer-memory">
+          <div id="sharedMemoryText"></div>
+        </div>
+
+        <div class="viewer-hint" id="memoryViewerHint">
+          누군가가 이 공간에 남긴 기억입니다.
+        </div>
+
+        <button id="nextRandomMemory">새로운 기억 만나기</button>
       </div>
 
-      <div class="viewer-hint" id="memoryViewerHint">
-        누군가가 이 공간에 남긴 기억입니다.
-      </div>
-
-      <button id="nextRandomMemory">새로운 기억 만나기</button>
     </div>
-
   </div>
-</div>
 
   <a-scene
     mindar-image="imageTargetSrc: ./assets/target.mind; autoStart: true; uiScanning: no; uiLoading: no; uiError: yes;"
@@ -110,33 +111,33 @@
     device-orientation-permission-ui="enabled: false">
 
     <a-assets>
-  <img id="aiImage01" src="./assets/ai-01.jpg" crossorigin="anonymous">
-  <img id="aiImage02" src="./assets/ai-02.jpg" crossorigin="anonymous">
-      </a-assets>
-    
+      <img id="aiImage01" src="./assets/ai-01.jpg" crossorigin="anonymous">
+      <img id="aiImage02" src="./assets/ai-02.jpg" crossorigin="anonymous">
+    </a-assets>
+
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-  <a-entity id="target01" mindar-image-target="targetIndex: 0">
-  <a-image
-    id="aiOverlay01"
-    src="#aiImage01"
-    position="0 0 0.01"
-    width="1.6"
-    height="1"
-    material="transparent: true; opacity: 0;">
-  </a-image>
-</a-entity>
+    <a-entity id="target01" mindar-image-target="targetIndex: 0">
+      <a-image
+        id="aiOverlay01"
+        src="./assets/ai-01.jpg"
+        position="0 0 0.01"
+        width="1.6"
+        height="1"
+        material="transparent: true; opacity: 0;">
+      </a-image>
+    </a-entity>
 
-<a-entity id="target02" mindar-image-target="targetIndex: 1">
-  <a-image
-    id="aiOverlay02"
-    src="#aiImage02"
-    position="0 0 0.01"
-    width="1.6"
-    height="1"
-    material="transparent: true; opacity: 0;">
-  </a-image>
-</a-entity>
+    <a-entity id="target02" mindar-image-target="targetIndex: 1">
+      <a-image
+        id="aiOverlay02"
+        src="./assets/ai-02.jpg"
+        position="0 0 0.01"
+        width="1.6"
+        height="1"
+        material="transparent: true; opacity: 0;">
+      </a-image>
+    </a-entity>
   </a-scene>
 
   <script type="module" src="./js/ar.js"></script>
