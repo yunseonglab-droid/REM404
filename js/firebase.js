@@ -100,3 +100,16 @@ export async function saveDebugLog(log) {
     createdAtServer: serverTimestamp()
   });
 }
+
+export async function getDebugLogs() {
+  const debugLogsRef = collection(db, "debugLogs");
+  const snapshot = await getDocs(debugLogsRef);
+
+  return snapshot.docs.map((docSnapshot) => {
+    return {
+      id: docSnapshot.id,
+      ...docSnapshot.data()
+    };
+  });
+}
+
