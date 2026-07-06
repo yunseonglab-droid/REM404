@@ -35,12 +35,32 @@ const viewMemoryBtn = document.getElementById("viewMemoryBtn");
 const nextRandomMemory = document.getElementById("nextRandomMemory");
 const sharedMemory = document.getElementById("sharedMemory");
 const sharedMemoryText = document.getElementById("sharedMemoryText");
+const prepareOverlay = document.getElementById("prepareOverlay");
+const prepareTitle = document.getElementById("prepareTitle");
+const prepareText = document.getElementById("prepareText");
+const prepareStartBtn = document.getElementById("prepareStartBtn");
 
 const FAST_REVEAL_DURATION = 820;
 const SLOW_REVEAL_DURATION = 2700;
 const INITIAL_RENDER_OPACITY = 0.4;
 const MID_BLUR = 5;
 const MAX_BLUR = 10;
+const PREPARE_MESSAGES = {
+  ko: [
+    "기억 저장소에 접근하는 중...",
+    "공간의 흔적을 불러오는 중...",
+    "기억 스캐너를 초기화하는 중...",
+    "이미지 인식 시스템 준비 중...",
+    "REM404 Archive와 연결하는 중..."
+  ],
+  en: [
+    "Accessing memory archive...",
+    "Loading traces of this place...",
+    "Initializing memory scanner...",
+    "Preparing image recognition...",
+    "Connecting to REM404 Archive..."
+  ]
+};
 
 const FAIL_HINT_1 = 3000;
 const FAIL_HINT_2 = 6000;
@@ -72,6 +92,12 @@ let recoveryCompleteTimer = null;
 let firebaseApi = null;
 let recognitionWatchTimer = null;
 let hasDetectedAnyTarget = false;
+let prepareTextTimer = null;
+if (prepareStartBtn) {
+
+  prepareStartBtn.disabled = true;
+
+}
 
 const haptic = createHapticController(RECOGNITION_HAPTIC_DURATION);
 const restoreSound = new Audio("./audio/restore.mp3");
@@ -174,6 +200,27 @@ function setInstruction(mainText, subHtml) {
   statusEl.textContent = mainText;
   subEl.innerHTML = subHtml;
 }
+function startPrepareOverlay() {
+
+  const lang = document.documentElement.lang || "ko";
+
+  const messages = PREPARE_MESSAGES[lang] || PREPARE_MESSAGES.ko;
+
+  let index = 0;
+
+  prepareText.textContent = messages[0];
+
+  prepareTextTimer = setInterval(() => {
+
+    index++;
+
+    prepareText.textContent =
+      messages[index % messages.length];
+
+  }, 1200);
+
+}
+
 function applyArchiveScreenText() {
   if (loadingText) {
     const loadingTextLabel = document.getElementById("loadingTextLabel");
@@ -504,6 +551,7 @@ window.addEventListener("load", () => {
   foundOnce = false;
 
   applyArchiveScreenText();
+  startPrepareOverlay();
 
   setInstruction(
     t.status.alignPhoto,
