@@ -35,7 +35,7 @@ export default {
   
   landing: {
   pageTitle: "REM404",
-  version: "REM404 v0.6 Beta",
+  version: "REM404 v0.6",
   title: "Memory and Traces<br>of Those Left Behind",
   text: "What remains here is not a building,<br>but memory.<br><br>Point your camera at the exhibition photo,<br>and another image will slowly appear.",
   notice: "This experience uses your smartphone camera.<br>No app installation is required.",
@@ -56,5 +56,22 @@ export default {
   viewMemoryHint: "Read anonymous memories left by others.",
   viewerLabel: "ANONYMOUS MEMORY",
   viewerHint: "This is a memory someone left in this place."
-}
+},
+  prepare: {
+  title: "Preparing Memory Restoration",
+
+  ready: "Memory Scanner Ready.",
+  requesting: "Requesting camera permission...",
+  failed: "Unable to open the camera. Please try again.",
+
+  startButton: "Start Camera",
+
+  messages: [
+    "Accessing memory archive...",
+    "Loading traces of this place...",
+    "Initializing memory scanner...",
+    "Preparing image recognition...",
+    "Connecting to REM404 Archive..."
+  ]
+},
 };
