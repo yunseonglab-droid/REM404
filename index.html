@@ -189,7 +189,8 @@ h1{
 
 <script type="module">
 import { getText, getLanguage, setLanguage } from "./js/lang/language.js";
-
+import { saveUsageLog } from "./js/firebase.js";
+  
 function applyLandingText() {
   const t = getText();
 
@@ -217,6 +218,11 @@ document.querySelectorAll("#languageSelector button").forEach((button) => {
 });
 
 applyLandingText();
+
+saveUsageLog("landing_visit", {
+  page: "index.html"
+}).catch(() => {});
+
 let adminTapCount = 0;
 let adminTapTimer = null;
 
