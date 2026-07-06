@@ -2,6 +2,7 @@
 import { createArchiveController } from "./archive.js";
 import { createHapticController } from "./haptic.js";
 import { getText } from "./lang/language.js";
+import { logDebugError } from "./debugLogger.js";
 
 const t = getText();
 
