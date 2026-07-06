@@ -109,49 +109,186 @@ h1 {
   opacity: .42;
   pointer-events: none;
 }
+
+.back-link {
+  display: inline-block;
+  margin-bottom: 32px;
+  color: #777;
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+#authScreen {
+  display: block;
+}
+
+#adminScreen {
+  display: none;
+}
+
+.auth-box {
+  margin-top: 32px;
+}
+
+#adminPassword {
+  width: 100%;
+  height: 56px;
+  box-sizing: border-box;
+  border: 1px solid rgba(17,17,17,.14);
+  border-radius: 18px;
+  padding: 0 16px;
+  font-size: 16px;
+  font-family: inherit;
+  outline: none;
+  background: #fafafa;
+  margin-bottom: 14px;
+}
+
+#adminPassword:focus {
+  border-color: rgba(17,17,17,.5);
+  background: #fff;
+}
+
+#loginBtn {
+  width: 100%;
+  height: 56px;
+  border: 0;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-size: 15px;
+  font-family: inherit;
+  font-weight: 850;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+}
+
+#loginBtn:active {
+  transform: scale(.98);
+}
+
+.auth-error {
+  display: none;
+  margin-top: 14px;
+  font-size: 13px;
+  color: #888;
+  line-height: 1.6;
+}
 </style>
 </head>
 
 <body>
 <main>
-  <div class="label">REM404 ADMIN</div>
 
-  <h1>
-    Archive<br>
-    Control Room
-  </h1>
+  <a href="./index.html" class="back-link">← 작품으로 돌아가기</a>
 
-  <div class="desc">
-    REM404의 오류 기록, 버전 상태, 아카이브 운영 정보를 확인하는 작가용 관리 페이지입니다.
-  </div>
+  <section id="authScreen">
+    <div class="label">REM404 ADMIN</div>
 
-  <div class="version">
-    <div class="small">Current Build</div>
-    <div class="big">v0.5.1 Beta</div>
-  </div>
+    <h1>
+      Admin<br>
+      Authentication
+    </h1>
 
-  <nav class="menu">
-    <a href="./debug.html">
-      <div class="menu-title">Debug Dashboard</div>
-      <div class="menu-desc">
-        오류 로그와 발생 환경을 확인합니다.
+    <div class="desc">
+      REM404 Archive의 작가용 관리 페이지입니다.<br>
+      관리자 인증 후 접근할 수 있습니다.
+    </div>
+
+    <div class="auth-box">
+      <input
+        id="adminPassword"
+        type="password"
+        placeholder="Admin password"
+        autocomplete="off"
+      >
+
+      <button id="loginBtn">관리자 인증</button>
+
+      <div class="auth-error" id="authError">
+        인증에 실패했습니다.
       </div>
-    </a>
+    </div>
+  </section>
 
-    <a class="disabled" href="#">
-      <div class="menu-title">Version History</div>
-      <div class="menu-desc">
-        추후 버전별 업데이트 기록을 관리합니다.
-      </div>
-    </a>
+  <section id="adminScreen">
+    <div class="label">REM404 ADMIN</div>
 
-    <a class="disabled" href="#">
-      <div class="menu-title">Archive Statistics</div>
-      <div class="menu-desc">
-        추후 기억 수, 언어 비율, 사용 기록을 확인합니다.
-      </div>
-    </a>
-  </nav>
+    <h1>
+      Archive<br>
+      Control Room
+    </h1>
+
+    <div class="desc">
+      REM404의 오류 기록, 버전 상태, 아카이브 운영 정보를 확인하는 작가용 관리 페이지입니다.
+    </div>
+
+    <div class="version">
+      <div class="small">Current Build</div>
+      <div class="big">v0.5.1 Beta</div>
+    </div>
+
+    <nav class="menu">
+      <a href="./debug.html">
+        <div class="menu-title">Debug Dashboard</div>
+        <div class="menu-desc">
+          오류 로그와 발생 환경을 확인합니다.
+        </div>
+      </a>
+
+      <a class="disabled" href="#">
+        <div class="menu-title">Version History</div>
+        <div class="menu-desc">
+          추후 버전별 업데이트 기록을 관리합니다.
+        </div>
+      </a>
+
+      <a class="disabled" href="#">
+        <div class="menu-title">Archive Statistics</div>
+        <div class="menu-desc">
+          추후 기억 수, 언어 비율, 사용 기록을 확인합니다.
+        </div>
+      </a>
+    </nav>
+  </section>
+
 </main>
+
+<script>
+const ADMIN_PASSWORD = "4040";
+
+const authScreen = document.getElementById("authScreen");
+const adminScreen = document.getElementById("adminScreen");
+const passwordInput = document.getElementById("adminPassword");
+const loginBtn = document.getElementById("loginBtn");
+const authError = document.getElementById("authError");
+
+function unlockAdmin() {
+  sessionStorage.setItem("rem404AdminAuth", "true");
+  authScreen.style.display = "none";
+  adminScreen.style.display = "block";
+}
+
+if (sessionStorage.getItem("rem404AdminAuth") === "true") {
+  unlockAdmin();
+}
+
+loginBtn.addEventListener("click", () => {
+  if (passwordInput.value === ADMIN_PASSWORD) {
+    unlockAdmin();
+  } else {
+    authError.style.display = "block";
+    passwordInput.value = "";
+    passwordInput.focus();
+  }
+});
+
+passwordInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    loginBtn.click();
+  }
+});
+</script>
+
 </body>
 </html>
