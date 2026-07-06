@@ -284,3 +284,50 @@ h2 {
   background:#fff;
   border-color:#111;
 }
+.manager-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.manager-tabs button,
+.restore-memory-btn {
+  height: 42px;
+  border: 0;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+.page-btn {
+  width: 38px;
+  height: 38px;
+  border: 0;
+  border-radius: 999px;
+  background: #eee;
+  color: #777;
+  font-family: inherit;
+  font-weight: 850;
+}
+
+.page-btn.active {
+  background: #111;
+  color: #fff;
+}
+
+.memory-editor:disabled {
+  color: #777;
+  background: #f3f3f3;
+}
