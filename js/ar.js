@@ -109,20 +109,29 @@ const archive = createArchiveController({
     ANONYMOUS_MEMORY_DELAY
   },
   callbacks: {
-    setHasOpenedArchive(value) {
-      hasOpenedArchive = value;
-    },
-    clearNudgeTimer() {
-      clearTimeout(nudgeTimer);
-    },
-    triggerSuccessHaptic() {
-      haptic.success();
-    },
-    playRestoreSound() {
-      restoreSound.currentTime = 0;
-      restoreSound.play().catch(() => {});
+  setHasOpenedArchive(value) {
+    hasOpenedArchive = value;
+  },
+  clearNudgeTimer() {
+    clearTimeout(nudgeTimer);
+  },
+  triggerSuccessHaptic() {
+    haptic.success();
+  },
+  playRestoreSound() {
+    restoreSound.pause();
+    restoreSound.currentTime = 0;
+    restoreSound.volume = 0.75;
+
+    const playPromise = restoreSound.play();
+
+    if (playPromise !== undefined) {
+      playPromise.catch((error) => {
+        console.warn("Restore sound play failed:", error);
+      });
     }
   }
+}
 });
 
 async function loadFirebaseApi() {
@@ -413,9 +422,13 @@ function handleTargetLost() {
   startFailHints();
 }
 
-window.addEventListener("pointerdown", () => {
+function unlockAudio() {
   unlockRestoreSound();
-}, { once: true });
+}
+
+window.addEventListener("pointerdown", unlockAudio, { once: true });
+window.addEventListener("touchstart", unlockAudio, { once: true });
+window.addEventListener("click", unlockAudio, { once: true });
 
 window.addEventListener("load", () => {
   foundOnce = false;
