@@ -180,3 +180,27 @@ export async function getArchiveStats() {
     usageLogs
   };
 }
+export async function saveUpdateLog(data) {
+  const updateLogsRef = collection(db, "updateLogs");
+
+  return addDoc(updateLogsRef, {
+    ...data,
+    createdAt: serverTimestamp()
+  });
+}
+
+export async function getUpdateLogs() {
+  const updateLogsRef = collection(db, "updateLogs");
+
+  const snapshot = await getDocs(
+    query(
+      updateLogsRef,
+      orderBy("createdAt", "desc")
+    )
+  );
+
+  return snapshot.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+}
