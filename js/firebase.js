@@ -1,5 +1,5 @@
 // js/firebase.js
-// REM404 Archive v0.4.1
+// REM404 Archive v0.6 Beta
 
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js";
 
@@ -9,7 +9,10 @@ import {
   addDoc,
   serverTimestamp,
   getCountFromServer,
-  getDocs
+  getDocs,
+  query,
+  orderBy,
+  limit
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -103,7 +106,12 @@ export async function saveDebugLog(log) {
 
 export async function getDebugLogs() {
   const debugLogsRef = collection(db, "debugLogs");
-  const snapshot = await getDocs(debugLogsRef);
+  const snapshot = await getDocs(
+  query(
+    debugLogsRef,
+    orderBy("createdAtServer","desc")
+  )
+);
 
   return snapshot.docs.map((docSnapshot) => {
     return {
@@ -113,3 +121,62 @@ export async function getDebugLogs() {
   });
 }
 
+export async function saveUsageLog(type = "visit", detail = {}) {
+  const usageLogsRef = collection(db, "usageLogs");
+
+  return addDoc(usageLogsRef, {
+    type,
+    detail,
+    page: location.pathname.split("/").pop(),
+    url: location.href,
+    userAgent: navigator.userAgent,
+    language: document.documentElement.lang || "unknown",
+    createdAt: serverTimestamp(),
+    createdAtLocal: new Date().toISOString()
+  });
+}
+
+export async function getArchiveStats() {
+  const memoriesSnapshot = await getDocs(memoriesRef);
+
+  const memories = memoriesSnapshot.docs.map((docSnapshot) => {
+    return {
+      id: docSnapshot.id,
+      ...docSnapshot.data()
+    };
+  });
+
+  const totalMemories = memories.length;
+
+  const koCount = memories.filter((item) => item.language === "ko").length;
+  const enCount = memories.filter((item) => item.language === "en").length;
+  const unknownCount = totalMemories - koCount - enCount;
+
+  const usageLogsRef = collection(db, "usageLogs");
+  const usageQuery = query(
+    usageLogsRef,
+    orderBy("createdAt", "desc"),
+    limit(100)
+  );
+
+  const usageSnapshot = await getDocs(usageQuery);
+
+  const usageLogs = usageSnapshot.docs.map((docSnapshot) => {
+    return {
+      id: docSnapshot.id,
+      ...docSnapshot.data()
+    };
+  });
+
+  const totalVisits = usageLogs.length;
+  
+  return {
+    totalMemories,
+    language: {
+      ko: koCount,
+      en: enCount,
+      unknown: unknownCount
+    },
+    usageLogs
+  };
+}
