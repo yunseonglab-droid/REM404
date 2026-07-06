@@ -12,7 +12,10 @@ import {
   getDocs,
   query,
   orderBy,
-  limit
+  limit,
+  doc,
+  updateDoc,
+  deleteDoc
 } from "https://www.gstatic.com/firebasejs/12.15.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -203,4 +206,40 @@ export async function getUpdateLogs() {
     id: doc.id,
     ...doc.data()
   }));
+}
+
+export async function getAllMemories() {
+  const memoriesQuery = query(
+    memoriesRef,
+    orderBy("createdAt", "desc")
+  );
+
+  const snapshot = await getDocs(memoriesQuery);
+
+  return snapshot.docs.map((docSnapshot) => {
+    return {
+      id: docSnapshot.id,
+      ...docSnapshot.data()
+    };
+  });
+}
+
+export async function updateMemory(memoryId, newText) {
+  const text = newText.trim();
+
+  if (!text) throw new Error("EMPTY_MEMORY");
+  if (text.length > 80) throw new Error("TOO_LONG_MEMORY");
+
+  const memoryDocRef = doc(db, "memories", memoryId);
+
+  return updateDoc(memoryDocRef, {
+    memory: text,
+    updatedAt: serverTimestamp()
+  });
+}
+
+export async function deleteMemory(memoryId) {
+  const memoryDocRef = doc(db, "memories", memoryId);
+
+  return deleteDoc(memoryDocRef);
 }
