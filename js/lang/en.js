@@ -21,7 +21,8 @@ export default {
     viewMemory: "View Another Memory",
     nextMemory: "View Another Memory",
     loadingMemory: "Loading memory...",
-    savingMemory: "Saving memory..."
+    savingMemory: "Saving memory...",
+    rescanSpace: "Scan New Space"
   },
 
   archive: {
