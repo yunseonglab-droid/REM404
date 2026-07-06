@@ -92,3 +92,11 @@ export async function getRandomMemory(excludedIds = []) {
 
   return availableMemories[randomIndex];
 }
+export async function saveDebugLog(log) {
+  const debugLogsRef = collection(db, "debugLogs");
+
+  return addDoc(debugLogsRef, {
+    ...log,
+    createdAtServer: serverTimestamp()
+  });
+}
