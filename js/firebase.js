@@ -242,6 +242,56 @@ export async function updateMemory(memoryId, newText) {
 
 export async function deleteMemory(memoryId) {
   const memoryDocRef = doc(db, "memories", memoryId);
+  const trashDocRef = doc(db, "trashMemories", memoryId);
+
+  const memorySnapshot = await getDoc(memoryDocRef);
+
+  if (!memorySnapshot.exists()) {
+    throw new Error("MEMORY_NOT_FOUND");
+  }
+
+  await setDoc(trashDocRef, {
+    ...memorySnapshot.data(),
+    originalId: memoryId,
+    deletedAt: serverTimestamp()
+  });
 
   return deleteDoc(memoryDocRef);
+}
+export async function getTrashMemories() {
+  const trashRef = collection(db, "trashMemories");
+  const trashQuery = query(
+    trashRef,
+    orderBy("deletedAt", "desc")
+  );
+
+  const snapshot = await getDocs(trashQuery);
+
+  return snapshot.docs.map((docSnapshot) => {
+    return {
+      id: docSnapshot.id,
+      ...docSnapshot.data()
+    };
+  });
+}
+
+export async function restoreMemory(memoryId) {
+  const trashDocRef = doc(db, "trashMemories", memoryId);
+  const memoryDocRef = doc(db, "memories", memoryId);
+
+  const trashSnapshot = await getDoc(trashDocRef);
+
+  if (!trashSnapshot.exists()) {
+    throw new Error("TRASH_MEMORY_NOT_FOUND");
+  }
+
+  const data = trashSnapshot.data();
+  const { originalId, deletedAt, ...restoredData } = data;
+
+  await setDoc(memoryDocRef, {
+    ...restoredData,
+    restoredAt: serverTimestamp()
+  });
+
+  return deleteDoc(trashDocRef);
 }
