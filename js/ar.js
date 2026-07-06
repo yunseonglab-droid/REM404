@@ -46,22 +46,6 @@ const SLOW_REVEAL_DURATION = 2700;
 const INITIAL_RENDER_OPACITY = 0.4;
 const MID_BLUR = 5;
 const MAX_BLUR = 10;
-const PREPARE_MESSAGES = {
-  ko: [
-    "기억 저장소에 접근하는 중...",
-    "공간의 흔적을 불러오는 중...",
-    "기억 스캐너를 초기화하는 중...",
-    "이미지 인식 시스템 준비 중...",
-    "REM404 Archive와 연결하는 중..."
-  ],
-  en: [
-    "Accessing memory archive...",
-    "Loading traces of this place...",
-    "Initializing memory scanner...",
-    "Preparing image recognition...",
-    "Connecting to REM404 Archive..."
-  ]
-};
 
 const FAIL_HINT_1 = 3000;
 const FAIL_HINT_2 = 6000;
@@ -205,9 +189,7 @@ function setInstruction(mainText, subHtml) {
 }
 function startPrepareOverlay() {
 
-  const lang = document.documentElement.lang || "ko";
-
-  const messages = PREPARE_MESSAGES[lang] || PREPARE_MESSAGES.ko;
+  const messages = t.prepare.messages;
 
   let index = 0;
 
@@ -223,14 +205,11 @@ function startPrepareOverlay() {
   }, 1200);
 
 }
+
 function setPrepareReady() {
   if (!prepareStartBtn || !prepareText) return;
 
-  prepareText.textContent =
-    document.documentElement.lang === "en"
-      ? "Memory Scanner Ready."
-      : "기억 스캐너 준비 완료.";
-
+ prepareText.textContent = t.prepare.ready;
   prepareStartBtn.disabled = false;
 }
 
@@ -278,6 +257,14 @@ function applyArchiveScreenText() {
   if (submitMemoryBtn) submitMemoryBtn.textContent = t.buttons.submitMemory;
   if (viewMemoryBtn) viewMemoryBtn.textContent = t.buttons.viewMemory;
   if (nextRandomMemory) nextRandomMemory.textContent = t.buttons.nextMemory;
+
+  if (prepareTitle) {
+    prepareTitle.textContent = t.prepare.title;
+  }
+
+  if (prepareStartBtn) {
+    prepareStartBtn.textContent = t.prepare.startButton;
+  }
 }
 
 function setOpacity(value) {
@@ -618,11 +605,8 @@ if (prepareStartBtn) {
   prepareStartBtn.addEventListener("click", async () => {
     prepareStartBtn.disabled = true;
 
-    prepareText.textContent =
-      document.documentElement.lang === "en"
-        ? "Requesting camera permission..."
-        : "카메라 권한을 요청하는 중...";
-
+    prepareText.textContent = t.prepare.requesting;
+    
     try {
       if (!sceneEl) sceneEl = document.querySelector("a-scene");
 
@@ -645,10 +629,7 @@ if (prepareStartBtn) {
 
       prepareStartBtn.disabled = false;
 
-      prepareText.textContent =
-        document.documentElement.lang === "en"
-          ? "Camera could not be opened. Please try again."
-          : "카메라를 열 수 없습니다. 다시 시도해주세요.";
+      prepareText.textContent = t.prepare.failed;
     }
   });
 }
