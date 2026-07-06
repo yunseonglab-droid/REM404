@@ -607,3 +607,88 @@ a-scene {
 #nextRandomMemory:active {
   transform: scale(.98);
 }
+/* ---------- Prepare Overlay ---------- */
+
+#prepareOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30000;
+  background: #fff;
+  color: #111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28px;
+  box-sizing: border-box;
+  opacity: 1;
+  transition: opacity .45s ease;
+}
+
+#prepareOverlay.hide {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.prepare-inner {
+  width: 100%;
+  max-width: 420px;
+}
+
+.prepare-label {
+  font-size: 12px;
+  letter-spacing: .16em;
+  color: #888;
+  margin-bottom: 34px;
+}
+
+#prepareTitle {
+  font-size: 32px;
+  line-height: 1.25;
+  margin: 0 0 28px;
+  font-weight: 850;
+  letter-spacing: -.05em;
+}
+
+#prepareText {
+  min-height: 58px;
+  font-size: 15px;
+  line-height: 1.8;
+  color: #555;
+  margin-bottom: 28px;
+}
+
+.prepare-line {
+  width: 100%;
+  height: 1px;
+  background: rgba(17,17,17,.12);
+  overflow: hidden;
+  margin-bottom: 34px;
+}
+
+.prepare-line div {
+  width: 42%;
+  height: 100%;
+  background: rgba(17,17,17,.55);
+  animation: lineMove 1.4s ease-in-out infinite;
+}
+
+#prepareStartBtn {
+  width: 100%;
+  height: 58px;
+  border: 0;
+  border-radius: 999px;
+  background: #111;
+  color: #fff;
+  font-size: 16px;
+  font-family: inherit;
+  font-weight: 850;
+  box-shadow: 0 10px 30px rgba(0,0,0,.12);
+}
+
+#prepareStartBtn:disabled {
+  opacity: .55;
+}
+
+#prepareStartBtn:active {
+  transform: scale(.98);
+}
