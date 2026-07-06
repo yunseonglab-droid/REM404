@@ -19,6 +19,7 @@ const overlay02 = document.getElementById("aiOverlay02");
 
 let activeOverlay = overlay01;
 const memoryBtn = document.getElementById("memoryBtn");
+const rescanBtn = document.getElementById("rescanBtn");
 const flash = document.getElementById("flash");
 
 const archiveScreen = document.getElementById("archiveScreen");
@@ -282,8 +283,15 @@ function showMemoryButton() {
     isExperienceLocked = true;
 
     memoryBtn.textContent = t.buttons.leaveMemory;
-    memoryBtn.classList.add("show");
-    nudgeTimer = setTimeout(() => {
+memoryBtn.classList.add("show");
+
+if (rescanBtn) {
+  rescanBtn.textContent = t.buttons.rescanSpace;
+  rescanBtn.classList.add("show");
+}
+
+nudgeTimer = setTimeout(() => {
+  
       nudgeMemoryButton();
     }, BUTTON_NUDGE_TIME);
   }, RECOVERY_COMPLETE_DELAY);
@@ -404,7 +412,36 @@ function handleTargetFound(overlay) {
     }, RECOGNITION_FEEDBACK_DURATION);
   }, RECOGNITION_STABLE_DELAY);
 }
-  
+function resetForNewScan() {
+  isImageReady = false;
+  hasOpenedArchive = false;
+  isExperienceLocked = false;
+  isTargetActive = false;
+  foundOnce = false;
+
+  clearAllTimers();
+  haptic.reset();
+  stopFade();
+
+  memoryBtn.classList.remove("show");
+  memoryBtn.classList.remove("nudge");
+
+  if (rescanBtn) {
+    rescanBtn.classList.remove("show");
+  }
+
+  uiEl.classList.remove("fade");
+  guideEl.classList.remove("fade");
+  loadingText.classList.remove("hide");
+
+  setInstruction(
+    t.status.alignPhoto,
+    t.status.alignPhotoSub
+  );
+
+  startFailHints();
+}
+
 function handleTargetLost() {
   if (archive.isArchiveOpen()) return;
 
@@ -473,5 +510,11 @@ memoryBtn.addEventListener("click", () => {
   if (!isImageReady || hasOpenedArchive) return;
   archive.openArchive();
 });
+
+if (rescanBtn) {
+  rescanBtn.addEventListener("click", () => {
+    resetForNewScan();
+  });
+}
 
 archive.bindArchiveEvents();
