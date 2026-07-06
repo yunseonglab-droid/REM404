@@ -56,5 +56,22 @@ export default {
   viewMemoryHint: "다른 사람이 남긴 익명의 기억을 읽어보세요.",
   viewerLabel: "ANONYMOUS MEMORY",
   viewerHint: "누군가가 이 공간에 남긴 기억입니다."
-}
+},
+  prepare: {
+  title: "기억 복원 준비 중",
+
+  ready: "기억 스캐너 준비 완료.",
+  requesting: "카메라 권한을 요청하는 중...",
+  failed: "카메라를 열 수 없습니다. 다시 시도해주세요.",
+
+  startButton: "카메라 시작하기",
+
+  messages: [
+    "기억 저장소에 접근하는 중...",
+    "공간의 흔적을 불러오는 중...",
+    "기억 스캐너를 초기화하는 중...",
+    "이미지 인식 시스템 준비 중...",
+    "REM404 Archive와 연결하는 중..."
+  ]
+},
 };
