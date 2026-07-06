@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<title>REM404 Debug Dashboard</title>
+
+<link rel="stylesheet" href="./css/debug.css">
+</head>
+
+<body>
+
+<div class="container">
+
+  <header class="header">
+    <div class="label">
+      REM404 ARCHIVE
+    </div>
+
+    <h1>
+      Debug Dashboard
+    </h1>
+
+    <div class="version">
+      Current Build
+      <strong>v0.5.1</strong>
+    </div>
+  </header>
+
+
+  <section class="summary">
+
+    <div class="card">
+      <div class="title">Open Errors</div>
+      <div class="value" id="openCount">0</div>
+    </div>
+
+    <div class="card">
+      <div class="title">Solved</div>
+      <div class="value" id="solvedCount">0</div>
+    </div>
+
+    <div class="card">
+      <div class="title">Total Logs</div>
+      <div class="value" id="totalCount">0</div>
+    </div>
+
+  </section>
+
+
+  <section class="actions">
+
+    <button id="refreshBtn">
+      새로고침
+    </button>
+
+  </section>
+
+
+  <section>
+
+    <h2>
+      Error Logs
+    </h2>
+
+    <div id="logList">
+
+      <div class="empty">
+        아직 기록된 오류가 없습니다.
+      </div>
+
+    </div>
+
+  </section>
+
+</div>
+
+<script type="module" src="./js/debug.js"></script>
+
+</body>
+</html>
