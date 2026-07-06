@@ -70,6 +70,8 @@ let recognitionRevealTimer = null;
 let recoveryCompleteTimer = null;
 
 let firebaseApi = null;
+let recognitionWatchTimer = null;
+let hasDetectedAnyTarget = false;
 
 const haptic = createHapticController(RECOGNITION_HAPTIC_DURATION);
 const restoreSound = new Audio("./audio/restore.mp3");
@@ -136,6 +138,10 @@ const archive = createArchiveController({
     if (playPromise !== undefined) {
       playPromise.catch((error) => {
         console.warn("Restore sound play failed:", error);
+        logDebugError("REM404-E-AUDIO-001", {
+        message: "Restore sound play failed",
+        error: String(error)
+        });
       });
     }
   }
@@ -150,7 +156,13 @@ async function loadFirebaseApi() {
     return firebaseApi;
   } catch (error) {
     console.error("Firebase module load failed:", error);
-    return null;
+
+    logDebugError("REM404-E-FIRE-001", {
+    message: "Firebase module load failed",
+    error: String(error)
+});
+
+return null;
   }
 }
 
@@ -385,7 +397,8 @@ function handleTargetFound(overlay) {
   if (isTargetActive) return;
 
   activeOverlay = overlay;
-
+  hasDetectedAnyTarget = true;
+  clearTimeout(recognitionWatchTimer);
   isTargetActive = true;
   foundOnce = true;
 
@@ -419,7 +432,9 @@ function resetForNewScan() {
   isExperienceLocked = false;
   isTargetActive = false;
   foundOnce = false;
-
+  hasDetectedAnyTarget = false;
+  clearTimeout(recognitionWatchTimer);
+  
   clearAllTimers();
   haptic.reset();
   stopFade();
@@ -441,6 +456,14 @@ function resetForNewScan() {
   );
 
   startFailHints();
+  recognitionWatchTimer = setTimeout(() => {
+  if (!hasDetectedAnyTarget) {
+    logDebugError("REM404-E-MIND-002", {
+      message: "No image target detected within 15 seconds after rescan",
+      targetCount: 2
+    });
+  }
+}, 15000);
 }
 
 function handleTargetLost() {
@@ -489,6 +512,14 @@ window.addEventListener("load", () => {
 
   startFailHints();
   loadFirebaseApi();
+  recognitionWatchTimer = setTimeout(() => {
+  if (!hasDetectedAnyTarget) {
+    logDebugError("REM404-E-MIND-002", {
+      message: "No image target detected within 15 seconds",
+      targetCount: 2
+    });
+  }
+}, 15000);
 });
 
 target01.addEventListener("targetFound", () => {
