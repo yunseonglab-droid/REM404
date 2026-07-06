@@ -134,38 +134,81 @@ html, body {
     transform: translateX(260%);
   }
 }
+#memoryActions{
+  position:fixed;
+  left:50%;
+  bottom:34px;
+  transform:translateX(-50%);
+  z-index:9999;
+  width:calc(100vw - 48px);
+  max-width:360px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:14px;
+  pointer-events:none;
+}
+
+#memoryActions:has(#memoryBtn.show),
+#memoryActions:has(#rescanBtn.show){
+  pointer-events:auto;
+}
+
+#rescanBtn{
+  border:0;
+  background:none;
+  padding:0;
+  color:rgba(255,255,255,0.82);
+  font-size:14px;
+  font-weight:650;
+  letter-spacing:-0.03em;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .35s ease;
+  text-shadow:0 2px 12px rgba(0,0,0,.32);
+}
+
+#rescanBtn.show{
+  opacity:1;
+  pointer-events:auto;
+}
 
 #memoryBtn {
-  position: fixed;
-  left: 50%;
-  bottom: 34px;
-  transform: translateX(-50%) translateY(28px);
-  z-index: 9999;
-  width: calc(100vw - 48px);
-  max-width: 360px;
+  position: relative;
+
+  width: 100%;
   height: 58px;
+
   border: 0;
   border-radius: 999px;
+
   background: rgba(255,255,255,0.9);
   color: #111;
+
   font-size: 16px;
   font-weight: 850;
-  letter-spacing: -0.02em;
+
   box-shadow: 0 10px 34px rgba(0,0,0,0.26);
   backdrop-filter: blur(10px);
+
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.45s ease, transform 0.45s ease;
+
+  transform: translateY(28px);
+
+  transition:
+    opacity .45s ease,
+    transform .45s ease;
 }
 
 #memoryBtn.show {
   opacity: 1;
   pointer-events: auto;
-  transform: translateX(-50%) translateY(0);
+  transform: translateY(0);
 }
 
 #memoryBtn:active {
-  transform: translateX(-50%) translateY(0) scale(0.97);
+  transform: translateY(0) scale(0.97);
 }
 
 #memoryBtn.nudge {
@@ -174,20 +217,20 @@ html, body {
 
 @keyframes nudge {
   0% {
-    transform: translateX(-50%) translateY(0) scale(1);
-  }
+  transform: translateY(0) scale(1);
+}
 
-  35% {
-    transform: translateX(-50%) translateY(0) scale(1.035);
-  }
+35% {
+  transform: translateY(0) scale(1.035);
+}
 
-  70% {
-    transform: translateX(-50%) translateY(0) scale(1);
-  }
+70% {
+  transform: translateY(0) scale(1);
+}
 
-  100% {
-    transform: translateX(-50%) translateY(0) scale(1);
-  }
+100% {
+  transform: translateY(0) scale(1);
+}
 }
 
 #flash {
