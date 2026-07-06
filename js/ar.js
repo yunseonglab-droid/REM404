@@ -11,8 +11,13 @@ const uiEl = document.getElementById("ui");
 const guideEl = document.getElementById("guide");
 const loadingText = document.getElementById("loadingText");
 
-const target = document.getElementById("target");
-const overlay = document.getElementById("aiOverlay");
+const target01 = document.getElementById("target01");
+const target02 = document.getElementById("target02");
+
+const overlay01 = document.getElementById("aiOverlay01");
+const overlay02 = document.getElementById("aiOverlay02");
+
+let activeOverlay = overlay01;
 const memoryBtn = document.getElementById("memoryBtn");
 const flash = document.getElementById("flash");
 
@@ -25,6 +30,7 @@ const submitMemoryBtn = document.getElementById("submitMemoryBtn");
 const memoryCount = document.getElementById("memoryCount");
 const anonymousMemoryArea = document.getElementById("anonymousMemoryArea");
 const viewMemoryBtn = document.getElementById("viewMemoryBtn");
+const nextRandomMemory = document.getElementById("nextRandomMemory");
 const sharedMemory = document.getElementById("sharedMemory");
 const sharedMemoryText = document.getElementById("sharedMemoryText");
 
@@ -201,7 +207,8 @@ function applyArchiveScreenText() {
 }
 
 function setOpacity(value) {
-  overlay.setAttribute("material", "opacity", value);
+  if (!activeOverlay) return;
+  activeOverlay.setAttribute("material", "opacity", value);
 }
 
 function setCanvasBlur(value) {
@@ -365,8 +372,10 @@ function hideIntroUI() {
   loadingText.classList.add("hide");
 }
 
-function handleTargetFound() {
+function handleTargetFound(overlay) {
   if (isTargetActive) return;
+
+  activeOverlay = overlay;
 
   isTargetActive = true;
   foundOnce = true;
@@ -444,11 +453,19 @@ window.addEventListener("load", () => {
   loadFirebaseApi();
 });
 
-target.addEventListener("targetFound", () => {
-  handleTargetFound();
+target01.addEventListener("targetFound", () => {
+  handleTargetFound(overlay01);
 });
 
-target.addEventListener("targetLost", () => {
+target01.addEventListener("targetLost", () => {
+  handleTargetLost();
+});
+
+target02.addEventListener("targetFound", () => {
+  handleTargetFound(overlay02);
+});
+
+target02.addEventListener("targetLost", () => {
   handleTargetLost();
 });
 
