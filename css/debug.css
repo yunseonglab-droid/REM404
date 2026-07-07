@@ -55,31 +55,52 @@ h1 {
 }
 }
 
-.summary {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-bottom: 26px;
+.summary-card{
+  margin-bottom:28px;
+  border:1px solid rgba(17,17,17,.08);
+  border-radius:22px;
+  overflow:hidden;
+  background:#fff;
+  box-shadow:0 10px 32px rgba(0,0,0,.05);
 }
 
-.card {
-  border: 1px solid rgba(17,17,17,.1);
-  border-radius: 18px;
-  padding: 16px 14px;
-  background: #fafafa;
+.summary-header{
+  padding:18px 24px;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:#777;
+  border-bottom:1px solid rgba(17,17,17,.08);
 }
 
-.card .title {
-  font-size: 11px;
-  line-height: 1.4;
-  color: #777;
-  margin-bottom: 10px;
+.summary-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
 }
 
-.card .value {
-  font-size: 28px;
-  font-weight: 850;
-  letter-spacing: -.05em;
+.summary-item{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  padding:24px 12px;
+}
+
+.summary-item:not(:last-child){
+  border-right:1px solid rgba(17,17,17,.06);
+}
+
+.summary-label{
+  font-size:12px;
+  color:#888;
+  margin-bottom:10px;
+}
+
+.summary-value{
+  font-size:34px;
+  font-weight:850;
+  letter-spacing:-.05em;
 }
 
 .actions {
