@@ -301,7 +301,9 @@ h1 {
 
 </main>
 
-<script>
+<script type="module">
+import { getAllMemories } from "./js/firebase.js";
+  
 const ADMIN_PASSWORD = "2489";
 
 const authScreen = document.getElementById("authScreen");
@@ -309,6 +311,9 @@ const adminScreen = document.getElementById("adminScreen");
 const passwordInput = document.getElementById("adminPassword");
 const loginBtn = document.getElementById("loginBtn");
 const authError = document.getElementById("authError");
+const overviewMemory = document.getElementById("overviewMemory");
+const overviewKo = document.getElementById("overviewKo");
+const overviewEn = document.getElementById("overviewEn");
 
 function unlockAdmin() {
   sessionStorage.setItem("rem404AdminAuth", "true");
