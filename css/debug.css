@@ -488,3 +488,29 @@ h2 {
   background:#111;
   color:#fff;
 }
+.stats-grid{
+  grid-template-columns:repeat(3,1fr);
+}
+
+.summary-live{
+  font-size:18px;
+  letter-spacing:.02em;
+}
+
+@media(max-width:520px){
+  .stats-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .stats-grid .summary-item:nth-child(2),
+  .stats-grid .summary-item:nth-child(4){
+    border-right:0;
+  }
+
+  .stats-grid .summary-item:nth-child(1),
+  .stats-grid .summary-item:nth-child(2),
+  .stats-grid .summary-item:nth-child(3),
+  .stats-grid .summary-item:nth-child(4){
+    border-bottom:1px solid rgba(17,17,17,.06);
+  }
+}
