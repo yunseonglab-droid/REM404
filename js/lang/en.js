@@ -35,7 +35,7 @@ export default {
   
   landing: {
   pageTitle: "REM404",
-  version: "REM404 v0.6",
+  version: "REM404 v0.6.1",
   title: "Memory and Traces<br>of Those Left Behind",
   text: "What remains here is not a building,<br>but memory.<br><br>Point your camera at the exhibition photo,<br>and another image will slowly appear.",
   notice: "This experience uses your smartphone camera.<br>No app installation is required.",
