@@ -40,17 +40,19 @@ h1 {
   letter-spacing: -.05em;
 }
 
-.version {
-  font-size: 13px;
-  color: #777;
-  line-height: 1.7;
+.version{
+  font-size:13px;
+  color:#777;
+  margin-bottom:26px;
 }
 
-.version strong {
-  display: block;
-  margin-top: 2px;
-  color: #111;
-  font-size: 15px;
+.version strong{
+  display:inline;
+  margin-top:0;
+  color:#111;
+  font-size:13px;
+  font-weight:800;
+}
 }
 
 .summary {
