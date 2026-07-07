@@ -174,6 +174,70 @@ h1 {
   color: #888;
   line-height: 1.6;
 }
+  /* ==========================================================
+   Archive Overview
+========================================================== */
+
+.overview-card{
+  margin:32px 0;
+  border:1px solid rgba(17,17,17,.08);
+  border-radius:22px;
+  background:#fff;
+  overflow:hidden;
+  box-shadow:0 10px 32px rgba(0,0,0,.05);
+}
+
+.overview-title{
+  padding:18px 24px;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:#777;
+  border-bottom:1px solid rgba(17,17,17,.08);
+}
+
+.overview-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+}
+
+.overview-item{
+  padding:26px 16px;
+  text-align:center;
+}
+
+.overview-item:not(:last-child){
+  border-right:1px solid rgba(17,17,17,.06);
+}
+
+.overview-label{
+  font-size:12px;
+  color:#888;
+  margin-bottom:12px;
+}
+
+.overview-value{
+  font-size:30px;
+  font-weight:850;
+  letter-spacing:-.05em;
+  color:#111;
+}
+
+@media(max-width:520px){
+  .overview-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .overview-item:nth-child(1),
+  .overview-item:nth-child(2){
+    border-bottom:1px solid rgba(17,17,17,.06);
+  }
+
+  .overview-item:nth-child(2){
+    border-right:none;
+  }
+}
 </style>
 </head>
 
@@ -222,11 +286,6 @@ h1 {
     <div class="desc">
       REM404의 오류 기록, 버전 상태, 아카이브 운영 정보를 확인하는 작가용 관리 페이지입니다.
     </div>
-
-    <div class="version">
-      <div class="small">Current Build</div>
-      <div class="big">v0.6 </div>
-    </div>
     
 <div class="overview-card">
 
@@ -256,7 +315,14 @@ h1 {
         --
       </div>
     </div>
-
+    
+<div class="overview-item">
+    <div class="overview-label">Errors</div>
+    <div class="overview-value" id="overviewErrors">
+        --
+    </div>
+</div>
+    
     <div class="overview-item">
       <div class="overview-label">Version</div>
       <div class="overview-value">
@@ -302,7 +368,7 @@ h1 {
 </main>
 
 <script type="module">
-import { getAllMemories } from "./js/firebase.js";
+import { getAllMemories, getDebugLogs } from "./js/firebase.js";
   
 const ADMIN_PASSWORD = "2489";
 
@@ -314,6 +380,7 @@ const authError = document.getElementById("authError");
 const overviewMemory = document.getElementById("overviewMemory");
 const overviewKo = document.getElementById("overviewKo");
 const overviewEn = document.getElementById("overviewEn");
+const overviewErrors = document.getElementById("overviewErrors");
 
 async function unlockAdmin() {
 
@@ -341,6 +408,9 @@ async function unlockAdmin() {
 
   overviewEn.textContent =
     Math.round((en / total) * 100) + "%";
+
+    const debugLogs = await getDebugLogs();
+overviewErrors.textContent = debugLogs.length;
 }
 
 if (sessionStorage.getItem("rem404AdminAuth") === "true") {
