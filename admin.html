@@ -187,16 +187,29 @@ h1 {
   box-shadow:0 10px 32px rgba(0,0,0,.05);
 }
 
-.overview-title{
+.overview-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
   padding:18px 24px;
+  border-bottom:1px solid rgba(17,17,17,.08);
+}
+
+.overview-title{
   font-size:12px;
   font-weight:800;
   letter-spacing:.16em;
   text-transform:uppercase;
   color:#777;
-  border-bottom:1px solid rgba(17,17,17,.08);
 }
 
+.overview-version{
+  font-size:12px;
+  font-weight:700;
+  color:#888;
+  white-space:nowrap;
+}
 .overview-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
@@ -242,13 +255,6 @@ h1 {
   .overview-item:nth-child(2){
     border-right:none;
   }
-}
-  .overview-version{
-  padding:14px 20px;
-  border-top:1px solid rgba(17,17,17,.08);
-  font-size:13px;
-  color:#777;
-  text-align:center;
 }
   
 </style>
@@ -302,9 +308,12 @@ h1 {
     
 <div class="overview-card">
 
+  <div class="overview-head">
   <div class="overview-title">
     Archive Overview
   </div>
+
+</div>
 
   <div class="overview-grid">
 
