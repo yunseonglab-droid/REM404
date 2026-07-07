@@ -315,10 +315,32 @@ const overviewMemory = document.getElementById("overviewMemory");
 const overviewKo = document.getElementById("overviewKo");
 const overviewEn = document.getElementById("overviewEn");
 
-function unlockAdmin() {
+async function unlockAdmin() {
+
   sessionStorage.setItem("rem404AdminAuth", "true");
+
   authScreen.style.display = "none";
   adminScreen.style.display = "block";
+
+  await loadOverview();
+
+}
+  async function loadOverview() {
+
+  const memories = await getAllMemories();
+
+  overviewMemory.textContent = memories.length;
+
+  const ko = memories.filter(m => m.language === "ko").length;
+  const en = memories.filter(m => m.language === "en").length;
+
+  const total = memories.length || 1;
+
+  overviewKo.textContent =
+    Math.round((ko / total) * 100) + "%";
+
+  overviewEn.textContent =
+    Math.round((en / total) * 100) + "%";
 }
 
 if (sessionStorage.getItem("rem404AdminAuth") === "true") {
