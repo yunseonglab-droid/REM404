@@ -65,9 +65,82 @@ function normalizeLog(log) {
 
 function renderLogs(logs) {
   cachedLogs = logs;
+
+  const normalizedLogs = cachedLogs.map(normalizeLog);
+
+  const openLogs = normalizedLogs.filter((log) => log.status === "open");
+  const solvedLogs = normalizedLogs.filter((log) => log.status === "solved");
+
+  openCountEl.textContent = openLogs.length;
+  solvedCountEl.textContent = solvedLogs.length;
+  totalCountEl.textContent = normalizedLogs.length;
+
+  if (normalizedLogs.length === 0) {
+    logListEl.innerHTML = `
+      <div class="empty">
+        아직 기록된 오류가 없습니다.
+      </div>
+    `;
+
+    renderPagination(0);
+    return;
+  }
+
+  const startIndex = (currentPage - 1) * PAGE_SIZE;
+  const endIndex = startIndex + PAGE_SIZE;
+  const pageLogs = normalizedLogs.slice(startIndex, endIndex);
+
+  logListEl.innerHTML = pageLogs.map((log) => {
+    const detailText = JSON.stringify(log.detail, null, 2);
+    const guide = ERROR_GUIDE[log.code];
+
+    const guideHtml = guide
+      ? `
+        <div class="error-guide">
+          <div class="error-guide-title">${guide.title}</div>
+          <div class="error-guide-desc">${guide.description}</div>
+
+          <div class="error-guide-row">
+            <strong>가능한 원인</strong>
+            <span>${guide.cause}</span>
+          </div>
+
+          <div class="error-guide-row">
+            <strong>해결 방법</strong>
+            <span>${guide.solution}</span>
+          </div>
+        </div>
+      `
+      : "";
+
+    return `
+      <article class="log-card">
+        <div class="log-top">
+          <div class="log-code">${log.code}</div>
+          <div class="badge ${log.status}">
+            ${log.status.toUpperCase()}
+          </div>
+        </div>
+
+        <div class="log-title">
+          ${log.title}
+        </div>
+
+        ${guideHtml}
+
+        <div class="log-detail">${detailText}</div>
+
+        <div class="log-meta">
+          Page: ${log.page}<br>
+          Time: ${formatDate(log.createdAt)}<br>
+          Device: ${log.userAgent}
+        </div>
+      </article>
+    `;
+  }).join("");
+
   renderPagination(normalizedLogs.length);
 }
-
 
 function renderPagination(totalCount) {
 
