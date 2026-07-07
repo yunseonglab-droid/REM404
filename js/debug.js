@@ -1,6 +1,11 @@
 // js/debug.js
+const PAGE_SIZE = 8;
+
+let currentPage = 1;
+let cachedLogs = [];
 
 import { getDebugLogs } from "./firebase.js";
+
 const ERROR_GUIDE = {
   "REM404-E-MIND-002": {
     title: "이미지 인식 실패",
@@ -59,71 +64,55 @@ function normalizeLog(log) {
 }
 
 function renderLogs(logs) {
-  const normalizedLogs = logs.map(normalizeLog);
+  cachedLogs = logs;
+  renderPagination(normalizedLogs.length);
+}
 
-  const openLogs = normalizedLogs.filter((log) => log.status === "open");
-  const solvedLogs = normalizedLogs.filter((log) => log.status === "solved");
 
-  openCountEl.textContent = openLogs.length;
-  solvedCountEl.textContent = solvedLogs.length;
-  totalCountEl.textContent = normalizedLogs.length;
+function renderPagination(totalCount) {
 
-  if (normalizedLogs.length === 0) {
-    logListEl.innerHTML = `
-      <div class="empty">
-        아직 기록된 오류가 없습니다.
-      </div>
-    `;
-    return;
+  let paginationEl = document.getElementById("debugPagination");
+
+  if (paginationEl) {
+
+    paginationEl.remove();
+
   }
 
-  logListEl.innerHTML = normalizedLogs.map((log) => {
-    const detailText = JSON.stringify(log.detail, null, 2);
-    const guide = ERROR_GUIDE[log.code];
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
-const guideHtml = guide
-  ? `
-    <div class="error-guide">
-      <div class="error-guide-title">${guide.title}</div>
-      <div class="error-guide-desc">${guide.description}</div>
+  if (totalPages <= 1) return;
 
-      <div class="error-guide-row">
-        <strong>가능한 원인</strong>
-        <span>${guide.cause}</span>
-      </div>
+  paginationEl = document.createElement("div");
 
-      <div class="error-guide-row">
-        <strong>해결 방법</strong>
-        <span>${guide.solution}</span>
-      </div>
-    </div>
-  `
-  : "";
+  paginationEl.id = "debugPagination";
 
-    return `
-      <article class="log-card">
-        <div class="log-top">
-          <div class="log-code">${log.code}</div>
-          <div class="badge ${log.status}">
-            ${log.status.toUpperCase()}
-          </div>
-        </div>
+  paginationEl.className = "pagination";
 
-        <div class="log-title">
-          ${log.title}
-            </div>
+  for (let page = 1; page <= totalPages; page++) {
 
-          ${guideHtml}
+    const button = document.createElement("button");
 
-        <div class="log-detail">${detailText}</div>
-        <div class="log-meta">
-          Page: ${log.page}<br>
-          Time: ${formatDate(log.createdAt)}<br>
-          Device: ${log.userAgent}
-        </div>
-      </article>
-    `;
-  }).join("");
+    button.textContent = page;
+
+    button.className = page === currentPage ? "page-btn active" : "page-btn";
+
+    button.addEventListener("click", () => {
+
+      currentPage = page;
+
+      renderLogs(cachedLogs);
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
+    });
+
+    paginationEl.appendChild(button);
+
+  }
+
+  logListEl.after(paginationEl);
+
 }
 
 async function loadLogs() {
@@ -134,6 +123,7 @@ async function loadLogs() {
 
   try {
     const logs = await getDebugLogs();
+    currentPage = 1;
     renderLogs(logs);
   } catch (error) {
     console.error(error);
