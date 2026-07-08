@@ -129,10 +129,10 @@ function renderLogs(logs) {
 
         ${guideHtml}
         
-          <div class="log-section-title">
-            Raw Log
-        </div>
-        <div class="log-detail">${detailText}</div>
+          <details class="raw-log">
+  <summary>원본 로그 보기</summary>
+  <pre class="log-detail">${detailText}</pre>
+</details>
 
         <div class="log-meta-item">
   <strong>PAGE</strong>
