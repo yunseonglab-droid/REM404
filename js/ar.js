@@ -40,6 +40,9 @@ const prepareOverlay = document.getElementById("prepareOverlay");
 const prepareTitle = document.getElementById("prepareTitle");
 const prepareText = document.getElementById("prepareText");
 const prepareStartBtn = document.getElementById("prepareStartBtn");
+const introOverlay = document.getElementById("introOverlay");
+const introStartBtn = document.getElementById("introStartBtn");
+const introDots = document.getElementById("introDots");
 
 const FAST_REVEAL_DURATION = 820;
 const SLOW_REVEAL_DURATION = 2700;
@@ -333,7 +336,7 @@ function showMemoryButton() {
   setInstruction(
     t.status.memoryRestored,
     t.status.memoryRestoredSub
-);
+  );
   
   recoveryCompleteTimer = setTimeout(() => {
     if (!isTargetActive || hasOpenedArchive) return;
@@ -567,23 +570,51 @@ window.addEventListener("load", () => {
     });
   }
 }
+let introDotIndex = 1;
 
-  setInstruction(
-    t.status.alignPhoto,
-    t.status.alignPhotoSub
-  );
+const introDotTimer = setInterval(() => {
+  if (!introDots) return;
 
-  startFailHints();
-  loadFirebaseApi();
-  recognitionWatchTimer = setTimeout(() => {
-  if (!hasDetectedAnyTarget) {
-    logDebugError("REM404-E-MIND-002", {
-      message: "No image target detected within 15 seconds",
-      targetCount: 2
-    });
+  introDotIndex = introDotIndex >= 3 ? 1 : introDotIndex + 1;
+  introDots.textContent = ".".repeat(introDotIndex);
+}, 450);
+
+setTimeout(() => {
+  if (introStartBtn) {
+    introStartBtn.classList.add("show");
   }
-}, 15000);
-});
+}, 2800);
+
+if (introStartBtn && introOverlay) {
+  introStartBtn.addEventListener("click", () => {
+    clearInterval(introDotTimer);
+
+    introOverlay.classList.add("hide");
+
+    setTimeout(() => {
+      introOverlay.style.display = "none";
+    }, 800);
+
+    setInstruction(
+      t.status.alignPhoto,
+      t.status.alignPhotoSub
+    );
+
+    startFailHints();
+
+    loadFirebaseApi();
+
+    recognitionWatchTimer = setTimeout(() => {
+      if (!hasDetectedAnyTarget) {
+        logDebugError("REM404-E-MIND-002", {
+          message: "No image target detected within 15 seconds",
+          targetCount: 2
+        });
+      }
+    }, 15000);
+  });
+}
+  });
 
 target01.addEventListener("targetFound", () => {
   handleTargetFound(overlay01);
