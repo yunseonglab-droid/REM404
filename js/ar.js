@@ -41,8 +41,8 @@ const prepareTitle = document.getElementById("prepareTitle");
 const prepareText = document.getElementById("prepareText");
 const prepareStartBtn = document.getElementById("prepareStartBtn");
 
-const FAST_REVEAL_DURATION = 820;
-const SLOW_REVEAL_DURATION = 2700;
+const FAST_REVEAL_DURATION = 1000;
+const SLOW_REVEAL_DURATION = 3000;
 const INITIAL_RENDER_OPACITY = 0.4;
 const MID_BLUR = 5;
 const MAX_BLUR = 10;
@@ -91,6 +91,12 @@ const restoreSound = new Audio("./audio/restore.mp3");
 
 restoreSound.preload = "auto";
 restoreSound.volume = 0.75;
+
+const recoverySound = new Audio("./audio/recovery.mp3");
+
+recoverySound.preload = "auto";
+recoverySound.volume = 0.6;
+
 let isSoundUnlocked = false;
 
 function unlockRestoreSound() {
@@ -102,6 +108,19 @@ function unlockRestoreSound() {
       restoreSound.pause();
       restoreSound.currentTime = 0;
       restoreSound.volume = 0.75;
+      
+      recoverySound.volume = 0;
+
+      recoverySound.play()
+       .then(() => {
+    recoverySound.pause();
+    recoverySound.currentTime = 0;
+    recoverySound.volume = 0.6;
+  })
+  .catch(() => {
+    recoverySound.volume = 0.6;
+  });
+      
       isSoundUnlocked = true;
     })
     .catch(() => {
@@ -396,6 +415,13 @@ function fadeInstructionLater() {
 function startFade() {
   stopFade();
   resetMemoryButton();
+
+  recoverySound.pause();
+  recoverySound.currentTime = 0;
+
+  recoverySound.play().catch((error) => {
+    console.warn("Recovery sound play failed:", error);
+  });
 
   startTime = performance.now();
   
