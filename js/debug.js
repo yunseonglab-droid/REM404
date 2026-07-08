@@ -50,6 +50,38 @@ function formatDate(value) {
 
   return String(value);
 }
+function parseUserAgent(ua = "") {
+  let device = "Unknown Device";
+  let browser = "Unknown Browser";
+
+  // Device
+  if (/iPhone/i.test(ua)) {
+    const version = ua.match(/OS (\d+[_\d]*)/);
+    device = `iPhone · iOS ${version ? version[1].replace(/_/g, ".") : ""}`;
+  } else if (/iPad/i.test(ua)) {
+    device = "iPad";
+  } else if (/Android/i.test(ua)) {
+    const version = ua.match(/Android ([\d.]+)/);
+    device = `Android ${version ? version[1] : ""}`;
+  } else if (/Windows/i.test(ua)) {
+    device = "Windows";
+  } else if (/Macintosh|Mac OS X/i.test(ua)) {
+    device = "macOS";
+  }
+
+  // Browser
+  if (/KAKAOTALK/i.test(ua)) {
+    browser = "KakaoTalk In-App Browser";
+  } else if (/CriOS|Chrome/i.test(ua)) {
+    browser = "Google Chrome";
+  } else if (/Safari/i.test(ua)) {
+    browser = "Safari";
+  } else if (/Firefox/i.test(ua)) {
+    browser = "Firefox";
+  }
+
+  return `${device}<br>${browser}`;
+}
 
 function normalizeLog(log) {
   return {
@@ -148,7 +180,7 @@ function renderLogs(logs) {
 
   <div class="info-row">
     <div class="info-label">DEVICE</div>
-    <div class="info-value">${log.userAgent}</div>
+    <div class="info-value">${parseUserAgent(log.userAgent)}</div>
   </div>
 
 </div>
