@@ -565,3 +565,48 @@ h2 {
   line-height:1.7;
   color:#444;
 }
+.raw-log{
+  margin-top:16px;
+  border:1px solid rgba(17,17,17,.08);
+  border-radius:16px;
+  background:#fafafa;
+  overflow:hidden;
+}
+
+.raw-log summary{
+  padding:14px 16px;
+  cursor:pointer;
+  font-size:12px;
+  font-weight:850;
+  color:#777;
+  letter-spacing:.06em;
+  list-style:none;
+}
+
+.raw-log summary::-webkit-details-marker{
+  display:none;
+}
+
+.raw-log summary::after{
+  content:"펼치기";
+  float:right;
+  color:#aaa;
+  font-weight:700;
+}
+
+.raw-log[open] summary::after{
+  content:"접기";
+}
+
+.raw-log .log-detail{
+  margin:0;
+  padding:14px 16px 16px;
+  border-top:1px solid rgba(17,17,17,.08);
+  background:#fff;
+  font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size:12px;
+  line-height:1.7;
+  color:#444;
+  overflow:auto;
+  white-space:pre-wrap;
+}
