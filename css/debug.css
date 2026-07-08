@@ -525,3 +525,43 @@ h2 {
   font-size:14px;
   box-shadow:none;
 }
+.error-guide{
+  margin:16px 0;
+  padding:16px;
+  border-radius:16px;
+  background:#fafafa;
+  border:1px solid rgba(17,17,17,.08);
+}
+
+.error-guide-title{
+  font-size:18px;
+  font-weight:850;
+  color:#111;
+  margin-bottom:14px;
+}
+
+.error-guide-desc{
+  line-height:1.7;
+  color:#555;
+}
+
+.error-guide-row{
+  margin-top:16px;
+  padding-top:16px;
+  border-top:1px solid rgba(17,17,17,.08);
+}
+
+.error-guide-row strong{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  color:#777;
+  margin-bottom:6px;
+  letter-spacing:.06em;
+}
+
+.error-guide-row span{
+  display:block;
+  line-height:1.7;
+  color:#444;
+}
