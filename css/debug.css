@@ -514,3 +514,14 @@ h2 {
     border-bottom:1px solid rgba(17,17,17,.06);
   }
 }
+.debug-actions{
+  margin:20px 0 28px;
+}
+
+.debug-actions #refreshBtn{
+  width:100%;
+  height:46px;
+  border-radius:999px;
+  font-size:14px;
+  box-shadow:none;
+}
