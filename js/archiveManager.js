@@ -7,7 +7,7 @@ import {
 } from "./firebase.js";
 
 const memoryList = document.getElementById("memoryList");
-const refreshBtn = document.getElementById("refreshMemoriesBtn");
+const refreshBtn = document.getElementById("refreshBtn");
 const searchInput = document.getElementById("memorySearchInput");
 
 let memories = [];
