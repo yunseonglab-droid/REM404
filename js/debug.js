@@ -134,19 +134,23 @@ function renderLogs(logs) {
   <pre class="log-detail">${detailText}</pre>
 </details>
 
-        <div class="log-meta-item">
-  <strong>PAGE</strong>
-  <span>${log.page}</span>
-</div>
+ <div class="log-info">
 
-<div class="log-meta-item">
-  <strong>TIME</strong>
-  <span>${formatDate(log.createdAt)}</span>
-</div>
+  <div class="info-row">
+    <div class="info-label">PAGE</div>
+    <div class="info-value">${log.page}</div>
+  </div>
 
-<div class="log-meta-item">
-  <strong>DEVICE</strong>
-  <span>${log.userAgent}</span>
+  <div class="info-row">
+    <div class="info-label">TIME</div>
+    <div class="info-value">${formatDate(log.createdAt)}</div>
+  </div>
+
+  <div class="info-row">
+    <div class="info-label">DEVICE</div>
+    <div class="info-value">${log.userAgent}</div>
+  </div>
+
 </div>
       </article>
     `;
