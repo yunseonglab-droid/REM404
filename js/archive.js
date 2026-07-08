@@ -244,7 +244,7 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
 
       const api = await loadFirebaseApi();
 
-      if (!api || !api.saveMemory || !api.getMemoryCount) {
+      if (!api || !api.saveMemory) {
         alert(t.archive.systemLoadFailed);
         submitMemoryBtn.disabled = false;
         submitMemoryBtn.textContent = t.buttons.submitMemory;
@@ -252,24 +252,37 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
       }
 
      try {
-  const beforeCount = await api.getMemoryCount();
-  const savedMemory = await api.saveMemory(text);
-  savedMemoryId = savedMemory.id;
-  viewedMemoryIds.add(savedMemory.id);
+const savedMemory = await api.saveMemory(text);
 
-  if (callbacks.triggerSuccessHaptic) {
-    callbacks.triggerSuccessHaptic();
-  }
+savedMemoryId = savedMemory.id;
+viewedMemoryIds.add(savedMemory.id);
 
-  const afterCount = await api.getMemoryCount();
+if (callbacks.triggerSuccessHaptic) {
+  callbacks.triggerSuccessHaptic();
+}
 
-  showArchiveComplete();
+showArchiveComplete();
 
-        animateCount(beforeCount, afterCount, () => {
-          setTimeout(() => {
-            anonymousMemoryArea.classList.add("show");
-          }, ANONYMOUS_MEMORY_DELAY);
-        });
+anonymousMemoryArea.classList.remove("show");
+
+if (api.getMemoryCount) {
+  api.getMemoryCount()
+    .then((count) => {
+      animateCount(0, count, () => {
+        setTimeout(() => {
+          anonymousMemoryArea.classList.add("show");
+        }, ANONYMOUS_MEMORY_DELAY);
+      });
+    })
+    .catch(() => {
+      memoryCount.textContent = "-";
+      anonymousMemoryArea.classList.add("show");
+    });
+  
+} else {
+  memoryCount.textContent = "-";
+  anonymousMemoryArea.classList.add("show");
+}
       } catch (error) {
         console.error(error);
 
@@ -278,6 +291,7 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
         submitMemoryBtn.disabled = false;
         submitMemoryBtn.textContent = t.buttons.submitMemory;
       }
+      
     });
 
     viewMemoryBtn.addEventListener("click", () => {
