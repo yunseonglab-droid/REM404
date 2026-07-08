@@ -32,6 +32,7 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
   
   const viewedMemoryIds = new Set();
   let savedMemoryId = null;
+  let prefetchedRandomMemory = null;
   
   function cameraFlash() {
     flash.style.opacity = "1";
@@ -179,7 +180,17 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
       excludedIds.push(savedMemoryId);
     }
 
-    const randomMemory = await api.getRandomMemory(excludedIds);
+    let randomMemory = prefetchedRandomMemory;
+
+if (randomMemory && excludedIds.includes(randomMemory.id)) {
+  randomMemory = null;
+}
+
+prefetchedRandomMemory = null;
+
+if (!randomMemory) {
+  randomMemory = await api.getRandomMemory(excludedIds);
+}
 
     setTimeout(() => {
       if (sharedMemoryText) {
@@ -204,7 +215,7 @@ export function createArchiveController({ elements, loadFirebaseApi, constants, 
           : t.buttons.viewMemory;
         triggerButton.disabled = false;
       }
-    }, 300);
+    }, 120);
     
     } catch (error) {
     console.error(error);
@@ -264,6 +275,13 @@ if (callbacks.triggerSuccessHaptic) {
 showArchiveComplete();
 
 anonymousMemoryArea.classList.remove("show");
+       api.getRandomMemory([savedMemoryId])
+  .then((memory) => {
+    prefetchedRandomMemory = memory;
+  })
+  .catch((error) => {
+    console.warn("Random memory prefetch failed:", error);
+  });
 
 if (api.getMemoryCount) {
   api.getMemoryCount()
