@@ -131,7 +131,7 @@ function renderLogs(logs) {
         
           <div class="log-section-title">
             Raw Log
-        ㅍ</div>
+        </div>
         <div class="log-detail">${detailText}</div>
 
         <div class="log-meta-item">
