@@ -634,9 +634,11 @@ h2 {
 }
 
 .info-value{
+  white-space: normal;
   font-size:14px;
   font-weight:500;
   line-height:1.7;
   color:#222;
   word-break:break-word;
+  
 }
