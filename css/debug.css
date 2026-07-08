@@ -315,13 +315,13 @@ h2 {
 
 .manager-tabs button,
 .restore-memory-btn {
-  height: 42px;
+  height: 38px;
   border: 0;
   border-radius: 999px;
   background: #111;
   color: #fff;
   font-family: inherit;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 850;
 }
 
