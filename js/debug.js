@@ -98,6 +98,7 @@ function renderLogs(logs) {
       ? `
         <div class="error-guide">
           <div class="error-guide-title">${guide.title}</div>
+          <div class="error-guide-label">오류 설명</div>
           <div class="error-guide-desc">${guide.description}</div>
 
           <div class="error-guide-row">
@@ -127,14 +128,26 @@ function renderLogs(logs) {
         </div>
 
         ${guideHtml}
-
+        
+          <div class="log-section-title">
+            Raw Log
+        ㅍ</div>
         <div class="log-detail">${detailText}</div>
 
-        <div class="log-meta">
-          Page: ${log.page}<br>
-          Time: ${formatDate(log.createdAt)}<br>
-          Device: ${log.userAgent}
-        </div>
+        <div class="log-meta-item">
+  <strong>PAGE</strong>
+  <span>${log.page}</span>
+</div>
+
+<div class="log-meta-item">
+  <strong>TIME</strong>
+  <span>${formatDate(log.createdAt)}</span>
+</div>
+
+<div class="log-meta-item">
+  <strong>DEVICE</strong>
+  <span>${log.userAgent}</span>
+</div>
       </article>
     `;
   }).join("");
