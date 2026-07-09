@@ -1525,31 +1525,228 @@ This update also includes a large internal refactor to prepare the project for f
 - Multi Image Target support is not yet available.
 
 ---
+# v0.7 BETA
+## Exhibition Experience Update
+
+**Release Date:** 2026-07-09
+
+---
+
+## Overview
+
+v0.7 Beta는
+
+실제 전시 환경을 기준으로
+
+관람 경험(User Experience)을 다듬는 것을 목표로 하였다.
+
+새로운 기능을 추가하기보다
+
+기존 기능의 완성도를 높이고
+
+관리자 시스템의 사용성을 개선하는 데 집중하였다.
+
+---
+
+# Problem 01
+
+## Recovery Sound 추가
+
+### Issue
+
+AI 이미지가 복원되는 과정은
+
+시각적인 변화만 존재하여
+
+기억이 복원되는 연출이 다소 부족하였다.
+
+### Solution
+
+Recovery Sound를 새롭게 추가하였다.
+
+AI 이미지가 복원되는 약 4초 동안
+
+전용 음향이 함께 재생되도록 변경하였다.
+
+### Result
+
+- 몰입감 향상
+- 기억 복원 연출 강화
+- 시각과 청각을 함께 사용하는 경험 완성
+
+---
+
+# Problem 02
+
+## Restore Sound 역할 분리
+
+### Issue
+
+Restore 효과음이
+
+이미지 복원과
+
+Archive 진입에서
+
+동시에 사용되고 있었다.
+
+### Solution
+
+Recovery Sound와 Restore Sound를 분리하였다.
+
+Recovery Sound는
+
+이미지 복원 과정에서만 사용되며
+
+Restore Sound는
+
+"당신의 기억" 화면 진입 시에만 재생되도록 변경하였다.
+
+### Result
+
+각 단계의 의미가 명확해졌으며
+
+전시 연출의 완성도가 향상되었다.
+
+---
+
+# Problem 03
+
+## Statistics UI 개선
+
+### Issue
+
+관리자 페이지의 Usage Log는
+
+JSON 형태 그대로 출력되어
+
+빠르게 내용을 확인하기 어려웠다.
+
+### Solution
+
+Statistics UI를 전면 개선하였다.
+
+페이지 이름
+
+이벤트 종류
+
+언어
+
+기기 정보 등을
+
+사람이 읽기 쉬운 형태로 변경하였다.
+
+### Result
+
+관리자가 로그를 빠르게 이해할 수 있는 구조가 되었다.
+
+---
+
+# Problem 04
+
+## Usage Log Pagination
+
+### Issue
+
+Usage Log가 계속 증가하면서
+
+모든 로그를 한 번에 출력하는 방식은
+
+가독성이 크게 떨어졌다.
+
+### Solution
+
+Usage Log를
+
+8개 단위 페이지네이션으로 변경하였다.
+
+### Result
+
+- 로그 탐색 속도 향상
+- 관리자 UX 개선
+- 장기 전시 운영 대응
+
+---
+
+# Problem 05
+
+## 관리자 인터페이스 개선
+
+### Issue
+
+Statistics 화면의 정보 구조가
+
+다소 복잡하게 구성되어 있었다.
+
+### Solution
+
+Summary 영역과
+
+Current Build 표시 방식을 개선하고
+
+전체 UI를 재정리하였다.
+
+### Result
+
+관리 페이지의 완성도가 향상되었으며
+
+필요한 정보를 더욱 빠르게 확인할 수 있게 되었다.
+
+---
+
+# Additional Improvements
+
+- Recovery Sound 추가
+- Restore Sound 역할 분리
+- AI 이미지 복원 연출 개선
+- Statistics UI 개선
+- Usage Log Pagination
+- Device 표시 개선
+- Language 표시 개선
+- Event 표시 개선
+- 관리자 UX 개선
+- 코드 안정성 향상
+
+---
+
+# Final Result
+
+v0.7 Beta는
+
+새로운 기능보다
+
+실제 전시에서의 사용자 경험을 다듬는 것에 집중한 업데이트였다.
+
+관람객은
+
+기억이 복원되는 과정을
+
+더 자연스럽게 경험할 수 있게 되었으며,
+
+관리자는
+
+작품의 상태와 사용 현황을
+
+보다 직관적으로 확인할 수 있게 되었다.
+
+---
+
+## Development Notes
+
+이번 버전은
+
+정식 Release 이전의 Beta 버전이다.
+
+기능 추가보다
+
+안정성과 사용자 경험을 우선하였으며
+
+교수 시연과 실제 사용자 피드백을 기반으로
+
+정식 v0.7 Release에서 추가 개선 사항을 반영할 예정이다.
 
 ## Next Release
 
-### v0.5.1 Beta
-
-- Multi Image Target Support
-- Archive Protection System
-- UX Improvements
-- Performance Optimization
-
----
-
-**Version:** `REM404 v0.5 Beta`
-
-# Future Roadmap
-
-## v0.6
-
-- 실제 전시장 테스트
-- 조명 환경 테스트
-- 관람객 테스트
-
----
-
-## v1.0
 
 # REM404 Archive Exhibition Release
 
@@ -1557,18 +1754,73 @@ This update also includes a large internal refactor to prepare the project for f
 
 # Development Retrospective
 
-이번 개발에서 가장 의미 있었던 변화는 기능을 늘린 것보다 **프로젝트를 관리하는 방식이 성숙해진 점**이었다.
+이번 개발에서 가장 의미 있었던 변화는
 
-처음에는 기능을 빠르게 추가하는 데 집중했지만, 개발을 진행하며 여러 차례 인식 오류와 배포 문제를 겪었다.
+기능을 추가하는 것보다
 
-그 과정에서 **v0.3.9를 안정판으로 유지하고, 문제가 생기면 즉시 롤백한 뒤 다시 개선하는 방식**을 정착시켰다.
+**프로젝트를 실제 전시를 위한 하나의 시스템으로 발전시킨 점**이었다.
 
-또한 GitHub Release와 버전 관리를 도입해 기능 개발과 안정화를 분리하는 개발 흐름을 만들었다.
+초기에는 AR 기능과 Archive 기능을 구현하는 데 집중했지만,
 
-REM404는 이제 단순한 AR 기술 시연이 아니라,
+개발을 진행하면서 인식 오류, 배포 문제, 사운드 충돌, 관리자 기능 부족 등
+
+실제 전시 환경에서 발생할 수 있는 문제들을 반복적으로 경험하였다.
+
+그 과정에서
+
+**안정적인 버전을 유지한 상태에서 새로운 기능을 개발하고,
+문제가 발생하면 즉시 이전 버전으로 롤백한 뒤 다시 개선하는 개발 방식**을 정착시켰다.
+
+또한 GitHub Release와 Build Note를 적극적으로 활용하여
+
+기능 개발과 안정화 과정을 명확하게 분리하였으며,
+
+각 버전마다 무엇이 변경되었는지 기록하는 개발 문화를 만들었다.
+
+v0.6에서는
+
+Firebase 기반 Archive,
+
+Admin Dashboard,
+
+Statistics,
+
+Debug Logger,
+
+Usage Log 등을 구축하며
+
+프로젝트의 내부 구조를 완성하였다.
+
+이후 v0.7 Beta에서는
+
+Recovery Sound,
+
+Restore Sound 역할 분리,
+
+Statistics UI 개선,
+
+관리자 페이지 UX 개선,
+
+Usage Log 페이지네이션 등을 적용하며
+
+실제 전시 환경에서의 사용자 경험을 다듬는 작업에 집중하였다.
+
+현재 REM404는
+
+단순한 AR 기술 시연이 아니라,
 
 > **한 사람이 남긴 기억이 또 다른 사람의 기억으로 이어지는 디지털 아카이브**
 
-라는 명확한 작품 구조를 갖춘 프로젝트로 발전했다.
+라는 명확한 작품 구조를 갖춘 프로젝트로 발전하였다.
 
-이 방향성은 앞으로의 졸업작품과 전시에서도 프로젝트의 핵심 축이 될 것이다.
+앞으로는
+
+교수 피드백과 실제 관람객 테스트를 기반으로
+
+AR 인식 안정성,
+
+전시 연출,
+
+사용자 경험을 지속적으로 개선하여
+
+정식 v0.7 Release와 졸업작품 버전으로 발전시킬 예정이다.
