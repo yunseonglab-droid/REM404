@@ -133,7 +133,7 @@ h2 {
 #logList {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 12px;
 }
 
 .empty {
