@@ -9,7 +9,7 @@ export async function logDebugError(code, detail = {}) {
     url: location.href,
     userAgent: navigator.userAgent,
     language: document.documentElement.lang || "unknown",
-    version: "v0.6.0 Beta",
+    version: "v0.7 Beta",
     createdAt: new Date().toISOString()
   };
 
