@@ -12,7 +12,6 @@ const uiEl = document.getElementById("ui");
 const guideEl = document.getElementById("guide");
 const loadingText = document.getElementById("loadingText");
 
-
 const target01 = document.getElementById("target01");
 const target02 = document.getElementById("target02");
 
@@ -81,9 +80,7 @@ let prepareTextTimer = null;
 let sceneEl = null;
 
 if (prepareStartBtn) {
-
   prepareStartBtn.disabled = true;
-
 }
 
 const haptic = createHapticController(RECOGNITION_HAPTIC_DURATION);
@@ -92,10 +89,12 @@ const restoreSound = new Audio("./audio/restore.mp3");
 restoreSound.preload = "auto";
 restoreSound.volume = 0.75;
 
+// ===== Added : Recovery Sound =====
 const recoverySound = new Audio("./audio/recovery.mp3");
 
 recoverySound.preload = "auto";
 recoverySound.volume = 0.6;
+// ===== End : Recovery Sound =====
 
 let isSoundUnlocked = false;
 
@@ -108,25 +107,13 @@ function unlockRestoreSound() {
       restoreSound.pause();
       restoreSound.currentTime = 0;
       restoreSound.volume = 0.75;
-      
-      recoverySound.volume = 0;
-
-      recoverySound.play()
-       .then(() => {
-    recoverySound.pause();
-    recoverySound.currentTime = 0;
-    recoverySound.volume = 0.6;
-  })
-  .catch(() => {
-    recoverySound.volume = 0.6;
-  });
-      
       isSoundUnlocked = true;
     })
     .catch(() => {
       restoreSound.volume = 0.75;
     });
 }
+
 const archive = createArchiveController({
   elements: {
     uiEl,
@@ -151,33 +138,33 @@ const archive = createArchiveController({
     ANONYMOUS_MEMORY_DELAY
   },
   callbacks: {
-  setHasOpenedArchive(value) {
-    hasOpenedArchive = value;
-  },
-  clearNudgeTimer() {
-    clearTimeout(nudgeTimer);
-  },
-  triggerSuccessHaptic() {
-    haptic.success();
-  },
-  playRestoreSound() {
-    restoreSound.pause();
-    restoreSound.currentTime = 0;
-    restoreSound.volume = 0.75;
+    setHasOpenedArchive(value) {
+      hasOpenedArchive = value;
+    },
+    clearNudgeTimer() {
+      clearTimeout(nudgeTimer);
+    },
+    triggerSuccessHaptic() {
+      haptic.success();
+    },
+    playRestoreSound() {
+      restoreSound.pause();
+      restoreSound.currentTime = 0;
+      restoreSound.volume = 0.75;
 
-    const playPromise = restoreSound.play();
+      const playPromise = restoreSound.play();
 
-    if (playPromise !== undefined) {
-      playPromise.catch((error) => {
-        console.warn("Restore sound play failed:", error);
-        logDebugError("REM404-E-AUDIO-001", {
-        message: "Restore sound play failed",
-        error: String(error)
+      if (playPromise !== undefined) {
+        playPromise.catch((error) => {
+          console.warn("Restore sound play failed:", error);
+          logDebugError("REM404-E-AUDIO-001", {
+            message: "Restore sound play failed",
+            error: String(error)
+          });
         });
-      });
+      }
     }
   }
-}
 });
 
 async function loadFirebaseApi() {
@@ -190,11 +177,11 @@ async function loadFirebaseApi() {
     console.error("Firebase module load failed:", error);
 
     logDebugError("REM404-E-FIRE-001", {
-    message: "Firebase module load failed",
-    error: String(error)
-});
+      message: "Firebase module load failed",
+      error: String(error)
+    });
 
-return null;
+    return null;
   }
 }
 
@@ -206,8 +193,8 @@ function setInstruction(mainText, subHtml) {
   statusEl.textContent = mainText;
   subEl.innerHTML = subHtml;
 }
-function startPrepareOverlay() {
 
+function startPrepareOverlay() {
   const messages = t.prepare.messages;
 
   let index = 0;
@@ -215,20 +202,17 @@ function startPrepareOverlay() {
   prepareText.textContent = messages[0];
 
   prepareTextTimer = setInterval(() => {
-
     index++;
 
     prepareText.textContent =
       messages[index % messages.length];
-
   }, 1200);
-
 }
 
 function setPrepareReady() {
   if (!prepareStartBtn || !prepareText) return;
 
- prepareText.textContent = t.prepare.ready;
+  prepareText.textContent = t.prepare.ready;
   prepareStartBtn.disabled = false;
 }
 
@@ -352,8 +336,8 @@ function showMemoryButton() {
   setInstruction(
     t.status.memoryRestored,
     t.status.memoryRestoredSub
-);
-  
+  );
+
   recoveryCompleteTimer = setTimeout(() => {
     if (!isTargetActive || hasOpenedArchive) return;
 
@@ -362,15 +346,14 @@ function showMemoryButton() {
     isExperienceLocked = true;
 
     memoryBtn.textContent = t.buttons.leaveMemory;
-memoryBtn.classList.add("show");
+    memoryBtn.classList.add("show");
 
-if (rescanBtn) {
-  rescanBtn.textContent = t.buttons.rescanSpace;
-  rescanBtn.classList.add("show");
-}
+    if (rescanBtn) {
+      rescanBtn.textContent = t.buttons.rescanSpace;
+      rescanBtn.classList.add("show");
+    }
 
-nudgeTimer = setTimeout(() => {
-  
+    nudgeTimer = setTimeout(() => {
       nudgeMemoryButton();
     }, BUTTON_NUDGE_TIME);
   }, RECOVERY_COMPLETE_DELAY);
@@ -416,15 +399,8 @@ function startFade() {
   stopFade();
   resetMemoryButton();
 
-  recoverySound.pause();
-  recoverySound.currentTime = 0;
-
-  recoverySound.play().catch((error) => {
-    console.warn("Recovery sound play failed:", error);
-  });
-
   startTime = performance.now();
-  
+
   function animate(now) {
     const elapsed = now - startTime;
     const slowStartTime = FAST_REVEAL_DURATION;
@@ -494,11 +470,22 @@ function handleTargetFound(overlay) {
     recognitionRevealTimer = setTimeout(() => {
       if (!isTargetActive) return;
 
+      // ===== Added : Recovery Sound =====
+      recoverySound.pause();
+      recoverySound.currentTime = 0;
+      recoverySound.volume = 0.6;
+
+      recoverySound.play().catch((error) => {
+        console.warn("Recovery sound play failed:", error);
+      });
+      // ===== End : Recovery Sound =====
+
       startFade();
       fadeInstructionLater();
     }, RECOGNITION_FEEDBACK_DURATION);
   }, RECOGNITION_STABLE_DELAY);
 }
+
 function resetForNewScan() {
   isImageReady = false;
   hasOpenedArchive = false;
@@ -507,7 +494,7 @@ function resetForNewScan() {
   foundOnce = false;
   hasDetectedAnyTarget = false;
   clearTimeout(recognitionWatchTimer);
-  
+
   clearAllTimers();
   haptic.reset();
   stopFade();
@@ -530,13 +517,13 @@ function resetForNewScan() {
 
   startFailHints();
   recognitionWatchTimer = setTimeout(() => {
-  if (!hasDetectedAnyTarget) {
-    logDebugError("REM404-E-MIND-002", {
-      message: "No image target detected within 15 seconds after rescan",
-      targetCount: 2
-    });
-  }
-}, 15000);
+    if (!hasDetectedAnyTarget) {
+      logDebugError("REM404-E-MIND-002", {
+        message: "No image target detected within 15 seconds after rescan",
+        targetCount: 2
+      });
+    }
+  }, 15000);
 }
 
 function handleTargetLost() {
@@ -580,19 +567,19 @@ window.addEventListener("load", () => {
   applyArchiveScreenText();
   startPrepareOverlay();
 
- if (sceneEl) {
-  if (sceneEl.hasLoaded) {
-    setTimeout(() => {
-      setPrepareReady();
-    }, 900);
-  } else {
-    sceneEl.addEventListener("loaded", () => {
+  if (sceneEl) {
+    if (sceneEl.hasLoaded) {
       setTimeout(() => {
         setPrepareReady();
       }, 900);
-    });
+    } else {
+      sceneEl.addEventListener("loaded", () => {
+        setTimeout(() => {
+          setPrepareReady();
+        }, 900);
+      });
+    }
   }
-}
 
   setInstruction(
     t.status.alignPhoto,
@@ -602,13 +589,13 @@ window.addEventListener("load", () => {
   startFailHints();
   loadFirebaseApi();
   recognitionWatchTimer = setTimeout(() => {
-  if (!hasDetectedAnyTarget) {
-    logDebugError("REM404-E-MIND-002", {
-      message: "No image target detected within 15 seconds",
-      targetCount: 2
-    });
-  }
-}, 15000);
+    if (!hasDetectedAnyTarget) {
+      logDebugError("REM404-E-MIND-002", {
+        message: "No image target detected within 15 seconds",
+        targetCount: 2
+      });
+    }
+  }, 15000);
 });
 
 target01.addEventListener("targetFound", () => {
@@ -632,7 +619,7 @@ if (prepareStartBtn) {
     prepareStartBtn.disabled = true;
 
     prepareText.textContent = t.prepare.requesting;
-    
+
     try {
       if (!sceneEl) sceneEl = document.querySelector("a-scene");
 
