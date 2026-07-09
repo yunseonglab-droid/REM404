@@ -24,10 +24,24 @@ body {
 main {
   width: 100%;
   max-width: 420px;
+  min-height: calc(100vh - 56px);
   margin: 0 auto;
   padding: 42px 0 48px;
+  box-sizing: border-box;
 }
 
+/* ===== Added : Admin Auth Optical Center ===== */
+
+body:has(#authScreen[style*="display: block"]) main,
+body:has(#authScreen:not([style])) main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 0;
+  padding-bottom: 80px;
+}
+
+/* ===== End : Admin Auth Optical Center ===== */
 .label {
   font-size: 12px;
   letter-spacing: .16em;
