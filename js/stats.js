@@ -37,7 +37,41 @@ function renderStats(stats) {
     `;
     return;
   }
+  
+function getPageName(page) {
+  switch (page) {
+    case "index.html":
+      return "🏠 Main Experience";
 
+    case "admin.html":
+      return "🛠 Admin";
+
+    case "stats.html":
+      return "📊 Statistics";
+
+    default:
+      return page || "Unknown";
+  }
+}
+
+function getEventName(type) {
+  switch (type) {
+    case "landing_visit":
+      return "🏠 Landing Visit";
+
+    case "memory_submit":
+      return "💾 Memory Submitted";
+
+    case "restore":
+      return "✨ Memory Restored";
+
+    case "error":
+      return "⚠ Error";
+
+    default:
+      return type || "-";
+  }
+}
   usageListEl.innerHTML = usageLogs.map((log) => {
     return `
       <article class="log-card">
@@ -47,17 +81,33 @@ function renderStats(stats) {
         </div>
 
         <div class="log-title">
-          ${log.page || "unknown page"}
+          ${getPageName(log.page)}
         </div>
 
         <div class="log-detail">
-${JSON.stringify(log.detail || {}, null, 2)}
-        </div>
+  Event : ${getEventName(log.type)}
+</div>
 
         <div class="log-meta">
           Time: ${formatDate(log.createdAt)}<br>
-          Language: ${log.language || "unknown"}<br>
-          Device: ${log.userAgent || "unknown"}
+          Language: ${
+  log.language === "ko"
+    ? "🇰🇷 한국어"
+    : log.language === "en"
+    ? "🇺🇸 English"
+    : "❓ Unknown"
+}<br>
+          Device: ${
+      log.userAgent?.includes("Mac")
+    ? "🍎 macOS / Chrome"
+    : log.userAgent?.includes("Windows")
+    ? "🖥 Windows"
+    : log.userAgent?.includes("Android")
+    ? "🤖 Android"
+    : log.userAgent?.includes("iPhone")
+    ? "📱 iPhone"
+    : "❓ Unknown"
+}
         </div>
       </article>
     `;
