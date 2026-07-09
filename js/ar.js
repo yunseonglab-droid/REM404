@@ -114,6 +114,43 @@ function unlockRestoreSound() {
     });
 }
 
+// ===== Added : Recovery Sound Safe Player =====
+
+function playRecoverySound() {
+  if (!recoverySound) return;
+
+  try {
+    restoreSound.pause();
+    restoreSound.currentTime = 0;
+
+    recoverySound.pause();
+    recoverySound.currentTime = 0;
+    recoverySound.volume = 0.6;
+
+    const playPromise = recoverySound.play();
+
+    if (playPromise !== undefined) {
+      playPromise.catch((error) => {
+        console.warn("Recovery sound play failed:", error);
+
+        logDebugError("REM404-E-AUDIO-002", {
+          message: "Recovery sound play failed",
+          error: String(error)
+        });
+      });
+    }
+  } catch (error) {
+    console.warn("Recovery sound error:", error);
+
+    logDebugError("REM404-E-AUDIO-002", {
+      message: "Recovery sound error",
+      error: String(error)
+    });
+  }
+}
+
+// ===== End : Recovery Sound Safe Player =====
+
 const archive = createArchiveController({
   elements: {
     uiEl,
@@ -471,15 +508,9 @@ function handleTargetFound(overlay) {
       if (!isTargetActive) return;
 
       // ===== Added : Recovery Sound =====
-      recoverySound.pause();
-      recoverySound.currentTime = 0;
-      recoverySound.volume = 0.6;
-
-      recoverySound.play().catch((error) => {
-        console.warn("Recovery sound play failed:", error);
-      });
-      // ===== End : Recovery Sound =====
-
+playRecoverySound();
+// ===== End : Recovery Sound =====
+      
       startFade();
       fadeInstructionLater();
     }, RECOGNITION_FEEDBACK_DURATION);
