@@ -136,6 +136,16 @@ h2 {
   gap: 12px;
 }
 
+/* ===== Added : Archive Manager Memory Card Spacing ===== */
+
+#memoryList {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ===== End : Archive Manager Memory Card Spacing ===== */
+
 .empty {
   padding: 24px 18px;
   border-radius: 18px;
