@@ -552,14 +552,6 @@ function handleTargetLost() {
   startFailHints();
 }
 
-function unlockAudio() {
-  unlockRestoreSound();
-}
-
-window.addEventListener("pointerdown", unlockAudio, { once: true });
-window.addEventListener("touchstart", unlockAudio, { once: true });
-window.addEventListener("click", unlockAudio, { once: true });
-
 window.addEventListener("load", () => {
   foundOnce = false;
   sceneEl = document.querySelector("a-scene");
