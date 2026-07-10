@@ -149,10 +149,61 @@ h1{
   letter-spacing:-.03em;
   color:#222;
 }
+  /* ===== REM404 Intro ===== */
+
+#brandIntro{
+  position:fixed;
+  inset:0;
+  background:#000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  z-index:100000;
+  opacity:1;
+  transition:opacity 1.2s ease;
+}
+
+#brandIntro.hide{
+  opacity:0;
+  pointer-events:none;
+}
+
+#brandIntro button{
+  border:none;
+  background:transparent;
+  color:#fff;
+  font-size:14px;
+  letter-spacing:.18em;
+  font-weight:700;
+  cursor:pointer;
+}
+
+/* ===== End ===== */
+  
 </style>
 </head>
 
 <body>
+  <!-- ===== REM404 Brand Intro START ===== -->
+
+<div id="brandIntro">
+
+  <video
+    id="brandIntroVideo"
+    preload="auto"
+    playsinline
+  >
+    <source src="./video/rem404_intro.mp4" type="video/mp4">
+  </video>
+
+  <button id="enterIntro">
+    ENTER REM404
+  </button>
+
+</div>
+
+<!-- ===== REM404 Brand Intro END ===== -->
+  
 <main>
   <div id="languageSelector">
   <button type="button" data-lang="ko">KR</button>
@@ -244,6 +295,47 @@ if (landingTitle) {
     }
   });
 }
+  /* ===== REM404 Intro START ===== */
+
+const brandIntro = document.getElementById("brandIntro");
+const brandIntroVideo = document.getElementById("brandIntroVideo");
+const enterIntro = document.getElementById("enterIntro");
+
+function closeIntro() {
+  brandIntro.classList.add("hide");
+
+  setTimeout(() => {
+    brandIntro.remove();
+  }, 1200);
+}
+
+enterIntro.addEventListener("click", async () => {
+
+  enterIntro.style.display = "none";
+
+  brandIntroVideo.classList.add("show");
+
+  try {
+
+    await brandIntroVideo.play();
+
+  } catch (e) {
+
+    console.error(e);
+
+    closeIntro();
+
+  }
+
+});
+
+brandIntroVideo.addEventListener("ended", () => {
+
+  closeIntro();
+
+});
+
+/* ===== REM404 Intro END ===== */
   
 const startBtn = document.getElementById("startBtn");
 const transition = document.getElementById("transition");
