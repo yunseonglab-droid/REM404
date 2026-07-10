@@ -222,7 +222,43 @@ h1{
 #enterIntro:active{
   transform:translate(-50%,-50%) scale(.98);
 }
+/* ===== Added : Archive Access ===== */
 
+#archiveAccess{
+  position:fixed;
+  left:50%;
+  bottom:max(24px, env(safe-area-inset-bottom));
+  z-index:100002;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  min-width:132px;
+  min-height:44px;
+  padding:0 14px;
+
+  transform:translateX(-50%);
+
+  color:rgba(255,255,255,.48);
+  text-decoration:none;
+
+  font-family:inherit;
+  font-size:10px;
+  font-weight:600;
+  letter-spacing:.14em;
+  white-space:nowrap;
+
+  touch-action:manipulation;
+  -webkit-tap-highlight-color:transparent;
+  transition:color .2s ease;
+}
+
+#archiveAccess:active{
+  color:#fff;
+}
+
+/* ===== End : Archive Access ===== */
 /* ===== End ===== */
   
 </style>
@@ -244,7 +280,13 @@ h1{
   <button id="enterIntro">
     ENTER REM404
   </button>
+<!-- ===== Added : Archive Access ===== -->
 
+<a href="./admin.html" id="archiveAccess">
+  Archive Access
+</a>
+
+<!-- ===== End : Archive Access ===== -->
 </div>
 
 <!-- ===== REM404 Brand Intro END ===== -->
