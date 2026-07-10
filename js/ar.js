@@ -33,6 +33,7 @@ const memoryCount = document.getElementById("memoryCount");
 const anonymousMemoryArea = document.getElementById("anonymousMemoryArea");
 const viewMemoryBtn = document.getElementById("viewMemoryBtn");
 const nextRandomMemory = document.getElementById("nextRandomMemory");
+const anotherArtworkBtn = document.getElementById("anotherArtworkBtn");
 const sharedMemory = document.getElementById("sharedMemory");
 const sharedMemoryText = document.getElementById("sharedMemoryText");
 const prepareOverlay = document.getElementById("prepareOverlay");
@@ -680,5 +681,14 @@ if (rescanBtn) {
     resetForNewScan();
   });
 }
+// ===== Added : View Another Artwork =====
 
+if (anotherArtworkBtn) {
+  anotherArtworkBtn.addEventListener("click", () => {
+    archive.closeArchive();
+    resetForNewScan();
+  });
+}
+
+// ===== End : View Another Artwork =====
 archive.bindArchiveEvents();
