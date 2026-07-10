@@ -453,6 +453,34 @@ html, body {
   text-align: center;
 }
 
+#anotherArtworkBtn{
+  display:block;
+  width:max-content;
+  margin:12px auto 0;
+  padding:0;
+
+  border:0;
+  background:none;
+
+  color:#555;
+
+  font-size:12px;
+  font-weight:700;
+  line-height:1.5;
+
+  text-decoration:underline;
+  text-underline-offset:3px;
+
+  font-family:inherit;
+  cursor:pointer;
+  transition:opacity .2s ease,color .2s ease;
+}
+
+#anotherArtworkBtn:active{
+  color:#111;
+  opacity:.7;
+}
+
 #sharedMemory {
   margin-top: 28px;
   opacity: 0;
