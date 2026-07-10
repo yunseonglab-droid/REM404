@@ -384,43 +384,69 @@ if (landingTitle) {
 }
   /* ===== REM404 Intro START ===== */
 
-const brandIntro = document.getElementById("brandIntro");
+let brandIntro = document.getElementById("brandIntro");
 const brandIntroVideo = document.getElementById("brandIntroVideo");
 const enterIntro = document.getElementById("enterIntro");
+const archiveAccess = document.getElementById("archiveAccess");
 
+// ===== Added : Skip Intro for Admin Return =====
+
+const skipIntro =
+  new URLSearchParams(window.location.search).get("skipIntro") === "1";
+
+if (skipIntro && brandIntro) {
+  brandIntro.remove();
+
+  // 메모리에서 참조 제거
+  brandIntro = null;
+}
+
+// ===== End : Skip Intro for Admin Return =====
 function closeIntro() {
+
+  if (!brandIntro) return;
+
   brandIntro.classList.add("hide");
 
   setTimeout(() => {
     brandIntro.remove();
+    brandIntro = null;
   }, 1200);
+
 }
 
-enterIntro.addEventListener("click", async () => {
+if (!skipIntro && brandIntro && brandIntroVideo && enterIntro) {
 
-  enterIntro.style.display = "none";
+  enterIntro.addEventListener("click", async () => {
 
-  brandIntroVideo.classList.add("show");
+    enterIntro.style.display = "none";
+    if (archiveAccess) {
+  archiveAccess.style.display = "none";
+}
 
-  try {
+    brandIntroVideo.classList.add("show");
 
-    await brandIntroVideo.play();
+    try {
 
-  } catch (e) {
+      await brandIntroVideo.play();
 
-    console.error(e);
+    } catch (e) {
+
+      console.error(e);
+
+      closeIntro();
+
+    }
+
+  });
+
+  brandIntroVideo.addEventListener("ended", () => {
 
     closeIntro();
 
-  }
+  });
 
-});
-
-brandIntroVideo.addEventListener("ended", () => {
-
-  closeIntro();
-
-});
+}
 
 /* ===== REM404 Intro END ===== */
   
