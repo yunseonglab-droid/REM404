@@ -167,15 +167,60 @@ h1{
   opacity:0;
   pointer-events:none;
 }
+#brandIntroVideo{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  background:#000;
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  z-index:1;
+}
 
-#brandIntro button{
-  border:none;
-  background:transparent;
+#brandIntroVideo.show{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+  
+#enterIntro{
+  position:fixed;
+  top:50%;
+  left:50%;
+  z-index:100002;
+
+  min-width:180px;
+  height:52px;
+  padding:0 26px;
+
+  transform:translate(-50%,-50%);
+
+  border:1px solid rgba(255,255,255,.45);
+  border-radius:999px;
+
+  background:#000;
   color:#fff;
-  font-size:14px;
+
+  font-family:inherit;
+  font-size:12px;
+  font-weight:800;
   letter-spacing:.18em;
-  font-weight:700;
+  white-space:nowrap;
+
+  appearance:none;
+  -webkit-appearance:none;
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+  touch-action:manipulation;
   cursor:pointer;
+}
+
+#enterIntro:active{
+  transform:translate(-50%,-50%) scale(.98);
 }
 
 /* ===== End ===== */
