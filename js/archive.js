@@ -323,13 +323,65 @@ if (api.getMemoryCount) {
     }
   }
 
+  // ===== Added : Close Archive for Another Artwork =====
+
+  function closeArchive() {
+    callbacks.setHasOpenedArchive(false);
+    callbacks.clearNudgeTimer();
+
+    archiveScreen.classList.remove("show");
+archiveScreen.classList.remove("visible");
+
+    archiveForm.classList.remove("hide");
+
+    archiveComplete.classList.remove("show");
+    archiveComplete.classList.remove("visible");
+
+    if (memoryViewer) {
+      memoryViewer.classList.remove("show");
+      memoryViewer.classList.remove("visible");
+    }
+
+    if (sharedMemory) {
+      sharedMemory.classList.remove("show");
+    }
+
+    if (sharedMemoryText) {
+      sharedMemoryText.textContent = "";
+      sharedMemoryText.classList.remove("long-memory");
+    }
+
+    anonymousMemoryArea.classList.remove("show");
+
+    memoryInput.value = "";
+    charCount.textContent = "0 / 80";
+
+    submitMemoryBtn.disabled = false;
+    submitMemoryBtn.textContent = t.buttons.submitMemory;
+
+    viewMemoryBtn.disabled = false;
+    viewMemoryBtn.textContent = t.buttons.viewMemory;
+
+    if (nextRandomMemory) {
+      nextRandomMemory.disabled = false;
+      nextRandomMemory.textContent = t.buttons.nextMemory;
+    }
+
+    savedMemoryId = null;
+    prefetchedRandomMemory = null;
+    viewedMemoryIds.clear();
+  }
+
+  // ===== End : Close Archive for Another Artwork =====
+  
   function isArchiveOpen() {
     return archiveScreen.classList.contains("show");
   }
 
-  return {
+   return {
     bindArchiveEvents,
     openArchive,
+    closeArchive,
     isArchiveOpen
   };
 }
