@@ -99,20 +99,32 @@ recoverySound.volume = 0.6;
 
 let isSoundUnlocked = false;
 
-function unlockRestoreSound() {
+function unlockAllSounds() {
   if (isSoundUnlocked) return;
 
-  restoreSound.volume = 0;
-  restoreSound.play()
-    .then(() => {
-      restoreSound.pause();
-      restoreSound.currentTime = 0;
-      restoreSound.volume = 0.75;
-      isSoundUnlocked = true;
+  const sounds = [
+    { audio: restoreSound, volume: 0.75 },
+    { audio: recoverySound, volume: 0.6 }
+  ];
+
+  Promise.allSettled(
+    sounds.map(({ audio, volume }) => {
+      audio.volume = 0;
+
+      return audio.play()
+        .then(() => {
+          audio.pause();
+          audio.currentTime = 0;
+          audio.volume = volume;
+        })
+        .catch((error) => {
+          audio.volume = volume;
+          throw error;
+        });
     })
-    .catch(() => {
-      restoreSound.volume = 0.75;
-    });
+  ).then(() => {
+    isSoundUnlocked = true;
+  });
 }
 
 // ===== Added : Recovery Sound Safe Player =====
@@ -640,6 +652,7 @@ target02.addEventListener("targetLost", () => {
 
 if (prepareStartBtn) {
   prepareStartBtn.addEventListener("click", async () => {
+    unlockAllSounds();
     prepareStartBtn.disabled = true;
 
     prepareText.textContent = t.prepare.requesting;
