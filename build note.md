@@ -1824,3 +1824,131 @@ AR 인식 안정성,
 사용자 경험을 지속적으로 개선하여
 
 정식 v0.7 Release와 졸업작품 버전으로 발전시킬 예정이다.
+
+# REM404 Archive
+## Build Note
+
+# v0.8 Beta
+### Multi Artwork Experience
+
+Release Date: 2026-07
+
+---
+
+## Overview
+
+v0.8은 REM404 Archive의 첫 번째 전시 베타 버전이다.
+
+이번 업데이트의 목표는 새로운 기능을 추가하는 것이 아니라,
+실제 전시장 환경에서 하나의 작품이 아닌 여러 작품을 자연스럽게 이어서 감상할 수 있는 관람 경험을 만드는 것이었다.
+
+이 버전부터 REM404는 단순한 AR 프로젝트가 아닌,
+전시 경험(Exhibition Experience)을 제공하는 시스템으로 발전하기 시작했다.
+
+---
+
+## Added
+
+### Exhibition Flow
+
+- 다른 작품 감상하기 기능 추가
+- 페이지 새로고침 없는 작품 전환
+- Archive 상태 초기화 시스템 추가
+- Multi Artwork Experience 지원
+
+### Intro Experience
+
+- REM404 Intro Experience 추가
+- Intro Video 재생
+- Intro Sound 추가
+- Camera Permission 준비 프로세스 개선
+
+### Audio
+
+- Recovery Sound 추가
+- Restore Sound 시스템 개선
+- iPhone Audio Unlock 안정화
+- AR 인식 사운드 안정성 개선
+
+### Archive
+
+- Archive Flow 개선
+- 기억 저장 이후 관람 흐름 개선
+- 다른 기억 보기 UX 개선
+
+### Admin
+
+- Version History 추가
+- 관리자 UI 개선
+- Debug 안정화
+- Archive Statistics 개선
+
+### Performance
+
+- 카메라 준비 속도 개선
+- 전체 UX 최적화
+- 다양한 버그 수정
+- 코드 안정성 향상
+
+---
+
+## Design Direction
+
+v0.8에서는 기능보다 관람 경험을 우선하였다.
+
+관람자가 설명 없이도
+
+Intro
+→ AR 인식
+→ 기억 복원
+→ 기억 남기기
+→ 다른 기억 보기
+→ 다른 작품 감상하기
+
+까지 자연스럽게 이어질 수 있도록 전체 흐름을 재설계하였다.
+
+---
+
+## Known Goals
+
+다음 버전(v0.9)은 실제 전시장 테스트를 기반으로 개발된다.
+
+반영 예정
+
+- 교수 피드백
+- 실제 관람객 피드백
+- 전시장 사용성 개선
+- UI / UX 개선
+- 성능 안정화
+- 버그 수정
+
+---
+
+## Roadmap
+
+v0.8 Beta
+↓
+
+전시장 테스트
+
+↓
+
+v0.9 Release Candidate
+
+↓
+
+REM404 Archive v1.0 Official Release
+
+---
+
+## Notes
+
+v1.0은 REM404 Archive의 완성이 아니라
+REM404 Platform의 첫 번째 공식 릴리스이다.
+
+이후 모든 전시는
+REM404 v1.x를 기반으로
+각 작가와 작품의 성격에 맞게 커스터마이징하여 제작한다.
+
+REM404는 하나의 작품이 아니라,
+사진 전시를 위한 경험 플랫폼을 목표로 한다.
