@@ -1,4 +1,5 @@
 // js/debugLogger.js
+import { reportServiceError } from "./serviceMonitor.js";
 
 export async function logDebugError(code, detail = {}) {
   const log = {
@@ -14,6 +15,11 @@ export async function logDebugError(code, detail = {}) {
   };
 
   console.warn("[REM404 DEBUG]", log);
+  void reportServiceError(code, {
+    message: detail.message || detail.error || code,
+    source: location.href,
+    ...detail
+  });
 
   try {
     const firebaseApi = await import("./firebase.js");
