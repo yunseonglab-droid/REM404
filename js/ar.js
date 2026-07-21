@@ -3,6 +3,9 @@ import { createArchiveController } from "./archive.js";
 import { createHapticController } from "./haptic.js";
 import { getText } from "./lang/language.js";
 import { logDebugError } from "./debugLogger.js";
+import { loadExhibitionConfig } from "./exhibition-config.js";
+
+await loadExhibitionConfig();
 
 const t = getText();
 
