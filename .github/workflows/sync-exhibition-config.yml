@@ -2,8 +2,8 @@ name: REM404 전시 정보 동기화
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "*/5 * * * *"
+  # rem404 was approved for deletion on 2026-08-28. Preserve the legacy
+  # snapshot; resume scheduling only after an approved destination is available.
 
 permissions:
   contents: write
