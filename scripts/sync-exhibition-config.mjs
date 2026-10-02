@@ -1,15 +1,35 @@
 import { writeFile } from "node:fs/promises";
 
 const repositoryName = process.env.GITHUB_REPOSITORY?.split("/").pop() || "";
-const exhibitionId = repositoryName.trim().toLowerCase().replace(/\.git$/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+const exhibitionId = (process.env.REM404_EXHIBITION_ID || repositoryName).trim().toLowerCase().replace(/\.git$/, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
 if (!exhibitionId) throw new Error("GitHub repository name is unavailable.");
 
 const projectId = process.env.REM404_PROJECT_ID || "rem404";
 const apiKey = process.env.REM404_FIREBASE_API_KEY || "";
 const path = `projects/${encodeURIComponent(projectId)}/databases/(default)/documents/exhibitions/${encodeURIComponent(exhibitionId)}/public/config`;
-const response = await fetch(`https://firestore.googleapis.com/v1/${path}?key=${encodeURIComponent(apiKey)}`);
-if (response.status === 404) { console.log(`REM404에 등록되지 않은 저장소입니다: ${exhibitionId}`); process.exit(0); }
-if (!response.ok) throw new Error(`REM404 public config request failed: ${response.status}`);
+let response;
+try {
+  response = await fetch(`https://firestore.googleapis.com/v1/${path}?key=${encodeURIComponent(apiKey)}`, {
+    signal: AbortSignal.timeout(15_000)
+  });
+} catch {
+  throw new Error(`REM404 public config network/timeout failure (${projectId}/${exhibitionId}); snapshot preserved.`);
+}
+if (!response.ok) {
+  const body = await response.json().catch(() => ({}));
+  // Only emit fixed status/reason tokens, never response messages, URLs or keys.
+  const status = String(body.error?.status || "");
+  const safeStatus = /^[A-Z_]{1,60}$/.test(status) ? status : "UNKNOWN";
+  const reasons = (Array.isArray(body.error?.details) ? body.error.details : [])
+    .map((detail) => String(detail?.reason || ""))
+    .filter((reason) => /^[A-Z_]{1,80}$/.test(reason));
+  const hint = response.status === 403
+    ? "Public read denied: document may be absent or non-public; verify via an authorized read before changing publication, rules, AppCheck or key restrictions."
+    : response.status === 404
+      ? "Public config is missing; confirm whether this exhibition was intentionally removed or moved."
+      : "Check service availability and configuration.";
+  throw new Error(`REM404 public config request failed: HTTP ${response.status} ${safeStatus} ${reasons.join(",")} (${projectId}/${exhibitionId}). ${hint} Snapshot preserved.`);
+}
 
 const document = await response.json();
 const decode = (value) => {
